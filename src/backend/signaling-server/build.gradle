@@ -65,6 +65,9 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// mongo db
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 	// WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
