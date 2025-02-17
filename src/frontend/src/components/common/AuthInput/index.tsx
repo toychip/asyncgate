@@ -6,7 +6,7 @@ import { descriptionVarients } from '@/styles/motions';
 import * as S from './styles';
 
 export type DescriptionType = 'normal' | 'valid' | 'error';
-interface Description {
+export interface Description {
   type: DescriptionType;
   content: string;
 }
@@ -15,8 +15,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
   label: string;
   isRequired?: boolean;
-  description?: Description;
-  inputType?: 'text' | 'password' | 'email';
+  description?: Description | null;
+  type?: 'text' | 'password' | 'email';
   value?: string;
   handleChange: (value: string) => void;
 }
@@ -26,7 +26,7 @@ const AuthInput = ({
   label,
   isRequired = false,
   description,
-  inputType = 'text',
+  type = 'text',
   value,
   handleChange,
   ...props
@@ -46,22 +46,22 @@ const AuthInput = ({
         {label} {isRequired && <S.RequiredMark>*</S.RequiredMark>}
       </S.InputLabel>
       <S.Input
-        inputType={inputType}
+        type={type}
         value={value}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onChange={(event) => handleChange(event.target.value)}
         {...props}
       />
-      <motion.div
-        variants={descriptionVarients}
-        initial="hidden"
-        animate={isDescriptionDisplayed ? 'visible' : 'hidden'}
-      >
-        {isDescriptionDisplayed && (
+      {isDescriptionDisplayed && (
+        <motion.div
+          variants={descriptionVarients}
+          initial="hidden"
+          animate={isDescriptionDisplayed ? 'visible' : 'hidden'}
+        >
           <S.DescriptionText $type={description.type}>{description.content}</S.DescriptionText>
-        )}
-      </motion.div>
+        </motion.div>
+      )}
     </S.InputContainer>
   );
 };
