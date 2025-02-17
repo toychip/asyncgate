@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import AuthInput from '@/components/common/AuthInput';
-import { FormDropVarients } from '@/styles/motions';
+import { formDropVarients } from '@/styles/motions';
 
 import useLogin from './hooks/useLogin';
 import * as S from './styles';
@@ -18,7 +18,7 @@ const LoginPage = () => {
     <>
       <S.PageContainer>
         <S.ContentWrapper>
-          <S.LoginFormContainer variants={FormDropVarients} initial="hidden" animate="visible">
+          <S.LoginFormContainer variants={formDropVarients} initial="hidden" animate="visible">
             <S.MainLoginContainer>
               <S.LoginFormHeader>
                 <S.HeaderTitle>돌아오신 것을 환영해요!</S.HeaderTitle>
@@ -35,7 +35,7 @@ const LoginPage = () => {
                 <AuthInput
                   id="password"
                   label="비밀번호"
-                  type="password"
+                  inputType="password"
                   isRequired={true}
                   value={password}
                   handleChange={handlePasswordChange}

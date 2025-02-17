@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthCheckbox from '@/components/common/AuthCheckbox';
 import AuthDateInput from '@/components/common/AuthDateInput';
 import AuthInput from '@/components/common/AuthInput';
-import { FormDropVarients } from '@/styles/motions';
+import { formDropVarients } from '@/styles/motions';
 
 import useRegister from './hooks/useRegister';
 import * as S from './styles';
@@ -27,7 +27,7 @@ const RegisterPage = () => {
   return (
     <S.PageContainer>
       <S.ContentWrapper>
-        <S.RegisterFormContainer variants={FormDropVarients} initial="hidden" animate="visible">
+        <S.RegisterFormContainer variants={formDropVarients} initial="hidden" animate="visible">
           <S.FormTitle>계정 만들기</S.FormTitle>
           <S.FormBody>
             <S.InputContainer>
@@ -35,22 +35,31 @@ const RegisterPage = () => {
                 id="email"
                 label="이메일"
                 value={userData.email}
+                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
                 isRequired={true}
                 handleChange={handleEmailChange}
               />
-              <AuthInput id="nickname" label="별명" value={userData.nickname} handleChange={handleNicknameChange} />
+              <AuthInput
+                id="nickname"
+                label="별명"
+                value={userData.nickname}
+                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
+                handleChange={handleNicknameChange}
+              />
               <AuthInput
                 id="username"
                 label="사용자명"
                 value={userData.username}
+                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
                 isRequired={true}
                 handleChange={handleUsernameChange}
               />
               <AuthInput
                 id="password"
                 label="비밀번호"
-                type="password"
+                inputType="password"
                 value={userData.password}
+                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
                 isRequired={true}
                 handleChange={handlePasswordChange}
               />
