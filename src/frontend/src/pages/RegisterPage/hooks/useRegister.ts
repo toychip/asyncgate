@@ -15,7 +15,7 @@ interface RegisterForm {
 }
 
 type DescriptionState = Partial<Record<keyof Omit<RegisterForm, 'isOptIn'>, Description | null>>;
-type IsValidState = Record<keyof Omit<RegisterForm, 'isOptIn'>, boolean>;
+type IsValidState = Record<keyof Omit<RegisterForm, 'isOptIn' | 'nickname'>, boolean>;
 
 const useRegister = () => {
   // 이메일 중복 검사 후 description 띄우기
@@ -38,7 +38,6 @@ const useRegister = () => {
 
   const [isValid, setIsValid] = useState<IsValidState>({
     email: false,
-    nickname: false,
     username: false,
     password: false,
     birthday: false,
@@ -71,12 +70,6 @@ const useRegister = () => {
     setUserData((prev) => {
       return { ...prev, nickname: value };
     });
-
-    const isEmptyValue = value.trim().length === 0;
-    setIsValid((prev) => ({ ...prev, nickname: !isEmptyValue }));
-
-    if (isEmptyValue) return setDescription((prev) => ({ ...prev, nickname: DESCRIPTION_NICKNAME.normal }));
-    setDescription((prev) => ({ ...prev, nickname: null }));
   };
 
   const handleUsernameChange = (value: string) => {
