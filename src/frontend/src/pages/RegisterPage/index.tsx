@@ -12,6 +12,9 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const {
     userData,
+    description,
+    isFormValid,
+    validateRequiredData,
     handleEmailChange,
     handleNicknameChange,
     handleUsernameChange,
@@ -24,6 +27,14 @@ const RegisterPage = () => {
     navigate('/login');
   };
 
+  const handleFormSubmit = () => {
+    // 폼 제출 가능 여부 확인
+    if (!isFormValid) return validateRequiredData();
+    // 이메일 중복 여부 확인
+    // 인증번호 입력 모달
+    // 성공 시, 회원가입. 이후 길드 시작 페이지로 이동
+  };
+
   return (
     <S.PageContainer>
       <S.ContentWrapper>
@@ -34,8 +45,9 @@ const RegisterPage = () => {
               <AuthInput
                 id="email"
                 label="이메일"
+                type="email"
                 value={userData.email}
-                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
+                description={description.email}
                 isRequired={true}
                 handleChange={handleEmailChange}
               />
@@ -43,23 +55,23 @@ const RegisterPage = () => {
                 id="nickname"
                 label="별명"
                 value={userData.nickname}
-                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
+                description={description.nickname}
                 handleChange={handleNicknameChange}
               />
               <AuthInput
                 id="username"
                 label="사용자명"
                 value={userData.username}
-                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
+                description={description.username}
                 isRequired={true}
                 handleChange={handleUsernameChange}
               />
               <AuthInput
                 id="password"
                 label="비밀번호"
-                inputType="password"
+                type="password"
                 value={userData.password}
-                description={{ type: 'normal', content: '다른 회원에게 표시되는 이름이에요.' }}
+                description={description.password}
                 isRequired={true}
                 handleChange={handlePasswordChange}
               />
@@ -67,6 +79,7 @@ const RegisterPage = () => {
                 label="생년월일"
                 isRequired={true}
                 initialValue={userData.birthday}
+                description={description.birthday}
                 handleChange={handleBirthdayChange}
               />
             </S.InputContainer>
@@ -79,7 +92,7 @@ const RegisterPage = () => {
               언제든지 취소하실 수 있어요."
               />
             </S.EmailOptInContainer>
-            <S.ContinueButton>
+            <S.ContinueButton type="submit" onClick={handleFormSubmit}>
               <S.ContinueText>계속하기</S.ContinueText>
             </S.ContinueButton>
             <S.PrivacyPolicyLabel>
