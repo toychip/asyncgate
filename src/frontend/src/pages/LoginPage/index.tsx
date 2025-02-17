@@ -28,6 +28,7 @@ const LoginPage = () => {
                 <AuthInput
                   id="email"
                   label="이메일 또는 전화번호"
+                  type="email"
                   isRequired={true}
                   value={email}
                   handleChange={handleEmailChange}
@@ -35,7 +36,7 @@ const LoginPage = () => {
                 <AuthInput
                   id="password"
                   label="비밀번호"
-                  inputType="password"
+                  type="password"
                   isRequired={true}
                   value={password}
                   handleChange={handlePasswordChange}
