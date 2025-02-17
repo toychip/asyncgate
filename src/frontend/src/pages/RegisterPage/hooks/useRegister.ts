@@ -111,9 +111,11 @@ const useRegister = () => {
       return { ...prev, birthday: value };
     });
 
-    setIsValid((prev) => ({ ...prev, birthday: isBirthdayValid }));
+    const isValidBirthday = !!value.year && !!value.month && !!value.day;
 
-    if (isBirthdayValid) {
+    setIsValid((prev) => ({ ...prev, birthday: isValidBirthday }));
+
+    if (isValidBirthday) {
       setDescription((prev) => ({ ...prev, birthday: null }));
     }
   };
