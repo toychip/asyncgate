@@ -31,12 +31,15 @@ const CustomizeGuildModal = ({
 
   const handleSubmit = async () => {
     try {
+      console.log('서버 가시성 값:', guildVisibility);
+
       const requestData: CreateGuildRequest = {
         name: guildName.trim(),
         profileImage: profileImage || null,
-        isPrivate: guildVisibility === null ? true : !guildVisibility,
+        isPrivate: guildVisibility === true ? false : true,
       };
 
+      console.log('최종 요청 데이터:', requestData);
       await createGuild(requestData);
 
       closeAllModal();
