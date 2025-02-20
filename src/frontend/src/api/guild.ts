@@ -9,11 +9,14 @@ export const createGuild = async (data: CreateGuildRequest) => {
   if (data.profileImage) {
     formData.append('profileImage', data.profileImage);
   }
-  if (data.private) {
-    formData.append('private', String(data.private));
-  }
 
-  return await tokenAxios.post<CreateGuildResponse>(endPoint.guilds.CREATE_GUILD, formData);
+  formData.append('private', String(data.private));
+
+  return await tokenAxios.post<CreateGuildResponse>(endPoint.guilds.CREATE_GUILD, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
 
 export const getGuilds = async () => {
