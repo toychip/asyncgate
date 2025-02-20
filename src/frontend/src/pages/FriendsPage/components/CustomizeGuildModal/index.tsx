@@ -2,6 +2,7 @@ import { LuCamera } from 'react-icons/lu';
 import { TbPlus } from 'react-icons/tb';
 
 import { createGuild } from '@/api/guild';
+import useModalStore from '@/stores/modalStore';
 import { CreateGuildRequest } from '@/types/guilds';
 
 import Modal from '../../../../components/common/Modal';
@@ -26,6 +27,8 @@ const CustomizeGuildModal = ({
   handleGuildNameChange,
   handleProfileImageChange,
 }: CustomizeGuildModalProps) => {
+  const { closeAllModal } = useModalStore();
+
   const handleSubmit = async () => {
     try {
       const requestData: CreateGuildRequest = {
@@ -35,6 +38,8 @@ const CustomizeGuildModal = ({
       };
 
       await createGuild(requestData);
+
+      closeAllModal();
     } catch (error) {
       console.error('길드 생성 중 오류가 발생했어요', error);
     }
