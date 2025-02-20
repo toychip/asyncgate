@@ -1,5 +1,5 @@
 import { endPoint } from '@/constants/endPoint';
-import { CreateGuildRequest, CreateGuildResponse, GetGuildsResponse } from '@/types/guilds';
+import { CreateGuildRequest, CreateGuildResponse, GetGuildsResponse, GuildResponse } from '@/types/guilds';
 import { tokenAxios } from '@/utils/axios';
 
 export const createGuild = async (data: CreateGuildRequest) => {
@@ -21,5 +21,5 @@ export const createGuild = async (data: CreateGuildRequest) => {
 
 export const getGuilds = async () => {
   const { data } = await tokenAxios.get<GetGuildsResponse>(endPoint.guilds.GET_GUILDS);
-  return data;
+  return data.result.responses;
 };
