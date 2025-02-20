@@ -10,7 +10,7 @@ export const createGuild = async (data: CreateGuildRequest) => {
     formData.append('profileImage', data.profileImage);
   }
 
-  formData.append('private', String(data.private));
+  formData.append('isPrivate', String(data.isPrivate));
 
   return await tokenAxios.post<CreateGuildResponse>(endPoint.guilds.CREATE_GUILD, formData, {
     headers: {
