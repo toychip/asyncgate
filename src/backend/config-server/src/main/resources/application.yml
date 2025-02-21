@@ -11,7 +11,8 @@ spring:
           enabled: true
         git:
           uri: https://github.com/sgdevcamp2025/asyncgate
-          default-label: main
+#          default-label: main
+          default-label: be/feat/22/direct-message
           search-paths:
             - "config"
 
