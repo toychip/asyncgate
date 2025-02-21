@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { LuCamera } from 'react-icons/lu';
 import { TbPlus } from 'react-icons/tb';
 
@@ -27,6 +28,7 @@ const CustomizeGuildModal = ({
   handleGuildNameChange,
   handleProfileImageChange,
 }: CustomizeGuildModalProps) => {
+  const queryClient = useQueryClient();
   const { closeAllModal } = useModalStore();
 
   const handleSubmit = async () => {
@@ -38,6 +40,8 @@ const CustomizeGuildModal = ({
       };
 
       await createGuild(requestData);
+
+      queryClient.invalidateQueries({ queryKey: ['server-list'] });
 
       closeAllModal();
     } catch (error) {
