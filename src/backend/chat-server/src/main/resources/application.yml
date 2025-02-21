@@ -26,13 +26,14 @@ spring:
       auto-offset-reset: latest
       enable-auto-commit: false
       properties:
-        heartbeat.interval.ms: 3000
-        session.timeout.ms: 60000  # 60초 동안 하트비트 없으면 죽은 것으로 판단
-        max.poll.interval.ms: 1800000  # 30분 동안 폴링 없으면 세션 종료 방지
-        max.poll.records: 500  # 한번에 가져오는 메시지 수
-        connections.max.idle.ms: 1800000  # 30분 동안 연결 유지
-        request.timeout.ms: 120000  # 2분 동안 응답 없으면 재시도
-        retry.backoff.ms: 1000  # 재연결 백오프 (1초)
+        heartbeat.interval.ms: 10000
+        session.timeout.ms: 60000
+        max.poll.interval.ms: 1800000
+        max.poll.records: 1000
+        connections.max.idle.ms: 1800000
+        request.timeout.ms: 120000
+        retry.backoff.ms: 5000
+        reconnect.backoff.ms: 5000
 
 management:
   endpoints:
