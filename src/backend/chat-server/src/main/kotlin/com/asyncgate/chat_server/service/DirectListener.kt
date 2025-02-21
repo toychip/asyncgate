@@ -113,6 +113,5 @@ class DirectListener(
             e.printStackTrace()
         }
     }
-    
     // ToDo KafkaListener, group-id 에서 업로드 이벤트 설정 추가,
 }
