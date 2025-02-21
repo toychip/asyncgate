@@ -13,7 +13,7 @@ spring:
     name: chat-server
   kafka:
     topic:
-      direct-chat: direct-chat-topic
+      direct-message: direct-message-topic
       read-status: read-status-topic
 
 management:
