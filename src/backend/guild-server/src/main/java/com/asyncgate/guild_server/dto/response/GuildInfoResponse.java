@@ -50,7 +50,8 @@ public record GuildInfoResponse(
 
             @Schema(description = "비공개 여부", example = "false")
             boolean isPrivate
-    ) {}
+    ) {
+    }
 
     @Schema(description = "길드 내 채널 정보 DTO")
     private record InnerChannelResponse(
