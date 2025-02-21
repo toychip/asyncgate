@@ -25,7 +25,7 @@ class DirectListener(
 
     @KafkaListener(
         topics = ["\${spring.kafka.topic.direct-message}"],
-        groupId = "\${spring.kafka.consumer.group-id.direct}",
+        groupId = "\${spring.kafka.consumer.group-id.direct-message}",
         containerFactory = "directFactory"
     )
     fun dmCreateListener(directMessage: DirectMessage, ack: Acknowledgment) {
@@ -113,4 +113,6 @@ class DirectListener(
             e.printStackTrace()
         }
     }
+    
+    // ToDo KafkaListener, group-id 에서 업로드 이벤트 설정 추가,
 }

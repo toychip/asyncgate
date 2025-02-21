@@ -14,7 +14,17 @@ spring:
   kafka:
     topic:
       direct-message: direct-message-topic
+      direct-action: direct-action-topic
       read-status: read-status-topic
+      direct-upload: direct-upload-topic
+    consumer:
+      group-id:
+        direct-message: direct-message
+        direct-action: direct-action
+        read-status: read-status
+        direct-upload: direct-upload
+      auto-offset-reset: latest
+      enable-auto-commit: false
 
 management:
   endpoints:
