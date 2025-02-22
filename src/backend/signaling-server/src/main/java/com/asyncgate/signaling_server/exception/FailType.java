@@ -24,7 +24,13 @@ public enum FailType {
 
     // Access Denied Error
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access_40300", "접근 권한이 없습니다."),
-    NOT_LOGIN_USER(HttpStatus.FORBIDDEN, "Access_40301", "로그인하지 않은 사용자입니다.");
+    NOT_LOGIN_USER(HttpStatus.FORBIDDEN, "Access_40301", "로그인하지 않은 사용자입니다."),
+
+    // 채팅룸이 존재하지 않음
+    _ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "Room_4001", "채팅룸이 존재하지 않습니다."),
+
+    // member가 존재하지 않음
+    _MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "Member_4001", "멤버가 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String errorCode;

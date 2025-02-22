@@ -6,29 +6,29 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class Room implements Identifiable {
+public class ChatRoom implements Identifiable {
 
     private final String id;
     private final String roomId;
-    private final List<String> userIds;
+    private final List<String> memberIds;
 
     @Builder
-    public Room(String id, String roomId, List<String> userIds) {
+    public ChatRoom(String id, String roomId, List<String> memberIds) {
         this.id = id;
         this.roomId = roomId;
-        this.userIds = userIds;
+        this.memberIds = memberIds;
     }
 
-    public static Room create(final String id, final String roomId, final List<String> userIds) {
-        return Room.builder()
+    public static ChatRoom create(final String id, final String roomId, final List<String> userIds) {
+        return ChatRoom.builder()
                 .id(id)
                 .roomId(roomId)
-                .userIds(userIds)
+                .memberIds(userIds)
                 .build();
     }
 
     // user 추가
     public void addUser(final String roomId, final String userId) {
-        this.userIds.add(userId);
+        this.memberIds.add(userId);
     }
 }

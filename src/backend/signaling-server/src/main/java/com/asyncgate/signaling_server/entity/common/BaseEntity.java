@@ -1,6 +1,5 @@
 package com.asyncgate.signaling_server.entity.common;
 
-import com.asyncgate.user_server.entity.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

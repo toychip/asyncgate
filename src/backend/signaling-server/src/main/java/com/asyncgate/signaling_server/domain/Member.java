@@ -4,21 +4,21 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class User implements Identifiable {
+public class Member implements Identifiable {
 
     private final String id;
     private final String userId;
     private String roomId;
 
     @Builder
-    public User(String id, String userId, String roomId) {
+    public Member(String id, String userId, String roomId) {
         this.id = id;
         this.userId = userId;
         this.roomId = roomId;
     }
 
-    public static User create(final String id, final String userId, final String roomId) {
-        return User.builder()
+    public static Member create(final String id, final String userId, final String roomId) {
+        return Member.builder()
                 .id(id)
                 .userId(userId)
                 .roomId(roomId)
