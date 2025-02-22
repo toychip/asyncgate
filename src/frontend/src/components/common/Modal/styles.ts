@@ -42,7 +42,7 @@ export const HeaderWrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   margin-top: 0.8rem;
-  padding: 0 2.4rem;
+  padding: 0 2.4rem 2.4rem;
 `;
 
 export const FooterWrapper = styled.div`
@@ -52,12 +52,13 @@ export const FooterWrapper = styled.div`
   justify-content: center;
 
   margin-top: 1.6rem;
-  padding: 0 2.4rem 2.4rem;
+  padding: 2.4rem 2.4rem 0;
 `;
 
 export const CloseButton = styled.div`
   display: flex;
   justify-content: end;
+  padding: 2.4rem 2.4rem 0;
 `;
 
 export const CloseIcon = styled(TbX)`
