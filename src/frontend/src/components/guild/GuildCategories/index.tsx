@@ -1,16 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { TbChevronDown, TbX } from 'react-icons/tb';
 
 import { getGuild } from '@/api/guild';
 import useDropdown from '@/hooks/useDropdown';
+import { useGuildInfoStore } from '@/stores/guildInfo';
 import { GuildResultData } from '@/types/guilds';
 
 import * as S from './styles';
-
-interface GuildCategoriesProps {
-  guildId: string;
-}
 
 interface DropdownItem {
   id: string;
@@ -18,8 +14,9 @@ interface DropdownItem {
   onClick?: () => void;
 }
 
-const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
+const GuildCategories = () => {
   const { isOpened, dropdownRef, toggleDropdown } = useDropdown();
+  const { guildId } = useGuildInfoStore();
   const { data } = useQuery<GuildResultData>({ queryKey: ['serverInfo', guildId], queryFn: () => getGuild(guildId) });
 
   const dropdownItems: DropdownItem[] = [
@@ -52,19 +49,26 @@ const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
 
   return (
     <S.GuildCategories>
-      <S.GuildTitle>
-        <S.GuildName>{data?.guild.name}</S.GuildName>
-        {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} onClick={toggleDropdown} />}
-      </S.GuildTitle>
-
-      {isOpened && (
-        <S.DropDown ref={dropdownRef}>
-          {dropdownItems.map((item) => (
-            <S.DropDownItem key={item.id} onClick={item.onClick}>
-              <S.DropDownItemText>{item.text}</S.DropDownItemText>
-            </S.DropDownItem>
-          ))}
-        </S.DropDown>
+      {guildId && (
+        <>
+          <S.GuildTitle>
+            <S.GuildName>{data?.guild.name}</S.GuildName>
+            {isOpened ? (
+              <TbX size={24} onClick={toggleDropdown} />
+            ) : (
+              <TbChevronDown size={24} onClick={toggleDropdown} />
+            )}
+          </S.GuildTitle>
+          {isOpened && (
+            <S.DropDown ref={dropdownRef}>
+              {dropdownItems.map((item) => (
+                <S.DropDownItem key={item.id} onClick={item.onClick}>
+                  <S.DropDownItemText>{item.text}</S.DropDownItemText>
+                </S.DropDownItem>
+              ))}
+            </S.DropDown>
+          )}
+        </>
       )}
     </S.GuildCategories>
   );

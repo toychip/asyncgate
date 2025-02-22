@@ -21,7 +21,7 @@ const GuildList = () => {
 
   return (
     <S.GuildList>
-      <S.DMButton>
+      <S.DMButton onClick={() => setGuildId('')}>
         <S.DiscordIcon size={32} />
       </S.DMButton>
       {data?.map((guild) => (
