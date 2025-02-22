@@ -93,16 +93,16 @@ const useRegister = () => {
     const USERNAME_REGEX = /^[a-zA-Z0-9_.]+$/;
 
     if (isEmptyValue) {
-      setIsValid((prev) => ({ ...prev, email: false }));
+      setIsValid((prev) => ({ ...prev, username: false }));
       return setDescription((prev) => ({ ...prev, username: DESCRIPTION_REQUIRED }));
     }
 
     if (USERNAME_REGEX.test(value)) {
-      setIsValid((prev) => ({ ...prev, email: true }));
+      setIsValid((prev) => ({ ...prev, username: true }));
       return setDescription((prev) => ({ ...prev, username: DESCRIPTION_USERNAME.valid }));
     }
 
-    setIsValid((prev) => ({ ...prev, email: false }));
+    setIsValid((prev) => ({ ...prev, username: false }));
     setDescription((prev) => ({ ...prev, username: DESCRIPTION_USERNAME.error }));
   };
 
