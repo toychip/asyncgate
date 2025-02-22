@@ -43,7 +43,7 @@ const CustomizeGuildModal = ({
 
       await createGuild(requestData);
 
-      queryClient.invalidateQueries({ queryKey: ['server-list'] });
+      queryClient.invalidateQueries({ queryKey: ['serverList'] });
 
       closeAllModal();
     } catch (error) {

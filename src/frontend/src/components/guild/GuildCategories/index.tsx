@@ -19,7 +19,7 @@ interface DropdownItem {
 
 const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { data } = useQuery<GuildResultData>({ queryKey: ['server-info', guildId], queryFn: () => getGuild(guildId) });
+  const { data } = useQuery<GuildResultData>({ queryKey: ['serverInfo', guildId], queryFn: () => getGuild(guildId) });
 
   const toggleDown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -37,12 +37,12 @@ const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
       onClick: () => console.log('초대하기 모달 열기'),
     },
     {
-      id: 'create-category',
+      id: 'createCategory',
       text: '카테고리 생성',
       onClick: () => console.log('카테고리 생성 모달 열기'),
     },
     {
-      id: 'create-channel',
+      id: 'createChannel',
       text: '채널 생성',
       onClick: () => console.log('채널 생성 모달 열기'),
     },
