@@ -13,7 +13,7 @@ const GuildList = () => {
   const { openModal } = useModalStore();
   const { setGuildId } = useGuildInfoStore();
 
-  const { data } = useQuery<GuildResponse[]>({ queryKey: ['serverList'], queryFn: getGuilds });
+  const { data } = useQuery<GuildResponse[]>({ queryKey: ['guildList'], queryFn: getGuilds });
 
   const handleChangeModal = () => {
     openModal('basic', <CreateGuildModalContent />);

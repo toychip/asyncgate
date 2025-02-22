@@ -17,7 +17,7 @@ interface DropdownItem {
 const GuildCategories = () => {
   const { isOpened, dropdownRef, toggleDropdown } = useDropdown();
   const { guildId } = useGuildInfoStore();
-  const { data } = useQuery<GuildResultData>({ queryKey: ['serverInfo', guildId], queryFn: () => getGuild(guildId) });
+  const { data } = useQuery<GuildResultData>({ queryKey: ['guildInfo', guildId], queryFn: () => getGuild(guildId) });
 
   const dropdownItems: DropdownItem[] = [
     {
