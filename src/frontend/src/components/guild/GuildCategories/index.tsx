@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { TbChevronDown, TbX } from 'react-icons/tb';
 
 import { getGuild } from '@/api/guild';
+import useDropdown from '@/hooks/useDropdown';
 import { GuildResultData } from '@/types/guilds';
 
 import * as S from './styles';
@@ -18,12 +19,8 @@ interface DropdownItem {
 }
 
 const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { isOpened, dropdownRef, toggleDropdown } = useDropdown();
   const { data } = useQuery<GuildResultData>({ queryKey: ['serverInfo', guildId], queryFn: () => getGuild(guildId) });
-
-  const toggleDown = () => {
-    setIsDropdownOpen((prev) => !prev);
-  };
 
   const dropdownItems: DropdownItem[] = [
     {
@@ -57,11 +54,11 @@ const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
     <S.GuildCategories>
       <S.GuildTitle>
         <S.GuildName>{data?.guild.name}</S.GuildName>
-        {isDropdownOpen ? <TbX size={24} onClick={toggleDown} /> : <TbChevronDown size={24} onClick={toggleDown} />}
+        {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} onClick={toggleDropdown} />}
       </S.GuildTitle>
 
-      {isDropdownOpen && (
-        <S.DropDown>
+      {isOpened && (
+        <S.DropDown ref={dropdownRef}>
           {dropdownItems.map((item) => (
             <S.DropDownItem key={item.id} onClick={item.onClick}>
               <S.DropDownItemText>{item.text}</S.DropDownItemText>
