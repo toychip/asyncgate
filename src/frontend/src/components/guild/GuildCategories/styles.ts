@@ -16,7 +16,7 @@ export const GuildTitle = styled.div`
   display: flex;
   justify-content: space-between;
 
-  padding-bottom: 0.2rem;
+  padding-bottom: 1.6rem;
   border-bottom: 0.1rem solid ${({ theme }) => theme.colors.dark[500]};
 
   svg {
