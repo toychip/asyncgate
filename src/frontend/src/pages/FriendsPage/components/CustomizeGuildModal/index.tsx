@@ -14,7 +14,7 @@ import * as S from './styles';
 interface CustomizeGuildModalProps {
   onPrev: () => void;
   guildName: string;
-  guildVisibility: boolean | null;
+  isPublicGuild: boolean | null;
   profileImage: File | null;
   profileImagePreview: string | null;
   handleGuildNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +26,7 @@ const CustomizeGuildModal = ({
   profileImage,
   profileImagePreview,
   guildName,
-  guildVisibility,
+  isPublicGuild,
   handleGuildNameChange,
   handleProfileImageChange,
 }: CustomizeGuildModalProps) => {
@@ -38,7 +38,7 @@ const CustomizeGuildModal = ({
       const requestData: CreateGuildRequest = {
         name: guildName.trim(),
         profileImage: profileImage || null,
-        isPrivate: guildVisibility === true ? false : true,
+        isPrivate: isPublicGuild === true ? false : true,
       };
 
       await createGuild(requestData);

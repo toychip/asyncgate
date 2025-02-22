@@ -12,12 +12,12 @@ const CreateGuildModalContent = () => {
     stepList: STEP_SEQUENCE,
   });
 
-  const { guildVisibilityProps, guildCustomProps } = useCreateGuildData();
+  const { isPublicGuildProps, guildCustomProps } = useCreateGuildData();
 
   return (
     <Funnel currentStep={currentStep}>
       <Funnel.Step name="서버공개여부">
-        <CreateGuildModal onNext={moveToNextStep} {...guildVisibilityProps} />
+        <CreateGuildModal onNext={moveToNextStep} {...isPublicGuildProps} />
       </Funnel.Step>
 
       <Funnel.Step name="서버커스텀">
