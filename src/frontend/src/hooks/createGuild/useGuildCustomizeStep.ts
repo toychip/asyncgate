@@ -32,6 +32,7 @@ const useGuildCustomizeStep = () => {
   return {
     guildName,
     profileImage,
+    profileImagePreview,
     handleGuildNameChange,
     handleProfileImageChange,
   };

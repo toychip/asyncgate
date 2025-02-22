@@ -16,6 +16,7 @@ interface CustomizeGuildModalProps {
   guildName: string;
   guildVisibility: boolean | null;
   profileImage: File | null;
+  profileImagePreview: string | null;
   handleGuildNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleProfileImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -23,6 +24,7 @@ interface CustomizeGuildModalProps {
 const CustomizeGuildModal = ({
   onPrev,
   profileImage,
+  profileImagePreview,
   guildName,
   guildVisibility,
   handleGuildNameChange,
@@ -68,14 +70,18 @@ const CustomizeGuildModal = ({
               style={{ display: 'none' }}
             />
             <label htmlFor="profile-image-upload">
-              <S.ImageUpLoad>
-                <S.UpLoadIcon>
-                  <LuCamera size={24} />
-                  <SmallText>UPLOAD</SmallText>
-                </S.UpLoadIcon>
-                <S.PlusIcon>
-                  <TbPlus size={18} />
-                </S.PlusIcon>
+              <S.ImageUpLoad $profileImagePreview={profileImagePreview}>
+                {!profileImagePreview && (
+                  <>
+                    <S.UpLoadIcon>
+                      <LuCamera size={24} />
+                      <SmallText>UPLOAD</SmallText>
+                    </S.UpLoadIcon>
+                    <S.PlusIcon>
+                      <TbPlus size={18} />
+                    </S.PlusIcon>
+                  </>
+                )}
               </S.ImageUpLoad>
             </label>
             <S.GuildNameWrapper>
