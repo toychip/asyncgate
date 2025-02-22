@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { Description } from '@/components/common/AuthInput';
 import { YearMonthDay } from '@/types';
 
-import { DESCRIPTION_NICKNAME, DESCRIPTION_REQUIRED, DESCRIPTION_USERNAME } from '../constants';
+import { DESCRIPTION_EMAIL, DESCRIPTION_NICKNAME, DESCRIPTION_REQUIRED, DESCRIPTION_USERNAME } from '../constants';
 
 interface RegisterForm {
   email: string;
-  nickname?: string;
+  nickname: string;
   username: string;
   password: string;
   birthday: YearMonthDay;
@@ -15,10 +15,9 @@ interface RegisterForm {
 }
 
 type DescriptionState = Partial<Record<keyof Omit<RegisterForm, 'isOptIn'>, Description | null>>;
-type IsValidState = Record<keyof Omit<RegisterForm, 'isOptIn' | 'nickname'>, boolean>;
+type IsValidState = Record<keyof Omit<RegisterForm, 'isOptIn'>, boolean>;
 
 const useRegister = () => {
-  // 이메일 중복 검사 후 description 띄우기
   const [userData, setUserData] = useState<RegisterForm>({
     email: '',
     nickname: '',
@@ -38,6 +37,7 @@ const useRegister = () => {
 
   const [isValid, setIsValid] = useState<IsValidState>({
     email: false,
+    nickname: false,
     username: false,
     password: false,
     birthday: false,
@@ -45,13 +45,19 @@ const useRegister = () => {
 
   const isBirthdayValid = !!userData.birthday.year && !!userData.birthday.month && !!userData.birthday.day;
 
-  const isFormValid = !!userData.email && !!userData.username && !!userData.password && isBirthdayValid;
+  const isFormValid =
+    !!userData.email && !!userData.nickname && !!userData.username && !!userData.password && isBirthdayValid;
 
   const validateRequiredData = () => {
     if (!userData.email.trim()) setDescription((prev) => ({ ...prev, email: DESCRIPTION_REQUIRED }));
+    if (!userData.nickname.trim()) setDescription((prev) => ({ ...prev, nickname: DESCRIPTION_REQUIRED }));
     if (!userData.username.trim()) setDescription((prev) => ({ ...prev, username: DESCRIPTION_REQUIRED }));
     if (!userData.password.trim()) setDescription((prev) => ({ ...prev, password: DESCRIPTION_REQUIRED }));
     if (!isBirthdayValid) setDescription((prev) => ({ ...prev, birthday: DESCRIPTION_REQUIRED }));
+  };
+
+  const handleDuplicatedEmail = () => {
+    setDescription((prev) => ({ ...prev, email: DESCRIPTION_EMAIL.error }));
   };
 
   const handleEmailChange = (value: string) => {
@@ -70,6 +76,12 @@ const useRegister = () => {
     setUserData((prev) => {
       return { ...prev, nickname: value };
     });
+
+    const isEmptyValue = value.trim().length === 0;
+    setIsValid((prev) => ({ ...prev, nickname: !isEmptyValue }));
+
+    if (isEmptyValue) return setDescription((prev) => ({ ...prev, nickname: DESCRIPTION_REQUIRED }));
+    setDescription((prev) => ({ ...prev, nickname: null }));
   };
 
   const handleUsernameChange = (value: string) => {
@@ -132,6 +144,7 @@ const useRegister = () => {
     isValid,
     isFormValid,
     validateRequiredData,
+    handleDuplicatedEmail,
     handleEmailChange,
     handleNicknameChange,
     handleUsernameChange,

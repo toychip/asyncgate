@@ -1,20 +1,25 @@
 import { useNavigate } from 'react-router-dom';
 
+import { postEmailDuplicate } from '@/api/users';
 import AuthCheckbox from '@/components/common/AuthCheckbox';
 import AuthDateInput from '@/components/common/AuthDateInput';
 import AuthInput from '@/components/common/AuthInput';
+import useModalStore from '@/stores/modalStore';
 import { formDropVarients } from '@/styles/motions';
 
+import AuthCodeModal from './components/AuthCodeModal';
 import useRegister from './hooks/useRegister';
 import * as S from './styles';
 
 const RegisterPage = () => {
+  const { openModal } = useModalStore();
   const navigate = useNavigate();
   const {
     userData,
     description,
     isFormValid,
     validateRequiredData,
+    handleDuplicatedEmail,
     handleEmailChange,
     handleNicknameChange,
     handleUsernameChange,
@@ -27,12 +32,23 @@ const RegisterPage = () => {
     navigate('/login');
   };
 
-  const handleFormSubmit = () => {
+  const checkEmailDuplicate = async () => {
+    try {
+      const response = await postEmailDuplicate({ email: userData.email });
+      return response.result.is_duplicate;
+    } catch (error) {
+      console.error('이메일 중복 검사 실패', error);
+    }
+  };
+
+  const handleFormSubmit = async () => {
     // 폼 제출 가능 여부 확인
     if (!isFormValid) return validateRequiredData();
     // 이메일 중복 여부 확인
+    const isEmailDuplicated = await checkEmailDuplicate();
+    if (isEmailDuplicated) return handleDuplicatedEmail();
     // 인증번호 입력 모달
-    // 성공 시, 회원가입. 이후 길드 시작 페이지로 이동
+    openModal('withFooter', <AuthCodeModal email={userData.email} />);
   };
 
   return (
@@ -56,6 +72,7 @@ const RegisterPage = () => {
                 label="별명"
                 value={userData.nickname}
                 description={description.nickname}
+                isRequired={true}
                 handleChange={handleNicknameChange}
               />
               <AuthInput
