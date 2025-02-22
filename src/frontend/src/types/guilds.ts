@@ -32,3 +32,31 @@ export interface GuildResponse {
   name: string;
   profileImageUrl: string;
 }
+
+export interface GetGuildResponse {
+  httpStatus: number;
+  message: string;
+  time: string;
+  result: GuildResultData;
+}
+
+export interface GuildResultData {
+  guild: GuildResult;
+  categories: CategoryResult[];
+  channels: ChannelResult[];
+}
+
+interface CategoryResult {
+  categoryId: string;
+  name: string;
+  isPrivate: boolean;
+}
+
+interface ChannelResult {
+  channelId: string;
+  categoryId: string;
+  name: string;
+  topic: string;
+  channelType: string;
+  isPrivate: boolean;
+}
