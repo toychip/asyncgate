@@ -1,5 +1,5 @@
 import { endPoint } from '@/constants/endPoint';
-import { CreateGuildRequest, CreateGuildResponse, GetGuildsResponse } from '@/types/guilds';
+import { CreateGuildRequest, CreateGuildResponse, GetGuildResponse, GetGuildsResponse } from '@/types/guilds';
 import { tokenAxios } from '@/utils/axios';
 import { convertFormData } from '@/utils/convertFormData';
 
@@ -16,4 +16,9 @@ export const createGuild = async (data: CreateGuildRequest) => {
 export const getGuilds = async () => {
   const { data } = await tokenAxios.get<GetGuildsResponse>(endPoint.guilds.GET_GUILDS);
   return data.result.responses;
+};
+
+export const getGuild = async (guildId: string) => {
+  const { data } = await tokenAxios.get<GetGuildResponse>(endPoint.guilds.GET_GUILD(guildId));
+  return data.result;
 };
