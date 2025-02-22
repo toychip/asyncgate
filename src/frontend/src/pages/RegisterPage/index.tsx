@@ -52,7 +52,6 @@ const RegisterPage = () => {
         password: userData.password,
         birth: parseDate(userData.birthday),
       };
-      console.log(requestBody);
       const response = await postRegister(requestBody);
       return response;
     } catch (error) {
