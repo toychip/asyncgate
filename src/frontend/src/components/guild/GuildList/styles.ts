@@ -4,15 +4,25 @@ import { TbPlus } from 'react-icons/tb';
 import styled from 'styled-components';
 
 export const GuildList = styled.nav`
+  scrollbar-width: none;
+
+  overflow-x: auto;
   display: flex;
   flex-direction: column;
   gap: 2rem;
 
   width: 8.4rem;
-  height: 100%;
+  height: 100vh;
   padding: 2.2rem 1rem;
 
   background-color: ${({ theme }) => theme.colors.dark[800]};
+
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 0;
+  }
 `;
 
 export const DMButton = styled.button`
@@ -20,8 +30,8 @@ export const DMButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  width: 6.2rem;
-  height: 6.2rem;
+  min-width: 6.2rem;
+  min-height: 6.2rem;
   border-radius: 1.4rem;
 
   background-color: ${({ theme }) => theme.colors.blue};
@@ -36,8 +46,8 @@ export const CircleButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  width: 6.25rem;
-  height: 6.2rem;
+  min-width: 6.25rem;
+  min-height: 6.2rem;
   border-radius: 100%;
 
   background-color: ${({ theme }) => theme.colors.dark[600]};
@@ -53,8 +63,8 @@ export const SearchCommunityButton = styled(CircleButton)`
 export const GuildButton = styled.button<{ $imageUrl: string }>`
   position: relative;
 
-  width: 6.25rem;
-  height: 6.2rem;
+  min-width: 6.25rem;
+  min-height: 6.2rem;
   margin-bottom: 8px;
   border-radius: 100%;
 
