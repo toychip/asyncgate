@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { postLogin } from '@/api/users';
@@ -12,11 +12,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const { email, password, handleEmailChange, handlePasswordChange } = useLogin();
-
-  useEffect(() => {
-    // 이미 로그인 한 경우, 로그인 페이지로 접근 불가
-    if (localStorage.getItem('access_token')) navigate('/friends', { replace: true });
-  }, []);
 
   const handleRegisterButtonClick = () => {
     navigate('/register');

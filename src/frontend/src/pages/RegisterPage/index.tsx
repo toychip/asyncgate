@@ -7,8 +7,8 @@ import AuthInput from '@/components/common/AuthInput';
 import useModalStore from '@/stores/modalStore';
 import { formDropVarients } from '@/styles/motions';
 import { PostRegisterRequest } from '@/types/users';
+import parseDate from '@/utils/parseDate';
 
-import parseDate from './../../utils/parseDate';
 import AuthCodeModal from './components/AuthCodeModal';
 import useRegister from './hooks/useRegister';
 import * as S from './styles';
