@@ -24,7 +24,6 @@ export const ModalContainer = styled.div`
   flex-direction: column;
 
   min-width: 49rem;
-  min-height: 36rem;
   border-radius: 0.4rem;
 
   color: ${({ theme }) => theme.colors.white};
@@ -53,12 +52,12 @@ export const FooterWrapper = styled.div`
   justify-content: center;
 
   margin-top: 1.6rem;
+  padding: 0 2.4rem 2.4rem;
 `;
 
 export const CloseButton = styled.div`
   display: flex;
   justify-content: end;
-  padding: 2.4rem 2.4rem 0;
 `;
 
 export const CloseIcon = styled(TbX)`
