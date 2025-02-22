@@ -51,13 +51,9 @@ const GuildCategories = () => {
     <S.GuildCategories>
       {guildId && (
         <>
-          <S.GuildTitle>
+          <S.GuildTitle onClick={toggleDropdown}>
             <S.GuildName>{data?.guild.name}</S.GuildName>
-            {isOpened ? (
-              <TbX size={24} onClick={toggleDropdown} />
-            ) : (
-              <TbChevronDown size={24} onClick={toggleDropdown} />
-            )}
+            {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} />}
           </S.GuildTitle>
           {isOpened && (
             <S.DropDown ref={dropdownRef}>
