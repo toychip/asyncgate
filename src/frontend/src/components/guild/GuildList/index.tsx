@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getGuilds } from '@/api/guild';
+import { useGuildInfoStore } from '@/stores/guildInfo';
 import useModalStore from '@/stores/modalStore';
 import { GuildResponse } from '@/types/guilds';
 
@@ -10,6 +11,7 @@ import * as S from './styles';
 
 const GuildList = () => {
   const { openModal } = useModalStore();
+  const { setGuildId } = useGuildInfoStore();
 
   const { data } = useQuery<GuildResponse[]>({ queryKey: ['server-list'], queryFn: getGuilds });
 
@@ -23,7 +25,12 @@ const GuildList = () => {
         <S.DiscordIcon size={32} />
       </S.DMButton>
       {data?.map((guild) => (
-        <S.GuildButton key={guild.guildId} data-tooltip={guild.name} $imageUrl={guild.profileImageUrl} />
+        <S.GuildButton
+          key={guild.guildId}
+          data-tooltip={guild.name}
+          $imageUrl={guild.profileImageUrl}
+          onClick={() => setGuildId(guild.guildId)}
+        />
       ))}
       <S.AddGuildButton onClick={handleChangeModal}>
         <S.PlusIcon size={24} />
