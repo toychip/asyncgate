@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { TbChevronDown } from 'react-icons/tb';
+import { useState } from 'react';
+import { TbChevronDown, TbX } from 'react-icons/tb';
 
 import { getGuild } from '@/api/guild';
 import { GuildResultData } from '@/types/guilds';
@@ -11,14 +12,33 @@ interface GuildCategoriesProps {
 }
 
 const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { data } = useQuery<GuildResultData>({ queryKey: ['server-info'], queryFn: () => getGuild(guildId) });
+
+  const toggleDown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
 
   return (
     <S.GuildCategories>
       <S.GuildTitle>
         <S.GuildName>{data?.guild.name}</S.GuildName>
-        <TbChevronDown size={24} />
+        {isDropdownOpen ? <TbX size={24} onClick={toggleDown} /> : <TbChevronDown size={24} onClick={toggleDown} />}
       </S.GuildTitle>
+
+      {isDropdownOpen && (
+        <S.DropDown>
+          <S.DropDownItem>
+            <S.DropDownItemText>서버 설정</S.DropDownItemText>
+          </S.DropDownItem>
+          <S.DropDownItem>
+            <S.DropDownItemText>초대하기</S.DropDownItemText>
+          </S.DropDownItem>
+          <S.DropDownItem>
+            <S.DropDownItemText>서버 나가기</S.DropDownItemText>
+          </S.DropDownItem>
+        </S.DropDown>
+      )}
     </S.GuildCategories>
   );
 };
