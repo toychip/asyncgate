@@ -9,9 +9,15 @@ export const GuildCategories = styled.div`
 `;
 
 export const GuildTitle = styled.div`
+  cursor: pointer;
+
   position: relative;
+
   display: flex;
   justify-content: space-between;
+
+  padding-bottom: 0.2rem;
+  border-bottom: 0.1rem solid ${({ theme }) => theme.colors.dark[500]};
 
   svg {
     cursor: pointer;
