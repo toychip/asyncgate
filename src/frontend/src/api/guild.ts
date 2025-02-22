@@ -1,22 +1,19 @@
 import { endPoint } from '@/constants/endPoint';
 import { CreateGuildRequest, CreateGuildResponse, GetGuildsResponse } from '@/types/guilds';
 import { tokenAxios } from '@/utils/axios';
+import { convertFormData } from '@/utils/convertFormData';
 
 export const createGuild = async (data: CreateGuildRequest) => {
-  const formData = new FormData();
-  formData.append('name', data.name);
+  const formData = convertFormData(data);
 
-  if (data.profileImage) {
-    formData.append('profileImage', data.profileImage);
-  }
-  if (data.private) {
-    formData.append('private', String(data.private));
-  }
-
-  return await tokenAxios.post<CreateGuildResponse>(endPoint.guilds.CREATE_GUILD, formData);
+  return await tokenAxios.post<CreateGuildResponse>(endPoint.guilds.CREATE_GUILD, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 };
 
 export const getGuilds = async () => {
   const { data } = await tokenAxios.get<GetGuildsResponse>(endPoint.guilds.GET_GUILDS);
-  return data;
+  return data.result.responses;
 };

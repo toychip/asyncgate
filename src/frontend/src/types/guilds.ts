@@ -1,7 +1,7 @@
 export interface CreateGuildRequest {
   name: string;
-  profileImage?: string;
-  private?: boolean;
+  profileImage?: File | null;
+  isPrivate?: boolean;
 }
 
 export interface GuildResult {
