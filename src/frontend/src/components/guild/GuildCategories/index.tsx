@@ -13,7 +13,7 @@ interface GuildCategoriesProps {
 
 const GuildCategories = ({ guildId }: GuildCategoriesProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { data } = useQuery<GuildResultData>({ queryKey: ['server-info'], queryFn: () => getGuild(guildId) });
+  const { data } = useQuery<GuildResultData>({ queryKey: ['server-info', guildId], queryFn: () => getGuild(guildId) });
 
   const toggleDown = () => {
     setIsDropdownOpen((prev) => !prev);
