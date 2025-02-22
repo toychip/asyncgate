@@ -45,8 +45,7 @@ const useRegister = () => {
 
   const isBirthdayValid = !!userData.birthday.year && !!userData.birthday.month && !!userData.birthday.day;
 
-  const isFormValid =
-    !!userData.email && !!userData.nickname && !!userData.username && !!userData.password && isBirthdayValid;
+  const isFormValid = Object.values(isValid).every(Boolean);
 
   const validateRequiredData = () => {
     if (!userData.email.trim()) setDescription((prev) => ({ ...prev, email: DESCRIPTION_REQUIRED }));
