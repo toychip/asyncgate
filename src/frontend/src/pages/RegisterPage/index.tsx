@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
-import { postEmailDuplicate } from '@/api/users';
+import { postEmailDuplicate, postRegister } from '@/api/users';
 import AuthCheckbox from '@/components/common/AuthCheckbox';
 import AuthDateInput from '@/components/common/AuthDateInput';
 import AuthInput from '@/components/common/AuthInput';
 import useModalStore from '@/stores/modalStore';
 import { formDropVarients } from '@/styles/motions';
+import { PostRegisterRequest } from '@/types/users';
 
+import parseDate from './../../utils/parseDate';
 import AuthCodeModal from './components/AuthCodeModal';
 import useRegister from './hooks/useRegister';
 import * as S from './styles';
@@ -41,14 +43,33 @@ const RegisterPage = () => {
     }
   };
 
+  const sendAuthCode = async () => {
+    try {
+      const requestBody: PostRegisterRequest = {
+        email: userData.email,
+        nickname: userData.nickname,
+        name: userData.username,
+        password: userData.password,
+        birth: parseDate(userData.birthday),
+      };
+      console.log(requestBody);
+      const response = await postRegister(requestBody);
+      return response;
+    } catch (error) {
+      console.log('임시 회원가입 실패', error);
+    }
+  };
+
   const handleFormSubmit = async () => {
     // 폼 제출 가능 여부 확인
     if (!isFormValid) return validateRequiredData();
     // 이메일 중복 여부 확인
     const isEmailDuplicated = await checkEmailDuplicate();
     if (isEmailDuplicated) return handleDuplicatedEmail();
+
     // 인증번호 입력 모달
-    openModal('withFooter', <AuthCodeModal email={userData.email} />);
+    openModal('basic', <AuthCodeModal email={userData.email} />);
+    await sendAuthCode();
   };
 
   return (

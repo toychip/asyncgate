@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { postLogin } from '@/api/users';
 import AuthInput from '@/components/common/AuthInput';
 import { formDropVarients } from '@/styles/motions';
 
@@ -8,10 +10,30 @@ import * as S from './styles';
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
   const { email, password, handleEmailChange, handlePasswordChange } = useLogin();
+
+  useEffect(() => {
+    // 이미 로그인 한 경우, 로그인 페이지로 접근 불가
+    if (localStorage.getItem('access_token')) navigate('/friends', { replace: true });
+  }, []);
 
   const handleRegisterButtonClick = () => {
     navigate('/register');
+  };
+
+  const handleLoginButtonClick = async () => {
+    try {
+      const response = await postLogin({ email, password });
+      if (response.httpStatus === 200) {
+        localStorage.setItem('access_token', response.result.access_token);
+        return navigate('/friends', { replace: true });
+      } else if (response.httpStatus === 404) {
+        return setErrorMessage('이메일이나 비밀번호를 확인해주세요.');
+      }
+    } catch (error) {
+      console.error('로그인 요청 실패', error);
+    }
   };
 
   return (
@@ -46,8 +68,9 @@ const LoginPage = () => {
                 <S.LinkText>비밀번호를 잊으셨나요?</S.LinkText>
               </S.ForgotPasswordButton>
               <S.LoginButton>
-                <S.LoginText>로그인</S.LoginText>
+                <S.LoginText onClick={handleLoginButtonClick}>로그인</S.LoginText>
               </S.LoginButton>
+              {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
               <S.ToggleRegisterContainer>
                 <S.RegisterLabel>계정이 필요한가요?</S.RegisterLabel>
                 <S.RegisterButton onClick={handleRegisterButtonClick}>
