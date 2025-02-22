@@ -1,16 +1,10 @@
 import { endPoint } from '@/constants/endPoint';
 import { CreateGuildRequest, CreateGuildResponse, GetGuildsResponse } from '@/types/guilds';
 import { tokenAxios } from '@/utils/axios';
+import { convertFormData } from '@/utils/convertFormData';
 
 export const createGuild = async (data: CreateGuildRequest) => {
-  const formData = new FormData();
-  formData.append('name', data.name);
-
-  if (data.profileImage) {
-    formData.append('profileImage', data.profileImage);
-  }
-
-  formData.append('isPrivate', String(data.isPrivate));
+  const formData = convertFormData(data);
 
   return await tokenAxios.post<CreateGuildResponse>(endPoint.guilds.CREATE_GUILD, formData, {
     headers: {
