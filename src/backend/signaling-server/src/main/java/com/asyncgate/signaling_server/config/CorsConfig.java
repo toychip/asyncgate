@@ -17,8 +17,7 @@ public class CorsConfig {
 
         //리소스를 허용
         ArrayList<String> allowedOriginPatterns = new ArrayList<>();
-        allowedOriginPatterns.add("http://localhost:5173"); // vite
-        allowedOriginPatterns.add("http://127.0.0.1:5173");
+        allowedOriginPatterns.add("*");
         configuration.setAllowedOrigins(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD
