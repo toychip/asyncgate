@@ -42,17 +42,13 @@ export interface GetGuildResponse {
 
 export interface GuildResultData {
   guild: GuildResult;
-  categories: CategoryResult[];
+  categories: CategoryDataResult[];
   channels: ChannelResult[];
 }
 
-interface CategoryResult {
-  categoryId: string;
-  name: string;
-  isPrivate: boolean;
-}
+export type CategoryDataResult = Omit<CategoryResult, 'guildId'>;
 
-interface ChannelResult {
+export interface ChannelResult {
   channelId: string;
   categoryId: string;
   name: string;
@@ -60,3 +56,48 @@ interface ChannelResult {
   channelType: string;
   isPrivate: boolean;
 }
+
+export interface CreateCategoryResponse {
+  httpsStatus: number;
+  message: string;
+  time: string;
+  result: CategoryResult;
+}
+
+interface CategoryResult {
+  categoryId: string;
+  name: string;
+  isPrivate: boolean;
+  guildId: string;
+}
+
+export type CreateCategoryRequest = Omit<CategoryResult, 'categoryId' | 'isPrivate'> & {
+  private: boolean;
+};
+
+export interface CreateChannelRequest {
+  name: string;
+  guildId: string;
+  categoryId: string;
+  private: boolean;
+  channelType: ChannelType;
+}
+
+export interface CreateChannelResponse {
+  httpsStatus: number;
+  message: string;
+  time: string;
+  result: CreateChannelResponseResult;
+}
+
+interface CreateChannelResponseResult {
+  channelId: string;
+  name: string;
+  topic: string;
+  isPrivate: boolean;
+  guildId: string;
+  categoryId: string;
+  channelType: ChannelType;
+}
+
+export type ChannelType = 'TEXT' | 'VOICE' | null;

@@ -1,4 +1,4 @@
-import GuildCategories from '@/components/guild/GuildCategories';
+import GuildCategories from '@/components/guild/GuildCategory';
 
 import GuildList from '../../components/guild/GuildList';
 
