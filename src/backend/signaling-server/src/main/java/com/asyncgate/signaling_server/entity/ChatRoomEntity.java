@@ -1,10 +1,10 @@
 package com.asyncgate.signaling_server.entity;
 
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Document(collection = "room")
@@ -19,6 +19,10 @@ public class ChatRoomEntity {
 
     private String roomId;
 
-    @Builder.Default
-    private Set<String> memberIds = new HashSet<>(); // 참가자 리스트
+    private String pipelineId;
+
+    // 참여 멤버 리스트
+    private Set<String> memberIds;
+
+    private LocalDateTime createdAt;
 }

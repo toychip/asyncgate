@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC ChatRoom 테스트</title>
+</head>
+<body>
+<h1>WebRTC 채팅방 테스트</h1>
+
+<label>Room ID:</label>
+<input type="text" id="roomIdInput" placeholder="Room ID 입력">
+<button onclick="createRoom()">방 생성</button>
+<button onclick="joinRoom()">방 참가</button>
+
+<br><br>
+
+<!-- 버튼 추가 (토글 기능 포함) -->
+<button id="audioBtn" onclick="toggleAudio()">🎙️ 음성 공유</button>
+<button id="videoBtn" onclick="toggleVideo()">📹 화상 공유</button>
+<button id="screenBtn" onclick="toggleScreenShare()">🖥️ 화면 공유</button>
+
+<br><br>
+
+<h3>📹 내 카메라</h3>
+<video id="localVideo" autoplay muted></video>
+
+<h3>🖥️ 내 화면 공유</h3>
+<video id="screenShareVideo" autoplay></video>
+
+<h3>📺 상대방 영상</h3>
+<video id="remoteVideo" autoplay></video>
+
+<script>
+    const apiBaseUrl = "http://localhost:8600/room"; // Spring Boot API URL
+    let ws;
+    let peerConnection;
+    let roomId;
+    let localStream = null; // 웹캠 스트림
+    let screenStream = null; // 화면 공유 스트림
+    let isAudioEnabled = false;
+    let isVideoEnabled = false;
+    let isScreenSharing = false;
+
+    async function createRoom() {
+        roomId = document.getElementById("roomIdInput").value;
+        if (!roomId) {
+            alert("Room ID를 입력하세요.");
+            return;
+        }
+
+        const response = await fetch(`${apiBaseUrl}/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ room_id: roomId, max_users: 10})
+        });
+
+        if (response.ok) {
+            alert("방 생성 완료!");
+        } else {
+            alert("방 생성 실패");
+        }
+    }
+
+    async function joinRoom() {
+        const room_id = document.getElementById("roomIdInput").value;
+        if (!room_id) {
+            alert("Room ID를 입력하세요.");
+            return;
+        }
+
+        const member_id = "user-" + Math.random().toString(36).substr(2, 5); // 랜덤 유저 ID 생성
+
+        const response = await fetch(`${apiBaseUrl}/${room_id}/join`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ member_id: member_id }) // JSON 형태로 보냄
+        });
+
+        if (response.ok) {
+            alert("방 참가 완료!");
+            startWebRTC(room_id, member_id);
+        } else {
+            alert("방 참가 실패");
+        }
+    }
+
+    function startWebRTC(roomId, memberId) {
+        console.log("startWebRTC 실행");
+        ws = new WebSocket("ws://localhost:8600/signal");
+
+        ws.onopen = () => {
+            console.log("WebSocket 연결됨");
+            startCall(roomId, memberId);
+        };
+
+        ws.onmessage = async (message) => {
+            const data = JSON.parse(message.data);
+            if (data.id === "response") {
+                await peerConnection.setRemoteDescription(new RTCSessionDescription({
+                    type: "answer",
+                    sdp: data.sdpAnswer
+                }));
+            }
+        };
+    }
+
+    async function startCall(roomId, memberId) {
+        peerConnection = new RTCPeerConnection({
+            iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+        });
+
+        peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                ws.send(JSON.stringify({
+                    id: "candidate",
+                    candidate: event.candidate
+                }));
+            }
+        };
+
+        peerConnection.ontrack = (event) => {
+            document.getElementById("remoteVideo").srcObject = event.streams[0];
+        };
+
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        document.getElementById("localVideo").srcObject = localStream;
+
+        localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        ws.send(JSON.stringify({
+            id: "start",
+            roomId: roomId,
+            userId: memberId,
+            sdpOffer: offer.sdp
+        }));
+    }
+
+    // 🎙️ 음성 공유 토글
+    async function toggleAudio() {
+        if (isAudioEnabled) {
+            localStream.getAudioTracks().forEach(track => track.stop());
+            document.getElementById("audioBtn").innerText = "🎙️ 음성 공유";
+        } else {
+            localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+            document.getElementById("audioBtn").innerText = "🔇 음성 공유 중지";
+        }
+        isAudioEnabled = !isAudioEnabled;
+    }
+
+    // 📹 화상 공유 토글
+    async function toggleVideo() {
+        if (isVideoEnabled) {
+            localStream.getVideoTracks().forEach(track => track.stop());
+            document.getElementById("localVideo").srcObject = null;
+            document.getElementById("videoBtn").innerText = "📹 화상 공유";
+        } else {
+            const videoStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            document.getElementById("localVideo").srcObject = videoStream;
+            videoStream.getTracks().forEach(track => peerConnection.addTrack(track, videoStream));
+            document.getElementById("videoBtn").innerText = "📷 화상 공유 중지";
+        }
+        isVideoEnabled = !isVideoEnabled;
+    }
+
+    // 🖥️ 화면 공유 토글
+    async function toggleScreenShare() {
+        if (isScreenSharing) {
+            stopScreenShare();
+            document.getElementById("screenBtn").innerText = "🖥️ 화면 공유";
+        } else {
+            screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+            document.getElementById("screenShareVideo").srcObject = screenStream;
+
+            screenStream.getTracks().forEach(track => peerConnection.addTrack(track, screenStream));
+            screenStream.getTracks()[0].onended = () => stopScreenShare();
+
+            document.getElementById("screenBtn").innerText = "📴 화면 공유 중지";
+        }
+        isScreenSharing = !isScreenSharing;
+    }
+
+    // 🛑 화면 공유 중지
+    function stopScreenShare() {
+        if (screenStream) {
+            screenStream.getTracks().forEach(track => track.stop());
+            document.getElementById("screenShareVideo").srcObject = null;
+        }
+    }
+</script>
+</body>
+</html>
