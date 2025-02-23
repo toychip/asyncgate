@@ -22,9 +22,7 @@ const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
   const queryClient = useQueryClient();
 
   const handleCategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = event.target.value;
-
-    if (newName.length !== 0) setCategoryName(newName);
+    setCategoryName(event.target.value);
   };
 
   const handleSubmit = async () => {
@@ -70,7 +68,9 @@ const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
       </Modal.Content>
       <S.FooterContainer>
         <S.CancelButton onClick={closeAllModal}>취소</S.CancelButton>
-        <S.CreateButton onClick={handleSubmit}>카테고리 만들기</S.CreateButton>
+        <S.CreateButton $disabled={!categoryName.trim()} onClick={handleSubmit}>
+          카테고리 만들기
+        </S.CreateButton>
       </S.FooterContainer>
     </Modal>
   );

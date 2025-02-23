@@ -54,12 +54,12 @@ export const CancelButton = styled.button`
   background-color: transparent;
 `;
 
-export const CreateButton = styled.button`
+export const CreateButton = styled.button<{ $disabled: boolean }>`
   width: 11rem;
   height: 4rem;
   border-radius: 0.8rem;
 
   color: ${({ theme }) => theme.colors.white};
 
-  background-color: ${({ theme }) => theme.colors.blue};
+  background-color: ${({ theme, $disabled }) => ($disabled ? theme.colors.dark[400] : theme.colors.blue)};
 `;

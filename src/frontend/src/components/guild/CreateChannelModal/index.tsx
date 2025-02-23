@@ -25,9 +25,7 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
   const queryClient = useQueryClient();
 
   const handleChannelNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = event.target.value;
-
-    if (newName.length !== 0) setChannelName(newName);
+    setChannelName(event.target.value);
   };
 
   const handleChangeTextType = () => {
@@ -98,7 +96,7 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
       </Modal.Content>
       <S.FooterContainer>
         <S.CancelButton onClick={closeAllModal}>취소</S.CancelButton>
-        <S.CreateButton $disabled={!isSelectedType} onClick={handleSubmit}>
+        <S.CreateButton $disabled={!isSelectedType || !channelName.trim()} onClick={handleSubmit}>
           채널 만들기
         </S.CreateButton>
       </S.FooterContainer>
