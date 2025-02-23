@@ -36,7 +36,7 @@ const GuildCategories = () => {
     {
       id: 'createCategory',
       text: '카테고리 생성',
-      onClick: () => openModal('withFooter', <CreateCategoryModal />),
+      onClick: () => openModal('withFooter', <CreateCategoryModal guildId={guildId} />),
     },
     {
       id: 'createChannel',
@@ -58,6 +58,7 @@ const GuildCategories = () => {
             <S.GuildName>{data?.guild.name}</S.GuildName>
             {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} />}
           </S.GuildTitle>
+
           {isOpened && (
             <S.DropDown ref={dropdownRef}>
               {dropdownItems.map((item) => (

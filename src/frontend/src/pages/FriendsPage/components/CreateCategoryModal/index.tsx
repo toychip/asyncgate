@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import { BiSolidLock } from 'react-icons/bi';
 
+import { createGuildCategory } from '@/api/guild';
 import Modal from '@/components/common/Modal';
 import Toggle from '@/components/common/Toggle';
+import useModalStore from '@/stores/modalStore';
 import { BodyMediumText, ChipText, TitleText2 } from '@/styles/Typography';
+import { CreateCategoryRequest } from '@/types/guilds';
 
 import * as S from './styles';
 
-const CreateCategoryModal = () => {
+interface CreateCategoryModalProps {
+  guildId: string;
+}
+
+const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
+  const { closeAllModal } = useModalStore();
   const [isPublicCategory, setIsPublicCategory] = useState(false);
   const [categoryName, setCategoryName] = useState('');
 
@@ -15,6 +23,22 @@ const CreateCategoryModal = () => {
     const newName = event.target.value;
 
     if (newName.length !== 0) setCategoryName(newName);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const requestData: CreateCategoryRequest = {
+        name: categoryName,
+        guildId,
+        private: (!isPublicCategory).toString(),
+      };
+
+      await createGuildCategory(requestData);
+
+      closeAllModal();
+    } catch (error) {
+      console.error('카테고리 생성 중 오류가 발생했어요', error);
+    }
   };
 
   return (
@@ -42,8 +66,8 @@ const CreateCategoryModal = () => {
         </S.CategoryInfoText>
       </Modal.Content>
       <S.FooterContainer>
-        <S.CancelButton>취소</S.CancelButton>
-        <S.CreateButton>카테고리 만들기</S.CreateButton>
+        <S.CancelButton onClick={closeAllModal}>취소</S.CancelButton>
+        <S.CreateButton onClick={handleSubmit}>카테고리 만들기</S.CreateButton>
       </S.FooterContainer>
     </Modal>
   );
