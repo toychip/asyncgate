@@ -83,7 +83,7 @@ export const CreateButton = styled.button<{ $disabled: boolean }>`
 
   color: ${({ theme }) => theme.colors.white};
 
-  background-color: ${({ theme, disabled }) => (disabled ? theme.colors.dark[400] : theme.colors.blue)};
+  background-color: ${({ theme, $disabled }) => ($disabled ? theme.colors.dark[400] : theme.colors.blue)};
 `;
 
 export const PrivateSetting = styled.div`
