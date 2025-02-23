@@ -41,11 +41,6 @@ const GuildCategories = () => {
       onClick: () => openModal('withFooter', <CreateCategoryModal guildId={guildId} />),
     },
     {
-      id: 'createChannel',
-      text: '채널 생성',
-      onClick: () => console.log('채널 생성 모달 열기'),
-    },
-    {
       id: 'leave',
       text: '서버 나가기',
       onClick: () => console.log('서버 나가기 모달 열기'),
