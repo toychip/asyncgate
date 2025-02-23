@@ -14,8 +14,8 @@ interface UserProfileProps {
   isOnline: boolean;
   isMicOn: boolean;
   isHeadsetOn: boolean;
-  handleMicToggle: (value: boolean) => void;
-  handleHeadsetToggle: (value: boolean) => void;
+  handleMicToggle: () => void;
+  handleHeadsetToggle: () => void;
 }
 
 const UserProfile = ({
@@ -41,10 +41,10 @@ const UserProfile = ({
         </S.UserInfo>
       </S.UserInfoContainer>
       <S.ControlButtonContainer>
-        <S.ControlButton onClick={() => handleMicToggle(!isMicOn)}>
+        <S.ControlButton onClick={handleMicToggle}>
           {isMicOn ? <IoMicSharp color="lightgray" size={20} /> : <IoMicOffSharp color="red" size={20} />}
         </S.ControlButton>
-        <S.ControlButton onClick={() => handleHeadsetToggle(!isHeadsetOn)}>
+        <S.ControlButton onClick={handleHeadsetToggle}>
           {isHeadsetOn ? <MdHeadset color="lightgray" size={20} /> : <MdHeadsetOff color="red" size={20} />}
         </S.ControlButton>
         <S.ControlButton>
