@@ -16,4 +16,8 @@ public class MemberEntity {
 
     private String userId;  // 사용자 ID
     private String roomId;  // 참가 중인 방 ID
+
+    private boolean isMicEnabled;
+    private boolean isCameraEnabled;
+    private boolean isScreenSharingEnabled;
 }

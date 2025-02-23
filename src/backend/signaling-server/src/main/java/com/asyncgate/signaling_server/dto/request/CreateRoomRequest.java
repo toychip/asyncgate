@@ -6,7 +6,5 @@ import jakarta.validation.constraints.NotBlank;
 public record CreateRoomRequest(
         @JsonProperty("room_id")
         @NotBlank
-        String roomId,
-        @JsonProperty("max_users")
-        int maxUsers
+        String roomId
 ) {}

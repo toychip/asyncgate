@@ -9,6 +9,7 @@ public interface CreateRoomUseCase {
      * 채팅방 생성
      *
      * @param request
+     * @param userId
      */
-    void execute(final CreateRoomRequest request);
+    void execute(final CreateRoomRequest request, final String userId);
 }
