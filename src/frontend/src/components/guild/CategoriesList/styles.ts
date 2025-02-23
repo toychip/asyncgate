@@ -30,7 +30,18 @@ export const CategoryName = styled.div`
 `;
 
 export const Channels = styled.div`
-  cursor: pointer;
   display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+`;
+
+export const ChannelName = styled.div`
+  cursor: pointer;
+
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
   padding-left: 1rem;
 `;

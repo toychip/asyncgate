@@ -1,3 +1,5 @@
+import { BiHash } from 'react-icons/bi';
+import { BsFillMicFill } from 'react-icons/bs';
 import { TbPlus } from 'react-icons/tb';
 
 import { useGuildInfoStore } from '@/stores/guildInfo';
@@ -28,13 +30,16 @@ const CategoriesList = ({ categories, channels }: CategoriesListProps) => {
             <BodyMediumText>{category.name}</BodyMediumText>
             <TbPlus size={18} onClick={() => handleOpenModal(category.categoryId, guildId)} />
           </S.CategoryName>
-          {channels
-            ?.filter((channel) => category.categoryId === channel.categoryId)
-            .map((channel) => (
-              <S.Channels key={channel.channelId}>
-                <BodyRegularText>{channel.name}</BodyRegularText>
-              </S.Channels>
-            ))}
+          <S.Channels>
+            {channels
+              ?.filter((channel) => category.categoryId === channel.categoryId)
+              .map((channel) => (
+                <S.ChannelName key={channel.channelId}>
+                  {channel.channelType === 'TEXT' ? <BiHash size={18} /> : <BsFillMicFill size={18} />}
+                  <BodyRegularText>{channel.name}</BodyRegularText>
+                </S.ChannelName>
+              ))}
+          </S.Channels>
         </S.Category>
       ))}
     </S.CategoriesList>
