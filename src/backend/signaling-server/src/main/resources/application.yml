@@ -10,7 +10,7 @@ eureka:
 
 spring:
   application:
-    name: signaling_server
+    name: signaling-server
 
 management:
   endpoints:
@@ -21,3 +21,4 @@ management:
 logging:
   level:
     com.asyncgate.signaling_server: DEBUG
+    org.springframework.security: DEBUG

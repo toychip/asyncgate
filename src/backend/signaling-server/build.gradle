@@ -29,7 +29,7 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	implementation 'org.springframework.cloud:spring-cloud-starter'
@@ -62,8 +62,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// mysql
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	// runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// mongo db
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
@@ -81,6 +80,13 @@ dependencies {
 	/* Kurento 미디어 서버 관련 2개 */
 	// https://mvnrepository.com/artifact/org.kurento/kurento-client
 	implementation group: 'org.kurento', name: 'kurento-client', version: '6.18.0'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// aop
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 }
 
 dependencyManagement {
