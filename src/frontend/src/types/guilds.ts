@@ -60,3 +60,21 @@ interface ChannelResult {
   channelType: string;
   isPrivate: boolean;
 }
+
+export interface CreateCategoryResponse {
+  httpsStatus: number;
+  message: string;
+  time: string;
+  result: CategoryResult;
+}
+
+interface CategoryResult {
+  categoryId: string;
+  name: string;
+  isPrivate: boolean;
+  guildId: string;
+}
+
+export type CreateCategoryRequest = Omit<CategoryResult, 'categoryId' | 'isPrivate'> & {
+  private: string;
+};
