@@ -82,6 +82,16 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/users/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
+
+        - id: signaling-server
+          uri: lb://SIGNALING-SERVER
+          predicates:
+            - Path=/signaling/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signaling/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter      
+              
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
       globalcors:
