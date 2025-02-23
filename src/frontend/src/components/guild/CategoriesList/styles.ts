@@ -17,8 +17,11 @@ export const Category = styled.div`
 
 export const CategoryName = styled.div`
   cursor: pointer;
+
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
   width: 100%;
 
   svg {
