@@ -19,8 +19,9 @@ public class JsonWebTokenUtil implements InitializingBean {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    @Value("${jwt.access-token-expire-period}")
-    private Long accessTokenExpirePeriod;
+    // 잠시 제거
+    // @Value("${jwt.access-token-expire-period}")
+    private Long accessTokenExpirePeriod = 1209600000L;
 
     private Key key;
 
