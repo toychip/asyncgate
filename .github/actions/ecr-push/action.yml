@@ -217,7 +217,7 @@ runs:
             fi
 
             if [ "${{ inputs.container_name }}" == "signaling-server" ]; then
-              echo "  redis:" >> docker-compose.yml
+              echo "  mongodb:" >> docker-compose.yml
               echo "    image: mongo:latest" >> docker-compose.yml
               echo "    container_name: mongodb" >> docker-compose.yml
               echo "    ports:" >> docker-compose.yml
