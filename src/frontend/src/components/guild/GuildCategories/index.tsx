@@ -8,6 +8,8 @@ import { useGuildInfoStore } from '@/stores/guildInfo';
 import useModalStore from '@/stores/modalStore';
 import { GuildResultData } from '@/types/guilds';
 
+import CategoriesList from '../CategoriesList';
+
 import * as S from './styles';
 
 interface DropdownItem {
@@ -58,7 +60,7 @@ const GuildCategories = () => {
             <S.GuildName>{data?.guild.name}</S.GuildName>
             {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} />}
           </S.GuildTitle>
-
+          <CategoriesList categories={data?.categories} channels={data?.channels} />
           {isOpened && (
             <S.DropDown ref={dropdownRef}>
               {dropdownItems.map((item) => (
