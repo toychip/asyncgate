@@ -13,7 +13,7 @@ spring:
     name: signaling-server
   data:
     mongodb:
-      host: mongodb
+      host: 3.34.143.89
       port: 27017
       database: signaling
 
