@@ -74,3 +74,30 @@ interface CategoryResult {
 export type CreateCategoryRequest = Omit<CategoryResult, 'categoryId' | 'isPrivate'> & {
   private: string;
 };
+
+export interface CreateChannelRequest {
+  name: string;
+  guildId: string;
+  categoryId: string;
+  private: boolean;
+  channelType: ChannelType;
+}
+
+export interface CreateChannelResponse {
+  httpsStatus: number;
+  message: string;
+  time: string;
+  result: CreateChannelResponseResult;
+}
+
+interface CreateChannelResponseResult {
+  channelId: string;
+  name: string;
+  topic: string;
+  isPrivate: boolean;
+  guildId: string;
+  categoryId: string;
+  channelType: ChannelType;
+}
+
+export type ChannelType = 'TEXT' | 'VOICE' | null;

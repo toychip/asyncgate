@@ -2,6 +2,7 @@ import { endPoint } from '@/constants/endPoint';
 import {
   CreateCategoryRequest,
   CreateCategoryResponse,
+  CreateChannelRequest,
   CreateGuildRequest,
   CreateGuildResponse,
   GetGuildResponse,
@@ -32,4 +33,8 @@ export const getGuild = async (guildId: string) => {
 
 export const createGuildCategory = async (data: CreateCategoryRequest) => {
   return await tokenAxios.post<CreateCategoryResponse>(endPoint.guilds.CREATE_CATEGORY, data);
+};
+
+export const createGuildChannel = async (data: CreateChannelRequest) => {
+  return await tokenAxios.post<CreateChannelRequest>(endPoint.guilds.CREATE_CHANNEL, data);
 };
