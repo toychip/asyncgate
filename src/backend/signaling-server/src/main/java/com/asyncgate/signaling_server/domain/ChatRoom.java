@@ -1,10 +1,13 @@
 package com.asyncgate.signaling_server.domain;
 
 import lombok.Builder;
+import lombok.Getter;
+
 import java.util.UUID;
 import java.util.Set;
 import java.util.HashSet;
 
+@Getter
 public class ChatRoom {
     private final String id;
     private final String pipelineId;

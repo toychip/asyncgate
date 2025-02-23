@@ -40,7 +40,6 @@ public class DomainUtil {
         public static ChatRoomEntity toEntity(final ChatRoom chatRoom) {
             return ChatRoomEntity.builder()
                     .id(chatRoom.getId())
-                    .roomId(chatRoom.getRoomId())
                     .pipelineId(chatRoom.getPipelineId())
                     .memberIds(new HashSet<>(chatRoom.getMemberIds()))
                     .build();
@@ -49,7 +48,6 @@ public class DomainUtil {
         public static ChatRoom toDomain(final ChatRoomEntity entity) {
             return ChatRoom.builder()
                     .id(entity.getId())
-                    .roomId(entity.getRoomId())
                     .pipelineId(entity.getPipelineId())
                     .memberIds(entity.getMemberIds())
                     .build();
