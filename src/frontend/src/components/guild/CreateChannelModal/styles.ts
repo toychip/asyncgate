@@ -77,6 +77,8 @@ export const CancelButton = styled.button`
 `;
 
 export const CreateButton = styled.button<{ $disabled: boolean }>`
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+
   width: 11rem;
   height: 4rem;
   border-radius: 0.8rem;

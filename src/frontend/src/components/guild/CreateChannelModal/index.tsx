@@ -96,7 +96,11 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
       </Modal.Content>
       <S.FooterContainer>
         <S.CancelButton onClick={closeAllModal}>취소</S.CancelButton>
-        <S.CreateButton $disabled={!isSelectedType || !channelName.trim()} onClick={handleSubmit}>
+        <S.CreateButton
+          disabled={!channelName.trim()}
+          $disabled={!isSelectedType || !channelName.trim()}
+          onClick={handleSubmit}
+        >
           채널 만들기
         </S.CreateButton>
       </S.FooterContainer>
