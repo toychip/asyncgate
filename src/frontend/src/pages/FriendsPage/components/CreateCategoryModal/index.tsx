@@ -32,7 +32,7 @@ const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
       const requestData: CreateCategoryRequest = {
         name: categoryName,
         guildId,
-        private: (!isPublicCategory).toString(),
+        private: isPublicCategory,
       };
 
       await createGuildCategory(requestData);
@@ -61,7 +61,7 @@ const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
             <BiSolidLock size={24} />
             <BodyMediumText>비공개 카테고리</BodyMediumText>
           </S.SettingText>
-          <Toggle isOn={isPublicCategory} onToggle={() => setIsPublicCategory(!isPublicCategory)} />
+          <Toggle isOn={isPublicCategory} onToggle={() => setIsPublicCategory((prev) => !prev)} />
         </S.PrivateSetting>
         <S.CategoryInfoText>
           카테고리를 비공개로 만들면 선택한 멤버들과 역할만 이 카테고리를 볼 수 있어요. 이 설정은 이 카테고리에 동기화된

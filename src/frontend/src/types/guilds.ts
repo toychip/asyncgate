@@ -72,7 +72,7 @@ interface CategoryResult {
 }
 
 export type CreateCategoryRequest = Omit<CategoryResult, 'categoryId' | 'isPrivate'> & {
-  private: string;
+  private: boolean;
 };
 
 export interface CreateChannelRequest {

@@ -45,7 +45,7 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
         guildId,
         categoryId,
         channelType: isSelectedType,
-        private: !isPublicChannel,
+        private: isPublicChannel,
       };
 
       await createGuildChannel(requestData);
@@ -92,7 +92,7 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
             <BiSolidLock size={24} />
             <BodyMediumText>비공개 채널</BodyMediumText>
           </S.SettingText>
-          <Toggle isOn={isPublicChannel} onToggle={() => setIsPublicChannel(!isPublicChannel)} />
+          <Toggle isOn={isPublicChannel} onToggle={() => setIsPublicChannel((prev) => !prev)} />
         </S.PrivateSetting>
         <S.ChannelInfoText>선택한 멤버들과 역할만 이 채널을 볼 수 있어요</S.ChannelInfoText>
       </Modal.Content>
