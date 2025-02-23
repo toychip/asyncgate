@@ -11,11 +11,21 @@ export const CategoriesList = styled.div`
 `;
 
 export const Category = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const CategoryName = styled.div`
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  width: 100%;
 
   svg {
     color: ${({ theme }) => theme.colors.dark[300]};
   }
+`;
+
+export const Channels = styled.div`
+  display: flex;
 `;

@@ -1,6 +1,6 @@
 import { TbPlus } from 'react-icons/tb';
 
-import { BodyMediumText } from '@/styles/Typography';
+import { BodyMediumText, BodyRegularText } from '@/styles/Typography';
 import { CategoryDataResult, ChannelResult } from '@/types/guilds';
 
 import * as S from './styles';
@@ -10,15 +10,21 @@ interface CategoriesListProps {
   channels?: ChannelResult[];
 }
 const CategoriesList = ({ categories, channels }: CategoriesListProps) => {
-  console.log(categories);
-  console.log(channels);
-
   return (
     <S.CategoriesList>
       {categories?.map((category) => (
         <S.Category key={category.categoryId}>
-          <BodyMediumText>{category.name}</BodyMediumText>
-          <TbPlus size={18} />
+          <S.CategoryName>
+            <BodyMediumText>{category.name}</BodyMediumText>
+            <TbPlus size={18} />
+          </S.CategoryName>
+          {channels
+            ?.filter((channel) => category.categoryId === channel.categoryId)
+            .map((channel) => (
+              <S.Channels key={channel.channelId}>
+                <BodyRegularText>{channel.name}</BodyRegularText>
+              </S.Channels>
+            ))}
         </S.Category>
       ))}
     </S.CategoriesList>
