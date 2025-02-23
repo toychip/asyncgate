@@ -6,6 +6,7 @@ import com.asyncgate.signaling_server.security.annotation.MemberID;
 import com.asyncgate.signaling_server.signaling.KurentoManager;
 import com.asyncgate.signaling_server.usecase.CreateRoomUseCase;
 import com.asyncgate.signaling_server.usecase.ExitRoomUseCase;
+import com.asyncgate.signaling_server.usecase.GetUsersInRoomUseCase;
 import com.asyncgate.signaling_server.usecase.JoinRoomUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,6 +25,7 @@ public class ChatRoomCommandController {
     private final CreateRoomUseCase createRoomUseCase;
     private final JoinRoomUseCase joinRoomUseCase;
     private final ExitRoomUseCase exitRoomUseCase;
+    private final GetUsersInRoomUseCase getUsersInRoomUseCase;
 
     /**
      * 채널 생성
@@ -48,11 +50,7 @@ public class ChatRoomCommandController {
      */
     @GetMapping("/{room_id}/users")
     public SuccessResponse<GetUsersInChannelResponse> getUsersInRoom(@PathVariable("room_id") String roomId) {
-        return SuccessResponse.ok(
-                GetUsersInChannelResponse.builder()
-                        .users(kurentoManager.getUsersInChannel(roomId))
-                        .build()
-        );
+        return SuccessResponse.ok(getUsersInRoomUseCase.execute(roomId));
     }
 
     /**

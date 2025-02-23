@@ -78,7 +78,7 @@
         });
 
         if (response.ok) {
-            alert("방 참가 완료!");
+            alert("방 참가 완료!", room_id, member_id);
             startWebRTC(room_id, member_id);
         } else {
             alert("방 참가 실패");
@@ -86,7 +86,7 @@
     }
 
     function startWebRTC(roomId, memberId) {
-        console.log("startWebRTC 실행");
+        console.log("startWebRTC 실행", roomId, memberId);
         ws = new WebSocket("ws://localhost:8600/signal");
 
         ws.onopen = () => {
@@ -114,6 +114,9 @@
             if (event.candidate) {
                 ws.send(JSON.stringify({
                     id: "candidate",
+                    roomId: roomId,
+                    userId: memberId,
+                    sdpOffer: offer.sdp,
                     candidate: event.candidate
                 }));
             }
