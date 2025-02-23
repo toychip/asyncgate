@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { BiSolidLock } from 'react-icons/bi';
 
@@ -18,6 +19,7 @@ const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
   const { closeAllModal } = useModalStore();
   const [isPublicCategory, setIsPublicCategory] = useState(false);
   const [categoryName, setCategoryName] = useState('');
+  const queryClient = useQueryClient();
 
   const handleCategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
@@ -35,6 +37,7 @@ const CreateCategoryModal = ({ guildId }: CreateCategoryModalProps) => {
 
       await createGuildCategory(requestData);
 
+      await queryClient.invalidateQueries({ queryKey: ['guildInfo', guildId] });
       closeAllModal();
     } catch (error) {
       console.error('카테고리 생성 중 오류가 발생했어요', error);

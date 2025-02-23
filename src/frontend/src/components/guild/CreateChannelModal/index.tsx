@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { BiHash, BiSolidLock } from 'react-icons/bi';
 import { BsFillMicFill } from 'react-icons/bs';
@@ -21,6 +22,7 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
   const [isPublicChannel, setIsPublicChannel] = useState(false);
   const [channelName, setChannelName] = useState('');
   const [isSelectedType, setIsSelectedType] = useState<ChannelType>(null);
+  const queryClient = useQueryClient();
 
   const handleChannelNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
@@ -47,6 +49,8 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
       };
 
       await createGuildChannel(requestData);
+
+      await queryClient.invalidateQueries({ queryKey: ['guildInfo', guildId] });
 
       closeAllModal();
     } catch (error) {
@@ -94,7 +98,9 @@ const CreateChannelModal = ({ categoryId, guildId }: CreateChannelModalProps) =>
       </Modal.Content>
       <S.FooterContainer>
         <S.CancelButton onClick={closeAllModal}>취소</S.CancelButton>
-        <S.CreateButton onClick={handleSubmit}>채널 만들기</S.CreateButton>
+        <S.CreateButton $disabled={!isSelectedType} onClick={handleSubmit}>
+          채널 만들기
+        </S.CreateButton>
       </S.FooterContainer>
     </Modal>
   );
