@@ -19,7 +19,7 @@ export const ChannelTypeContent = styled.div<{ $isSelectedType: boolean }>`
   border-radius: 0.8rem;
 
   background-color: ${({ theme, $isSelectedType }) =>
-    $isSelectedType ? theme.colors.dark[350] : theme.colors.dark[600]};
+    $isSelectedType ? theme.colors.dark[450] : theme.colors.dark[600]};
 
   svg {
     color: ${({ theme }) => theme.colors.dark[400]};
@@ -31,7 +31,7 @@ export const ChannelTypeContent = styled.div<{ $isSelectedType: boolean }>`
 
   &:hover {
     cursor: pointer;
-    background-color: ${({ theme }) => theme.colors.dark[350]};
+    background-color: ${({ theme }) => theme.colors.dark[450]};
   }
 `;
 
