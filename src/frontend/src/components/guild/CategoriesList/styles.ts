@@ -30,5 +30,6 @@ export const CategoryName = styled.div`
 `;
 
 export const Channels = styled.div`
+  cursor: pointer;
   display: flex;
 `;
