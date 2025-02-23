@@ -216,6 +216,17 @@ runs:
               echo "      - mongo_data:/data/db" >> docker-compose.yml
             fi
 
+            if [ "${{ inputs.container_name }}" == "signaling-server" ]; then
+              echo "  redis:" >> docker-compose.yml
+              echo "    image: mongo:latest" >> docker-compose.yml
+              echo "    container_name: mongodb" >> docker-compose.yml
+              echo "    ports:" >> docker-compose.yml
+              echo "      - \"27017:27017\"" >> docker-compose.yml
+              echo "    restart: unless-stopped" >> docker-compose.yml
+              echo "    volumes:" >> docker-compose.yml
+              echo "      - mongo_data:/data/db" >> docker-compose.yml
+            fi
+
             echo "volumes:" >> docker-compose.yml
             echo "  mongo_data:" >> docker-compose.yml
 
