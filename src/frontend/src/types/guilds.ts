@@ -42,17 +42,13 @@ export interface GetGuildResponse {
 
 export interface GuildResultData {
   guild: GuildResult;
-  categories: CategoryResult[];
+  categories: CategoryDataResult[];
   channels: ChannelResult[];
 }
 
-interface CategoryResult {
-  categoryId: string;
-  name: string;
-  isPrivate: boolean;
-}
+export type CategoryDataResult = Omit<CategoryResult, 'guildId'>;
 
-interface ChannelResult {
+export interface ChannelResult {
   channelId: string;
   categoryId: string;
   name: string;
