@@ -3,7 +3,9 @@ import { TbChevronDown, TbX } from 'react-icons/tb';
 
 import { getGuild } from '@/api/guild';
 import useDropdown from '@/hooks/useDropdown';
+import CreateCategoryModal from '@/pages/FriendsPage/components/CreateCategoryModal';
 import { useGuildInfoStore } from '@/stores/guildInfo';
+import useModalStore from '@/stores/modalStore';
 import { GuildResultData } from '@/types/guilds';
 
 import * as S from './styles';
@@ -15,6 +17,7 @@ interface DropdownItem {
 }
 
 const GuildCategories = () => {
+  const { openModal } = useModalStore();
   const { isOpened, dropdownRef, toggleDropdown } = useDropdown();
   const { guildId } = useGuildInfoStore();
   const { data } = useQuery<GuildResultData>({ queryKey: ['guildInfo', guildId], queryFn: () => getGuild(guildId) });
@@ -33,7 +36,7 @@ const GuildCategories = () => {
     {
       id: 'createCategory',
       text: '카테고리 생성',
-      onClick: () => console.log('카테고리 생성 모달 열기'),
+      onClick: () => openModal('withFooter', <CreateCategoryModal />),
     },
     {
       id: 'createChannel',
