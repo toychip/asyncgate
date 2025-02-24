@@ -40,6 +40,7 @@ export const SentUserName = styled(BodyMediumText)`
 
   max-width: 50%;
 
+  line-height: 1.8rem;
   color: ${({ theme }) => theme.colors.white};
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -51,4 +52,9 @@ export const SentDateTime = styled(SmallText)`
 
 export const MessageContent = styled(BodyRegularText)`
   color: ${({ theme }) => theme.colors.white};
+`;
+
+export const ModifiedMark = styled(SmallText)`
+  margin-left: 0.5rem;
+  color: ${({ theme }) => theme.colors.dark[300]};
 `;

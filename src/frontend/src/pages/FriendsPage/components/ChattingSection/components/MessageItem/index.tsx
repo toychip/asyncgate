@@ -23,7 +23,10 @@ const MessageItem = ({
           <S.SentUserName>{sentUserName}</S.SentUserName>
           <S.SentDateTime>{sentDateTime}</S.SentDateTime>
         </S.MessageTitle>
-        <S.MessageContent>{messageContent}</S.MessageContent>
+        <S.MessageContent>
+          {messageContent}
+          {isModified && <S.ModifiedMark>(수정됨)</S.ModifiedMark>}
+        </S.MessageContent>
       </S.MessageContentContainer>
     </S.MessageItem>
   );
