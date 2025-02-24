@@ -1,15 +1,48 @@
+import { useEffect, useState } from 'react';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
 import { MdEmojiEmotions } from 'react-icons/md';
+
+import parseMessageDateTime from '@/utils/parseMessageDateTime';
+
+import MessageItem, { MessageItemProps } from '../MessageItem';
 
 import useMessageSection from './hooks/useMessageSection';
 import * as S from './styles';
 
+const date = new Date();
+
+const MOCKDATA: MessageItemProps[] = [
+  {
+    sentUserProfileUrl: '',
+    sentUserName: 'Fe',
+    sentDateTime: parseMessageDateTime(date),
+    messageContent: 'text message',
+    isModified: false,
+  },
+];
+
 const MessageSection = () => {
+  const [messageList, setMessageList] = useState<MessageItemProps[]>(MOCKDATA);
   const { chatInput, textareaRef, handleTextareaChange, handleKeyDown } = useMessageSection();
+
+  useEffect(() => {}, []);
 
   return (
     <S.MessageSection>
-      <S.MessageContainer></S.MessageContainer>
+      <S.MessageContainer>
+        <S.MessageItemList>
+          {messageList.map((message) => (
+            <MessageItem
+              key={`${message.sentUserName}_${message.sentDateTime}`}
+              sentUserProfileUrl={message.sentUserProfileUrl}
+              sentUserName={message.sentUserName}
+              sentDateTime={message.sentDateTime}
+              messageContent={message.messageContent}
+              isModified={message.isModified}
+            />
+          ))}
+        </S.MessageItemList>
+      </S.MessageContainer>
       <S.BottomBarWrapper>
         <S.BottomBarContainer>
           <S.AttachButton>

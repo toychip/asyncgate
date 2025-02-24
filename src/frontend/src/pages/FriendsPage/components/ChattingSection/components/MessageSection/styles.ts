@@ -14,6 +14,13 @@ export const MessageContainer = styled.div`
   justify-content: flex-end;
 `;
 
+export const MessageItemList = styled.ol`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+`;
+
 export const BottomBarWrapper = styled.div`
   width: 100%;
   padding: 0 1.6rem;
