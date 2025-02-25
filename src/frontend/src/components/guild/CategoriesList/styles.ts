@@ -6,6 +6,7 @@ export const CategoriesList = styled.div`
   gap: 2rem;
 
   margin-top: 1.5rem;
+  padding: 0 1.6rem;
 
   color: ${({ theme }) => theme.colors.dark[300]};
 `;
