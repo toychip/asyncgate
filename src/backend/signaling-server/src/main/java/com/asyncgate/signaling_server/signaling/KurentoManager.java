@@ -6,10 +6,7 @@ import com.asyncgate.signaling_server.entity.MemberEntity;
 import com.asyncgate.signaling_server.support.utility.DomainUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.kurento.client.IceCandidate;
-import org.kurento.client.KurentoClient;
-import org.kurento.client.MediaPipeline;
-import org.kurento.client.WebRtcEndpoint;
+import org.kurento.client.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -25,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class KurentoManager {
     private final KurentoClient kurentoClient;
+
+    // kurento media pipline (SFU) 방에 대한 데이터 (key, value)
     private final Map<String, MediaPipeline> pipelines = new ConcurrentHashMap<>();
     private final Map<String, Map<String, WebRtcEndpoint>> roomEndpoints = new ConcurrentHashMap<>();
     private final Map<String, Member> userStates = new ConcurrentHashMap<>();
@@ -38,7 +37,6 @@ public class KurentoManager {
      */
     public synchronized MediaPipeline getOrCreatePipeline(String roomId) {
         return pipelines.computeIfAbsent(roomId, id -> {
-            log.info("🎥 [Kurento] 새로운 MediaPipeline 생성: {}", roomId);
             return kurentoClient.createMediaPipeline();
         });
     }
@@ -46,10 +44,14 @@ public class KurentoManager {
     /**
      * WebRTC 엔드포인트 생성 및 ICE Candidate 리스너 설정
      */
+    /**
+     * WebRTC 엔드포인트 생성 및 ICE Candidate 리스너 설정
+     */
     public synchronized WebRtcEndpoint createEndpoint(String roomId, String userId) {
         MediaPipeline pipeline = getOrCreatePipeline(roomId);
         WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
 
+        // ICE Candidate 리스너 추가
         endpoint.addIceCandidateFoundListener(event -> {
             JsonObject candidateMessage = new JsonObject();
             candidateMessage.addProperty("id", "iceCandidate");
@@ -59,6 +61,7 @@ public class KurentoManager {
             log.info("🧊 [Kurento] ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, userId, event.getCandidate());
         });
 
+        // 사용자 엔드포인트 저장
         roomEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, endpoint);
         userStates.put(userId, DomainUtil.MemberMapper.toDomain(
                 MemberEntity.builder()
@@ -98,29 +101,6 @@ public class KurentoManager {
     }
 
     /**
-     * 특정 방에서 유저를 제거하고, 필요시 방 정리
-     */
-    public void removeUser(String roomId, String userId) {
-        if (roomEndpoints.containsKey(roomId)) {
-            WebRtcEndpoint endpoint = roomEndpoints.get(roomId).remove(userId);
-            if (endpoint != null) {
-                endpoint.release();
-            }
-
-            if (roomEndpoints.get(roomId).isEmpty()) {
-                roomEndpoints.remove(roomId);
-                MediaPipeline pipeline = pipelines.remove(roomId);
-                if (pipeline != null) {
-                    pipeline.release();
-                }
-            }
-        }
-
-        userStates.remove(userId);
-        log.info("🚪 [Kurento] 유저 제거 완료: roomId={}, userId={}", roomId, userId);
-    }
-
-    /**
      * 특정 방의 모든 유저 목록 반환
      */
     public List<GetUsersInChannelResponse.UserInRoom> getUsersInChannel(String channelId) {
@@ -129,32 +109,34 @@ public class KurentoManager {
             return Collections.emptyList();
         }
 
-        return userStates.entrySet().stream()
-                .filter(entry -> channelId.equals(entry.getValue().getRoomId()))
+        return roomEndpoints.get(channelId).entrySet().stream()
                 .map(entry -> {
-                    Member member = entry.getValue();
+                    String userId = entry.getKey();
+                    WebRtcEndpoint endpoint = entry.getValue();
+
+                    boolean isMicEnabled = endpoint.isMediaFlowingIn(MediaType.AUDIO) && endpoint.isMediaFlowingOut(MediaType.AUDIO);
+                    boolean isCameraEnabled = endpoint.isMediaFlowingIn(MediaType.VIDEO) && endpoint.isMediaFlowingOut(MediaType.VIDEO);
+
                     return GetUsersInChannelResponse.UserInRoom.builder()
-                            .id(member.getUserId())
-                            .nickname(member.getUserId())  // 닉네임 정보가 없으면 기본 userId 사용
+                            .id(userId)
+                            .nickname(userId)  // 닉네임 정보가 없으면 기본 userId 사용
                             .profileImage("")  // 프로필 이미지 필드가 없으면 기본 값 설정
-                            .isMicEnabled(member.isMicEnabled())
-                            .isCameraEnabled(member.isCameraEnabled())
-                            .isScreenSharingEnabled(member.isScreenSharingEnabled())
+                            .isMicEnabled(isMicEnabled)
+                            .isCameraEnabled(isCameraEnabled)
+                            .isScreenSharingEnabled(false)
                             .build();
                 })
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 유저가 방에 접속함.
-     */
-    public void addUserToRoom(String roomId, String userId) {
-        userStates.put(userId, DomainUtil.MemberMapper.toDomain(
-                MemberEntity.builder()
-                        .userId(userId)
-                        .roomId(roomId)
-                        .build())
-        );
+    // 특정 유저의 endpoint 찾기
+    public WebRtcEndpoint getUserEndpoint(String roomId, String userId) {
+        if (!roomEndpoints.containsKey(roomId) || !roomEndpoints.get(roomId).containsKey(userId)) {
+            log.error("❌ [Kurento] WebRTC Endpoint 없음: roomId={}, userId={}", roomId, userId);
+            return null;
+        }
+
+        return roomEndpoints.get(roomId).get(userId);
     }
 
     /**
@@ -167,22 +149,104 @@ public class KurentoManager {
         }
 
         Member member = userStates.get(userId);
+        WebRtcEndpoint endpoint = getUserEndpoint(roomId, userId);
+
+        if (endpoint == null) {
+            log.warn("⚠️ [Kurento] WebRTC Endpoint 없음: roomId={}, userId={}", roomId, userId);
+            return;
+        }
+
         switch (type) {
             case "audio":
+                if (enabled) {
+                    reconnectAudio(userId, endpoint);
+                } else {
+                    disconnectAudio(userId, endpoint);
+                }
                 log.info("🔊 [Kurento] Audio 상태 변경: roomId={}, userId={}, enabled={}", roomId, userId, enabled);
                 member.updateMediaState("mic", enabled);
                 break;
+
             case "video":
+                if (enabled) {
+                    reconnectVideo(userId, endpoint);
+                } else {
+                    disconnectVideo(userId, endpoint);
+                }
                 log.info("📹 [Kurento] Video 상태 변경: roomId={}, userId={}, enabled={}", roomId, userId, enabled);
                 member.updateMediaState("camera", enabled);
                 break;
-            case "screen":
-                log.info("🖥️ [Kurento] Screen 상태 변경: roomId={}, userId={}, enabled={}", roomId, userId, enabled);
-                member.updateMediaState("screen", enabled);
-                break;
+
             default:
                 log.warn("⚠️ [Kurento] 잘못된 미디어 타입: {}", type);
                 return;
+        }
+    }
+
+    /**
+     * 특정 사용자의 오디오 스트림 연결 해제
+     */
+    private void disconnectAudio(String userId, WebRtcEndpoint endpoint) {
+        endpoint.disconnect(endpoint, MediaType.AUDIO);
+        log.info("🚫 [Kurento] 오디오 비활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("mic", false);
+        }
+    }
+
+    /**
+     * 특정 사용자의 오디오 스트림 다시 연결
+     */
+    private void reconnectAudio(String userId, WebRtcEndpoint endpoint) {
+        endpoint.connect(endpoint, MediaType.AUDIO);
+        log.info("🔊 [Kurento] 오디오 활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("mic", true);
+        }
+    }
+
+    /**
+     * 특정 사용자의 비디오 스트림 연결 해제
+     */
+    private void disconnectVideo(String userId, WebRtcEndpoint endpoint) {
+        endpoint.disconnect(endpoint, MediaType.VIDEO);
+        log.info("🚫 [Kurento] 비디오 비활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("camera", false);
+        }
+    }
+
+    /**
+     * 특정 사용자의 비디오 스트림 다시 연결
+     */
+    private void reconnectVideo(String userId, WebRtcEndpoint endpoint) {
+        endpoint.connect(endpoint, MediaType.VIDEO);
+        log.info("📹 [Kurento] 비디오 활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("camera", true);
+        }
+    }
+
+    /**
+     * 방을 제거함
+     */
+    public void removeRoom(String roomId) {
+        if (roomEndpoints.containsKey(roomId)) {
+            roomEndpoints.get(roomId).values().forEach(WebRtcEndpoint::release);
+            roomEndpoints.remove(roomId);
+        }
+
+        if (pipelines.containsKey(roomId)) {
+            pipelines.get(roomId).release();
+            pipelines.remove(roomId);
         }
     }
 }
