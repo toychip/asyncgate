@@ -1,7 +1,7 @@
 eureka:
   instance:
     prefer-ip-address: true
-    hostname: signaling_server
+    hostname: signaling-server
     ip-address: '{cipher}814f08466ab03c2cafb04104dc5c07690891d44daae88cb9caf1605849c201d2'
   client:
     service-url:
