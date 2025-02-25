@@ -1,18 +1,18 @@
 package com.asyncgate.user_server.controller;
 
-import com.asyncgate.user_server.security.annotation.MemberID;
+import com.asyncgate.user_server.dto.response.ReadUserRoomProfileResponse;
 import com.asyncgate.user_server.support.response.SuccessResponse;
-import io.swagger.v3.oas.annotations.Hidden;
+import com.asyncgate.user_server.usecase.ReadUserRoomProfileUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Hidden
 @RestController
 @RequiredArgsConstructor
-public class TestQueryController {
+public class MemberQueryController {
+
+    private final ReadUserRoomProfileUseCase readUserRoomProfileUseCase;
 
     /**
      * 0.0 security no need 테스트용 get method
@@ -25,9 +25,8 @@ public class TestQueryController {
     /**
      * 1.7 회원 화상 간단 정보 조회
      */
-    @Override
     @GetMapping("/room/profile")
-    public SuccessResponse<?> readUserRoomProfile(@MemberID String userId) {
-        return SuccessResponse.ok("회원탈퇴 완료");
+    public SuccessResponse<ReadUserRoomProfileResponse> readUserRoomProfile(@RequestParam("userId") final String userId) {
+        return SuccessResponse.ok(readUserRoomProfileUseCase.execute(userId));
     }
 }

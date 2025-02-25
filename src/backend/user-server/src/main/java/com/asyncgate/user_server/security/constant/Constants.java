@@ -26,6 +26,7 @@ public class Constants {
             "/", // root
             "/actuator/info",
             "/health",
+            "/room/profile",
 
             // Swagger
             "/api-docs.html",
