@@ -10,7 +10,7 @@ eureka:
 
 spring:
   application:
-    name: signaling-server
+    name: signaling_server
   data:
     mongodb:
       host: localhost

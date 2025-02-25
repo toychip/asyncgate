@@ -24,7 +24,7 @@ public class ConfigPrinter {
             // config 폴더에 있는 모든 서비스 리스트
             String[] services = {
                     "apigateway-server", "chat-server", "guild-server",
-                    "notification-server", "signaling-server", "state-server", "user-server"
+                    "notification-server", "signaling_server", "state-server", "user-server"
             };
 
             for (String service : services) {

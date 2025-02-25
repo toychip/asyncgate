@@ -83,8 +83,8 @@ spring:
             - RewritePath=/users/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
 
-        - id: signaling-server
-          uri: lb://SIGNALING-SERVER
+        - id: signaling_server
+          uri: lb://SIGNALING_SERVER
           predicates:
             - Path=/signalings/**
           filters:
