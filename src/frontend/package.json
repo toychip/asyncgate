@@ -14,6 +14,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-devtools": "^5.66.0",
     "axios": "^1.7.9",
@@ -24,6 +25,7 @@
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.1.5",
     "styled-components": "^6.1.14",
+    "websocket": "^1.0.35",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
