@@ -10,71 +10,96 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor
 import org.springframework.messaging.support.ChannelInterceptor
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
-import java.io.Serializable
 
 @Component
 class FilterChannelInterceptor(
     private val jwtTokenProvider: JwtTokenProvider,
 ) : ChannelInterceptor {
 
-    /*
-    @Value("\${spring.kafka.consumer.state-topic}")
-    private lateinit var stateTopic: String
-     */
-
     companion object {
         private val log: Logger = LoggerFactory.getLogger(FilterChannelInterceptor::class.java)
+        private const val AUTHORIZATION_HEADER = "Authorization"
+        private const val BEARER_PREFIX = "Bearer "
+    }
+
+    private fun extractToken(headerValue: String?): String? {
+        if (headerValue.isNullOrBlank()) return null
+        val token = headerValue.trim()
+        return if (token.startsWith(BEARER_PREFIX, ignoreCase = true)) {
+            token.substring(BEARER_PREFIX.length)
+        } else {
+            token
+        }
     }
 
     override fun preSend(message: Message<*>, channel: MessageChannel): Message<*> {
         val headerAccessor = StompHeaderAccessor.wrap(message)
+        log.info("📥 [STOMP] Command: ${headerAccessor.command}, sessionId: ${headerAccessor.sessionId}")
+
         if (StompCommand.CONNECT == headerAccessor.command) {
-            val accessToken = headerAccessor.getFirstNativeHeader("jwt-token")
-                ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "access-token is missing")
-            if (!jwtTokenProvider.validate(accessToken)) {
+            val rawAuth = headerAccessor.getFirstNativeHeader(AUTHORIZATION_HEADER)
+            log.info("🔑 [STOMP] Raw Authorization Header: $rawAuth")
+            val jwtToken = extractToken(rawAuth)
+            if (jwtToken.isNullOrBlank()) {
+                log.error("🚨 [STOMP] Access Token is missing or improperly formatted!")
+                throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access token is missing")
+            }
+            if (!jwtTokenProvider.validate(jwtToken)) {
+                log.error("🚨 [STOMP] Access Token validation failed!")
                 throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
             }
+            log.info("✅ [STOMP] CONNECT 요청 처리 완료")
         }
         return message
     }
 
     override fun postSend(message: Message<*>, channel: MessageChannel, sent: Boolean) {
         val accessor = StompHeaderAccessor.wrap(message)
+        log.info("📡 [STOMP] Command: ${accessor.command}, sessionId: ${accessor.sessionId}, sent: $sent")
+
         when (accessor.command) {
-            StompCommand.CONNECT -> handleConnect(accessor)
-            StompCommand.DISCONNECT -> handleDisconnect()
+            StompCommand.CONNECT -> {
+                log.info("✅ [STOMP] CONNECT 성공 - sessionId: ${accessor.sessionId}")
+                handleConnect(accessor)
+                log.info("🔎 [STOMP] CONNECTED 프레임 헤더: ${accessor.messageHeaders}")
+                accessor.messageHeaders.forEach { header ->
+                    log.info("messageHeader = $header")
+                }
+            }
+            StompCommand.DISCONNECT -> {
+                log.info("🔌 [STOMP] DISCONNECT 요청 - sessionId: ${accessor.sessionId}")
+                handleDisconnect(accessor)
+            }
             else -> {}
         }
     }
 
-    private fun handleDisconnect() {
-        log.info("WebSocket 연결 해제")
+    private fun handleDisconnect(accessor: StompHeaderAccessor) {
+        log.info("🔌 [STOMP] WebSocket 연결 해제 - sessionId: ${accessor.sessionId}")
     }
 
     private fun handleConnect(accessor: StompHeaderAccessor) {
         val currentSessionId = accessor.sessionId
-            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "not session now")
-        val jwtToken = accessor.getFirstNativeHeader("jwt-token")
-            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "jwt-token is missing")
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Not session now")
+        val rawAuth = accessor.getFirstNativeHeader(AUTHORIZATION_HEADER)
+        val jwtToken = extractToken(rawAuth)
+            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "JWT token is missing")
         val currentUserId = jwtTokenProvider.extract(jwtToken)
+        log.info("🔑 [STOMP] 유저 ID 추출 완료: $currentUserId")
 
         val loginSessionRequest = LoginSessionRequest(
             type = LoginType.LOGIN,
             sessionId = currentSessionId,
             userId = currentUserId
         )
-//
-//        // ToDo 상태관리 서버에 로그인 전달
-//        val guildIds = guildClient.getGuildIds(jwtToken)
-
+        // ToDo: 상태관리 서버에 로그인 전달 (주석 유지)
+        // val guildIds = guildClient.getGuildIds(jwtToken)
         val stateRequest = StateRequest(
             StatusType.CONNECT,
             userId = currentUserId
-//            guildIds = guildIds
         )
-
-        // 시그널링 서버에 전달
-        //                messageSender.signaling(stateTopic, stateRequest)
+        // 시그널링 서버에 전달 (주석)
+        // messageSender.signaling(stateTopic, stateRequest)
     }
 }
 
@@ -84,7 +109,7 @@ data class LoginSessionRequest(
     val userId: String,
     val communityId: String? = null,
     val ids: List<Long>? = null,
-) : Serializable {
+) : java.io.Serializable {
     override fun toString(): String {
         return "LoginSessionRequest(type=$type, sessionId='$sessionId', userId='$userId', communityId=$communityId, ids=$ids)"
     }
@@ -99,7 +124,7 @@ data class StateRequest(
     val type: StatusType,
     val userId: String,
     val guildIds: List<String>? = null,
-) : Serializable
+) : java.io.Serializable
 
 enum class StatusType {
     CONNECT,

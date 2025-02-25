@@ -7,26 +7,36 @@ import org.springframework.messaging.Message
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor
 
 object CustomSecurityContext {
-    private const val JWT_HEADER = "jwt-token"
+    private const val AUTHORIZATION_HEADER = "Authorization"
 
-    private const val AUTH_HEADER = "Authorization"
-    private const val BEARER_PREFIX = "Bearer "
+    // Authorization 헤더에서 "Bearer " 접두어를 제거한 후 JWT 토큰을 반환
+    private fun parseJwtToken(headerValue: String): String {
+        return try {
+            val token = headerValue.trim()
+            if (token.startsWith("Bearer ", ignoreCase = true)) {
+                token.substring(7).trim()
+            } else {
+                throw ChatServerException(FailType.JWT_INVALID_TOKEN)
+            }
+        } catch (e: Exception) {
+            throw ChatServerException(FailType.JWT_INVALID_TOKEN)
+        }
+    }
 
     fun extractJwtTokenForStomp(message: Message<*>): String {
         val accessor = StompHeaderAccessor.wrap(message)
-
-        return accessor.getFirstNativeHeader(JWT_HEADER)
+        val headerValue = accessor.getFirstNativeHeader(AUTHORIZATION_HEADER)
             ?: throw ChatServerException(FailType.JWT_INVALID_TOKEN)
+
+        println("headerValue = $headerValue")
+
+        return parseJwtToken(headerValue)
     }
 
     fun extractJwtTokenForHttp(request: HttpServletRequest): String {
-        val authHeader = request.getHeader(AUTH_HEADER)
+        val headerValue = request.getHeader(AUTHORIZATION_HEADER)
             ?: throw ChatServerException(FailType.JWT_INVALID_TOKEN)
 
-        if (!authHeader.startsWith(BEARER_PREFIX)) {
-            throw ChatServerException(FailType.JWT_INVALID_TOKEN)
-        }
-
-        return authHeader.removePrefix(BEARER_PREFIX).trim()
+        return parseJwtToken(headerValue)
     }
 }

@@ -1,9 +1,9 @@
 server:
-  port: 0
+  port: 8700
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:8700}
   client:
     register-with-eureka: true
     fetch-registry: true
@@ -34,6 +34,9 @@ spring:
         request.timeout.ms: 120000
         retry.backoff.ms: 5000
         reconnect.backoff.ms: 5000
+  data:
+    mongodb:
+      uri: mongodb://mongo:27017/chatdb
 
 management:
   endpoints:
