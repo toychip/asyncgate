@@ -48,7 +48,12 @@ public enum FailType {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access_40300", "접근 권한이 없습니다."),
     NOT_LOGIN_USER(HttpStatus.FORBIDDEN, "Access_40301", "로그인하지 않은 사용자입니다."),
     ARGUMENT_BAD_REQUEST(HttpStatus.BAD_REQUEST, "Argument_4001", "입력된 값이 잘못되었습니다."),
-    ;
+
+
+    // Friend
+    FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND, "Friend_4001", "친구 정보가 존재하지 않습니다."),
+    UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "Friend_40300", "현재 사용자는 해당 친구 관계에 대한 권한이 없습니다."),
+    UNAUTHORIZED_ACTION(HttpStatus.FORBIDDEN, "Friend_40301", "본인의 친구 요청에 대해서는 해당 작업을 수행할 수 없습니다.");;
 
     private final HttpStatus status;
     private final String errorCode;

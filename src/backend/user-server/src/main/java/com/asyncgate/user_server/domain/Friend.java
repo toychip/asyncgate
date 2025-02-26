@@ -20,12 +20,12 @@ public class Friend {
         this.status = status;
     }
 
-    public static Friend create(String user1, String user2, String requestedBy) {
+    public static Friend create(String requestUserId, String toUserId) {
         // 두 사용자 ID를 사전 순으로 정렬하여 저장
-        if (user1.compareTo(user2) < 0) {
-            return new Friend(UUID.randomUUID().toString(), user1, user2, requestedBy, FriendStatus.PENDING);
+        if (requestUserId.compareTo(toUserId) < 0) {
+            return new Friend(UUID.randomUUID().toString(), requestUserId, toUserId, requestUserId, FriendStatus.PENDING);
         } else {
-            return new Friend(UUID.randomUUID().toString(), user2, user1, requestedBy, FriendStatus.PENDING);
+            return new Friend(UUID.randomUUID().toString(), toUserId, requestUserId, requestUserId, FriendStatus.PENDING);
         }
     }
 
