@@ -2,10 +2,10 @@ package com.asyncgate.signaling_server.signaling;
 
 import com.asyncgate.signaling_server.domain.Member;
 import com.asyncgate.signaling_server.dto.response.GetUsersInChannelResponse;
-import com.asyncgate.signaling_server.entity.MemberEntity;
-import com.asyncgate.signaling_server.support.utility.DomainUtil;
+import com.asyncgate.signaling_server.infrastructure.client.MemberServiceClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import lombok.RequiredArgsConstructor;
 import org.kurento.client.*;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +20,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KurentoManager {
     private final KurentoClient kurentoClient;
+
+    private final MemberServiceClient memberServiceClient;
 
     // kurento media pipline (SFU) 방에 대한 데이터 (key, value)
     private final Map<String, MediaPipeline> pipelines = new ConcurrentHashMap<>();
     private final Map<String, Map<String, WebRtcEndpoint>> roomEndpoints = new ConcurrentHashMap<>();
     private final Map<String, Member> userStates = new ConcurrentHashMap<>();
-
-    public KurentoManager(KurentoClient kurentoClient) {
-        this.kurentoClient = kurentoClient;
-    }
 
     /**
      * 특정 방에 대한 MediaPipeline을 가져오거나 새로 생성
@@ -48,24 +47,22 @@ public class KurentoManager {
         MediaPipeline pipeline = getOrCreatePipeline(roomId);
         WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
 
+        // 사용자 정보 조회
+        Member member = memberServiceClient.fetchMemberById(userId, roomId);
+
         // ICE Candidate 리스너 추가
         endpoint.addIceCandidateFoundListener(event -> {
             JsonObject candidateMessage = new JsonObject();
             candidateMessage.addProperty("id", "iceCandidate");
-            candidateMessage.addProperty("userId", userId);
+            candidateMessage.addProperty("userId", member.getId());
             candidateMessage.add("candidate", new Gson().toJsonTree(event.getCandidate()));
 
-            log.info("🧊 [Kurento] ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, userId, event.getCandidate());
+            log.info("🧊 [Kurento] ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, member.getId(), event.getCandidate());
         });
 
         // 사용자 엔드포인트 저장
         roomEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, endpoint);
-        userStates.put(userId, DomainUtil.MemberMapper.toDomain(
-                MemberEntity.builder()
-                        .userId(userId)
-                        .roomId(roomId)
-                        .build())
-        );
+        userStates.put(userId, member);
 
         log.info("[Kurento] WebRTC Endpoint 생성: roomId={}, userId={}", roomId, userId);
         return endpoint;
@@ -154,7 +151,7 @@ public class KurentoManager {
         }
 
         switch (type) {
-            case "audio":
+            case "mic":
                 if (enabled) {
                     reconnectAudio(userId, endpoint);
                 } else {
@@ -164,7 +161,7 @@ public class KurentoManager {
                 member.updateMediaState("mic", enabled);
                 break;
 
-            case "video":
+            case "camera":
                 if (enabled) {
                     reconnectVideo(userId, endpoint);
                 } else {

@@ -9,7 +9,8 @@ import lombok.Setter;
 public class Member implements Identifiable {
 
     private final String id; // 고유한 식별자
-    private final String userId; // 사용자의 ID
+    private final String progileImageUrl;
+    private final String nickname;
     private String roomId; // 사용자가 속한 방 ID
 
     // 미디어 상태
@@ -18,20 +19,22 @@ public class Member implements Identifiable {
     private boolean isScreenSharingEnabled;
 
     @Builder
-    public Member(final String id, final String userId, final String roomId, final boolean isMicEnabled, final boolean isCameraEnabled, final boolean isScreenSharingEnabled) {
+    public Member(final String id, final String roomId, final String progileImageUrl, final String nickname, final boolean isMicEnabled, final boolean isCameraEnabled, final boolean isScreenSharingEnabled) {
         this.id = id;
-        this.userId = userId;
         this.roomId = roomId;
+        this.progileImageUrl = progileImageUrl;
+        this.nickname = nickname;
         this.isMicEnabled = isMicEnabled;
         this.isCameraEnabled = isCameraEnabled;
         this.isScreenSharingEnabled = isScreenSharingEnabled;
     }
 
-    public static Member create(final String id, final String userId, final String roomId) {
+    public static Member create(final String id, final String roomId, final String progileImageUrl, final String nickname) {
         return Member.builder()
                 .id(id)
-                .userId(userId)
                 .roomId(roomId)
+                .progileImageUrl(progileImageUrl)
+                .nickname(nickname)
                 .isMicEnabled(false)
                 .isCameraEnabled(false)
                 .isScreenSharingEnabled(false)
