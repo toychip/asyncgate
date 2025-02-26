@@ -3,7 +3,9 @@ package com.asyncgate.user_server.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class ReadUserRoomProfileResponse {
     // 유저의 id, 프로필 사진, 닉네임을 반환
     @JsonProperty("id")
