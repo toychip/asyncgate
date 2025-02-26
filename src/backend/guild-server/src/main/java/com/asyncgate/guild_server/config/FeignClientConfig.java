@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.asyncgate.guild_server.client")
 public class FeignClientConfig {
 
     @Bean

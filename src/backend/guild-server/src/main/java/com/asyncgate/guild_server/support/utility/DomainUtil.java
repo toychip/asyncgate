@@ -1,13 +1,7 @@
 package com.asyncgate.guild_server.support.utility;
 
-import com.asyncgate.guild_server.domain.Category;
-import com.asyncgate.guild_server.domain.Channel;
-import com.asyncgate.guild_server.domain.Guild;
-import com.asyncgate.guild_server.domain.GuildMember;
-import com.asyncgate.guild_server.entity.CategoryEntity;
-import com.asyncgate.guild_server.entity.ChannelEntity;
-import com.asyncgate.guild_server.entity.GuildEntity;
-import com.asyncgate.guild_server.entity.GuildMemberEntity;
+import com.asyncgate.guild_server.domain.*;
+import com.asyncgate.guild_server.entity.*;
 
 public class DomainUtil {
 
@@ -93,6 +87,40 @@ public class DomainUtil {
                     .name(entity.getName())
                     .channelType(entity.getChannelType())
                     .isPrivate(entity.isPrivate())
+                    .build();
+        }
+    }
+
+    public static class DirectMapper {
+        public static DirectEntity toEntity(final Direct domain) {
+            return DirectEntity.builder()
+                    .id(domain.getId())
+                    .name(domain.getName())
+                    .build();
+        }
+
+        public static Direct toDomain(final DirectEntity entity) {
+            return Direct.builder()
+                    .id(entity.getId())
+                    .name(entity.getName())
+                    .build();
+        }
+    }
+
+    public static class DirectMemberMapper {
+        public static DirectMemberEntity toEntity(final DirectMember directMember) {
+            return DirectMemberEntity.builder()
+                    .id(directMember.getId())
+                    .memberId(directMember.getMemberId())
+                    .memberName(directMember.getMemberName())
+                    .build();
+        }
+
+        public static DirectMember toDomain(final DirectMemberEntity entity) {
+            return DirectMember.builder()
+                    .id(entity.getId())
+                    .memberId(entity.getMemberId())
+                    .memberName(entity.getMemberName())
                     .build();
         }
     }
