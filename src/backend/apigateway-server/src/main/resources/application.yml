@@ -90,7 +90,15 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/signalings/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter      
+            - AuthorizationHeaderFilter   
+
+        - id: signaling-server
+          uri: lb://SIGNALING-SERVER
+          predicates:
+            - Path=/signalings/signal
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}   
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
@@ -99,6 +107,7 @@ spring:
           '[/**]':
             allowed-origins:
               - 'http://localhost:5173'
+              - 'https://localhost:5173'
             allow-credentials: true
             allowed-headers: '*'
             allowed-methods:
