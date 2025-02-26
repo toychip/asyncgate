@@ -35,9 +35,7 @@ public class KurentoConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(kurentoHandler(kurentoManager(kurentoClient())), "/socket.io/")
-                .setAllowedOrigins("*")
-                .withSockJS();
+        registry.addHandler(kurentoHandler(kurentoManager(kurentoClient())), "/signal").setAllowedOrigins("*");
     }
 
     @Bean
