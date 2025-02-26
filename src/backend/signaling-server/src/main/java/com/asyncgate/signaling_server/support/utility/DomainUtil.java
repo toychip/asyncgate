@@ -16,7 +16,6 @@ public class DomainUtil {
         public static MemberEntity toEntity(final Member member) {
             return MemberEntity.builder()
                     .id(member.getId())
-                    .userId(member.getUserId())
                     .roomId(member.getRoomId())
                     .isMicEnabled(member.isMicEnabled())
                     .isCameraEnabled(member.isCameraEnabled())
@@ -27,7 +26,6 @@ public class DomainUtil {
         public static Member toDomain(final MemberEntity entity) {
             return Member.builder()
                     .id(entity.getId())
-                    .userId(entity.getUserId())
                     .roomId(entity.getRoomId())
                     .isMicEnabled(entity.isMicEnabled())
                     .isCameraEnabled(entity.isCameraEnabled())

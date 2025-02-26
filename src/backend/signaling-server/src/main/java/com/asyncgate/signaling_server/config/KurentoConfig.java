@@ -1,7 +1,6 @@
 package com.asyncgate.signaling_server.config;
 
 import com.asyncgate.signaling_server.infrastructure.client.MemberServiceClient;
-import com.asyncgate.signaling_server.infrastructure.client.MemberServiceClientImpl;
 import com.asyncgate.signaling_server.signaling.KurentoManager;
 import com.asyncgate.signaling_server.support.handler.KurentoHandler;
 import org.kurento.client.KurentoClient;
@@ -27,7 +26,7 @@ public class KurentoConfig implements WebSocketConfigurer {
 
     @Bean
     public MemberServiceClient memberServiceClient() {
-        return new MemberServiceClientImpl();
+        return new MemberServiceClient();
     }
 
     @Bean
