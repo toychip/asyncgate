@@ -5,6 +5,7 @@ import com.asyncgate.user_server.dto.response.ReadUserRoomProfileResponse;
 import com.asyncgate.user_server.exception.FailType;
 import com.asyncgate.user_server.exception.UserServerException;
 import com.asyncgate.user_server.repository.MemberRepository;
+import com.asyncgate.user_server.usecase.ReadUserRoomProfileUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReadUserRoomProfileService {
+public class ReadUserRoomProfileService implements ReadUserRoomProfileUseCase {
 
     private MemberRepository memberRepository;
 
