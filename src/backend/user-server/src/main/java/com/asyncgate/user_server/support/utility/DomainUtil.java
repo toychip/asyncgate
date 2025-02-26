@@ -1,8 +1,10 @@
 package com.asyncgate.user_server.support.utility;
 
-import com.asyncgate.user_server.domain.Member;
 import com.asyncgate.user_server.domain.AuthenticationCode;
+import com.asyncgate.user_server.domain.Friend;
+import com.asyncgate.user_server.domain.Member;
 import com.asyncgate.user_server.domain.TemporaryMember;
+import com.asyncgate.user_server.entity.FriendEntity;
 import com.asyncgate.user_server.entity.MemberEntity;
 import com.asyncgate.user_server.entity.redis.AuthenticationCodeEntity;
 import com.asyncgate.user_server.entity.redis.TemporaryMemberEntity;
@@ -73,6 +75,28 @@ public class DomainUtil {
                     .id(entity.getId())
                     .code(entity.getCode())
                     .build();
+        }
+    }
+
+    public static class FriendMapper {
+        public static FriendEntity toEntity(final Friend friend) {
+            return FriendEntity.builder()
+                    .id(friend.getId())
+                    .userId1(friend.getUserId1())
+                    .userId2(friend.getUserId2())
+                    .requestedBy(friend.getRequestedBy())
+                    .status(friend.getStatus())
+                    .build();
+        }
+
+        public static Friend toDomain(final FriendEntity entity) {
+            return Friend.of(
+                    entity.getId(),
+                    entity.getUserId1(),
+                    entity.getUserId2(),
+                    entity.getRequestedBy(),
+                    entity.getStatus()
+            );
         }
     }
 }
