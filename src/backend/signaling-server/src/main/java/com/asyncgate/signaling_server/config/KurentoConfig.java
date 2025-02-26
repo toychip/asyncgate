@@ -41,6 +41,7 @@ public class KurentoConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        System.out.println("🚀 WebSocketHandlerRegistry 등록");
         registry.addHandler(kurentoHandler(kurentoManager(kurentoClient(), memberServiceClient())), "/signal").setAllowedOrigins("*");
     }
 
