@@ -44,9 +44,6 @@ public class KurentoManager {
     /**
      * WebRTC 엔드포인트 생성 및 ICE Candidate 리스너 설정
      */
-    /**
-     * WebRTC 엔드포인트 생성 및 ICE Candidate 리스너 설정
-     */
     public synchronized WebRtcEndpoint createEndpoint(String roomId, String userId) {
         MediaPipeline pipeline = getOrCreatePipeline(roomId);
         WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
