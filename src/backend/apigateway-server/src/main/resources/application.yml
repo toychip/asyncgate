@@ -82,6 +82,24 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/users/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
+
+        - id: signaling-server
+          uri: lb://SIGNALING-SERVER
+          predicates:
+            - Path=/signalings/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter   
+
+        - id: signaling-server
+          uri: lb://SIGNALING-SERVER
+          predicates:
+            - Path=/signalings/signal
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}   
+
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
       globalcors:
@@ -89,6 +107,7 @@ spring:
           '[/**]':
             allowed-origins:
               - 'http://localhost:5173'
+              - 'https://localhost:5173'
             allow-credentials: true
             allowed-headers: '*'
             allowed-methods:

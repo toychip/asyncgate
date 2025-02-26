@@ -1,4 +1,4 @@
-package com.asyncgate.user_server.security.constant;
+package com.asyncgate.signaling_server.security.constant;
 
 import java.util.List;
 
@@ -18,15 +18,11 @@ public class Constants {
      */
     public static List<String> NO_NEED_AUTH_URLS = List.of(
             // Authentication/Authorization
-            "/connection-test",
-            "/validation/authentication-code",
-            "/sign-up",
-            "/sign-in",
-            "/validation/email",
             "/", // root
             "/actuator/info",
             "/health",
-            "/room/profile",
+            "/index.html",
+            "/signal",
 
             // Swagger
             "/api-docs.html",

@@ -29,8 +29,10 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+	implementation 'org.springframework.cloud:spring-cloud-starter'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
@@ -39,11 +41,52 @@ dependencies {
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-oauth2-client'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// mysql
+	// runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// mongo db
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+	// WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// sockjs
+	implementation 'org.webjars:sockjs-client:1.5.1'
+	// stomp
+	implementation 'org.webjars:stomp-websocket:2.3.4'
+	// gson
+	implementation 'com.google.code.gson:gson:2.9.0'
+
+	/* Kurento 미디어 서버 관련 2개 */
+	// https://mvnrepository.com/artifact/org.kurento/kurento-client
+	implementation group: 'org.kurento', name: 'kurento-client', version: '6.18.0'
+
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// aop
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 }
 
 dependencyManagement {
