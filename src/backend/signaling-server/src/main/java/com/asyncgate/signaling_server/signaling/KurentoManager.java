@@ -2,6 +2,8 @@ package com.asyncgate.signaling_server.signaling;
 
 import com.asyncgate.signaling_server.domain.Member;
 import com.asyncgate.signaling_server.dto.response.GetUsersInChannelResponse;
+import com.asyncgate.signaling_server.exception.FailType;
+import com.asyncgate.signaling_server.exception.SignalingServerException;
 import com.asyncgate.signaling_server.infrastructure.client.MemberServiceClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -108,13 +110,21 @@ public class KurentoManager {
                     String userId = entry.getKey();
                     WebRtcEndpoint endpoint = entry.getValue();
 
+
+                    Member member = userStates.get(userId);
+
+                    // member가 null이라면 exception
+                    if (member == null) {
+                        throw new SignalingServerException(FailType._MEMBER_NOT_FOUND);
+                    }
+
                     boolean isMicEnabled = endpoint.isMediaFlowingIn(MediaType.AUDIO) && endpoint.isMediaFlowingOut(MediaType.AUDIO);
                     boolean isCameraEnabled = endpoint.isMediaFlowingIn(MediaType.VIDEO) && endpoint.isMediaFlowingOut(MediaType.VIDEO);
 
                     return GetUsersInChannelResponse.UserInRoom.builder()
-                            .id(userId)
-                            .nickname(userId)  // 닉네임 정보가 없으면 기본 userId 사용
-                            .profileImage("")  // 프로필 이미지 필드가 없으면 기본 값 설정
+                            .id(member.getId())
+                            .nickname(member.getNickname())  // 닉네임 정보가 없으면 기본 userId 사용
+                            .profileImage(member.getProgileImageUrl())  // 프로필 이미지 필드가 없으면 기본 값 설정
                             .isMicEnabled(isMicEnabled)
                             .isCameraEnabled(isCameraEnabled)
                             .isScreenSharingEnabled(false)
