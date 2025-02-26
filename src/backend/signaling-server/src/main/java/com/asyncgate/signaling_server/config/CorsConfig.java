@@ -33,9 +33,6 @@ public class CorsConfig {
         configuration.setAllowedHeaders(Collections.singletonList("*"));
 //        configuration.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
 
-        //인증, 인가를 위한 credentials 를 TRUE로 설정
-        configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
