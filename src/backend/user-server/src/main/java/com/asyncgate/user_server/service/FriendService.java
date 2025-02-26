@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -74,5 +76,20 @@ public class FriendService implements FriendUseCase {
         Friend friend = friendRepository.findById(friendId);
         validDeletePermission(userId, friend);
         friendRepository.deleteById(friendId);
+    }
+
+    @Override
+    public List<Friend> getSentFriendRequests(final String userId) {
+        return friendRepository.findSentFriendRequests(userId);
+    }
+
+    @Override
+    public List<Friend> getReceivedFriendRequests(final String userId) {
+        return friendRepository.findReceivedFriendRequests(userId);
+    }
+
+    @Override
+    public List<Friend> getFriends(final String userId) {
+        return friendRepository.findFriendsByUserId(userId);
     }
 }

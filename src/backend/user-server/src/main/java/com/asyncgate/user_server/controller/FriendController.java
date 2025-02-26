@@ -3,12 +3,15 @@ package com.asyncgate.user_server.controller;
 import com.asyncgate.user_server.domain.Friend;
 import com.asyncgate.user_server.domain.Member;
 import com.asyncgate.user_server.dto.response.FriendResponse;
+import com.asyncgate.user_server.dto.response.FriendsResponse;
 import com.asyncgate.user_server.dto.response.MemberResponse;
 import com.asyncgate.user_server.security.annotation.MemberID;
 import com.asyncgate.user_server.support.response.SuccessResponse;
 import com.asyncgate.user_server.usecase.FriendUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -81,8 +84,42 @@ public class FriendController {
             final @PathVariable String friendId
     ) {
         friendUseCase.deleteFriend(userId, friendId);
-        return SuccessResponse.ok("memberId" + friendId + "친구를 삭제했습니다.");
+        return SuccessResponse.ok(String.format("UserId[&s]인 친구를 삭제했습니다.", friendId));
     }
 
+    /**
+     * 본인이 보낸 친구 요청 목록 조회 (상태: PENDING)
+     * URL 예시: GET /friends/sent
+     */
+    @GetMapping("/sent")
+    public SuccessResponse<FriendsResponse> getSentFriendRequests(final @MemberID String userId) {
+        List<Friend> sent = friendUseCase.getSentFriendRequests(userId);
+        return SuccessResponse.ok(
+                FriendsResponse.from(sent)
+        );
+    }
 
+    /**
+     * 본인이 받은 친구 요청 목록 조회 (상태: PENDING)
+     * URL 예시: GET /friends/received
+     */
+    @GetMapping("/received")
+    public SuccessResponse<FriendsResponse> getReceivedFriendRequests(final @MemberID String userId) {
+        List<Friend> received = friendUseCase.getReceivedFriendRequests(userId);
+        return SuccessResponse.ok(
+                FriendsResponse.from(received)
+        );
+    }
+
+    /**
+     * 본인의 실제 친구 목록 조회 (상태: ACCEPTED)
+     * URL 예시: GET /friends/list
+     */
+    @GetMapping("/list")
+    public SuccessResponse<FriendsResponse> getFriends(final @MemberID String userId) {
+        List<Friend> friends = friendUseCase.getFriends(userId);
+        return SuccessResponse.ok(
+                FriendsResponse.from(friends)
+        );
+    }
 }

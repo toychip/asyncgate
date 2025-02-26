@@ -8,11 +8,14 @@ import com.asyncgate.user_server.support.utility.DomainUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class FriendRepositoryImpl implements FriendRepository {
 
     private final FriendJpaRepository friendJpaRepository;
+    private final FriendQueryDslRepository queryDslRepository;
 
     @Override
     public Friend findById(final String id) {
@@ -36,5 +39,29 @@ public class FriendRepositoryImpl implements FriendRepository {
                 .ifPresent(
                         BaseEntity::deactivate
                 );
+    }
+
+    @Override
+    public List<Friend> findSentFriendRequests(final String requestedUserId) {
+        return queryDslRepository.findSentFriendRequests(requestedUserId)
+                .stream().map(
+                        DomainUtil.FriendMapper::toDomain
+                ).toList();
+    }
+
+    @Override
+    public List<Friend> findReceivedFriendRequests(final String userId) {
+        return queryDslRepository.findReceivedFriendRequests(userId)
+                .stream().map(
+                        DomainUtil.FriendMapper::toDomain
+                ).toList();
+    }
+
+    @Override
+    public List<Friend> findFriendsByUserId(final String userId) {
+        return queryDslRepository.findFriendsByUserId(userId)
+                .stream().map(
+                        DomainUtil.FriendMapper::toDomain
+                ).toList();
     }
 }
