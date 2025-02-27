@@ -1,0 +1,67 @@
+import styled from 'styled-components';
+
+import { BodyMediumText, ChipText } from '@/styles/Typography';
+
+export const FriendsList = styled.ul`
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  margin-top: 0.8rem;
+
+  color: ${({ theme }) => theme.colors.dark[300]};
+`;
+
+export const FriendItem = styled.li`
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+
+  height: 6.2rem;
+  margin: 0 2rem 0 3rem;
+  padding: 1.6rem 1rem;
+  border-radius: 0.4rem;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.dark[500]};
+  }
+`;
+
+export const FriendProfileImage = styled.div<{ $imageUrl: string }>`
+  position: relative;
+
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+
+  background-color: ${({ theme }) => theme.colors.white};
+  background-image: url(${(props) => props.$imageUrl});
+`;
+
+export const FriendStatusMark = styled.div<{ $isOnline: boolean }>`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  width: 1rem;
+  height: 1rem;
+  border: 0.1rem solid ${({ theme }) => theme.colors.dark[400]};
+  border-radius: 50%;
+
+  background-color: ${({ $isOnline }) => ($isOnline ? 'green' : 'black')};
+`;
+
+export const FriendName = styled(BodyMediumText)`
+  overflow: hidden;
+
+  padding-left: 0.8rem;
+
+  color: ${({ theme }) => theme.colors.white};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+export const FriendStatus = styled(ChipText)`
+  color: ${({ theme }) => theme.colors.dark[300]};
+`;
