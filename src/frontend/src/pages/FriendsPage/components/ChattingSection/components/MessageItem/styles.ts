@@ -10,7 +10,36 @@ export const MessageItem = styled.li`
 `;
 
 export const MessageContentContainer = styled.div`
+  width: 100%;
+  padding-right: 1.6rem;
   padding-left: calc(4rem + 1.6rem + 1.6rem);
+`;
+
+export const MessageToolbar = styled.div`
+  position: absolute;
+  top: -1rem;
+  right: 0;
+
+  display: flex;
+  gap: 8px;
+
+  padding: 6px 8px;
+  border-radius: 6px;
+
+  opacity: 0.9;
+  background: ${({ theme }) => theme.colors.dark[600]};
+  box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
+`;
+
+export const IconButton = styled.button`
+  cursor: pointer;
+  border: none;
+  color: ${({ theme }) => theme.colors.dark[300]};
+  background: none;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.white};
+  }
 `;
 
 export const SentUserProfileImage = styled.img`
@@ -33,6 +62,10 @@ export const MessageTitle = styled.div`
   display: flex;
   gap: 1rem;
   align-items: flex-end;
+`;
+
+export const EditTextareaWrapper = styled.div`
+  width: 100%;
 `;
 
 export const SentUserName = styled(BodyMediumText)`

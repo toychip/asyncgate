@@ -1,60 +1,118 @@
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { BsFillPlusCircleFill } from 'react-icons/bs';
+import { IoClose } from 'react-icons/io5';
 import { MdEmojiEmotions } from 'react-icons/md';
 
-import parseMessageDateTime from '@/utils/parseMessageDateTime';
+import ChatTextarea from '../ChatTextarea';
+import MessageItem from '../MessageItem';
 
-import MessageItem, { MessageItemProps } from '../MessageItem';
-
-import useMessageSection from './hooks/useMessageSection';
+import useChat, { ChatMessage } from './hooks/useChat';
+import useChatTextarea from './hooks/useChatTextarea';
 import * as S from './styles';
 
-const date = new Date();
+interface MessageSectionProps {
+  channelId: string;
+}
 
-const MOCKDATA: MessageItemProps[] = [
-  {
-    sentUserProfileUrl: '',
-    sentUserName: 'Fe',
-    sentDateTime: parseMessageDateTime(date),
-    messageContent: 'text message',
-    isModified: false,
-  },
-];
+const MessageSection = ({ channelId }: MessageSectionProps) => {
+  const { messages, sendMessage } = useChat({ channelId });
+  const MOCKDATA: ChatMessage[] = [
+    {
+      profileImage: '',
+      channelId,
+      name: '철민',
+      content: '테스트용 메시지',
+    },
+    {
+      profileImage: '',
+      channelId,
+      name: '철민',
+      content: '테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지',
+    },
+    {
+      profileImage: '',
+      channelId,
+      name: '철민',
+      content: '테스트용 메시지테스트용 메시지',
+    },
+    {
+      profileImage: '',
+      channelId,
+      name: '철민',
+      content: '테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지',
+    },
+    {
+      profileImage: '',
+      channelId,
+      name: '철민',
+      content: '테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지',
+    },
+  ];
+  // TODO: 이전 채팅 기록 불러오는 로직 추가 예정
+  const { chatInput, textareaRef, handleTextareaChange, handleKeyDown } = useChatTextarea({
+    sendMessage,
+  });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-const MessageSection = () => {
-  const [messageList, setMessageList] = useState<MessageItemProps[]>(MOCKDATA);
-  const { chatInput, textareaRef, handleTextareaChange, handleKeyDown } = useMessageSection();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {}, []);
+  const handleFileAttachButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    console.log('선택한 파일:', file);
+    setSelectedFile(file);
+
+    // 파일 업로드 로직
+  };
+
+  const handleFileRemove = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <S.MessageSection>
       <S.MessageContainer>
         <S.MessageItemList>
-          {messageList.map((message) => (
+          {MOCKDATA.map((message, index) => (
             <MessageItem
-              key={`${message.sentUserName}_${message.sentDateTime}`}
-              sentUserProfileUrl={message.sentUserProfileUrl}
-              sentUserName={message.sentUserName}
-              sentDateTime={message.sentDateTime}
-              messageContent={message.messageContent}
-              isModified={message.isModified}
+              key={`${index}_${message.content}`}
+              sentUserProfileUrl={message.profileImage}
+              sentUserName={message.name}
+              sentDateTime={'날짜 시간'}
+              messageContent={message.content}
+              isModified={false}
             />
           ))}
         </S.MessageItemList>
       </S.MessageContainer>
       <S.BottomBarWrapper>
+        {selectedFile && (
+          <S.FilePreview>
+            <S.FileName>{selectedFile.name}</S.FileName>
+            <S.FileRemoveButton onClick={handleFileRemove}>
+              <IoClose size={20} />
+            </S.FileRemoveButton>
+          </S.FilePreview>
+        )}
         <S.BottomBarContainer>
-          <S.AttachButton>
+          <S.AttachButton onClick={handleFileAttachButtonClick}>
             <BsFillPlusCircleFill size={22} />
           </S.AttachButton>
-          <S.ChatTextarea
+          <S.FileAttachInput ref={fileInputRef} type="file" id="fileAttach" onChange={handleFileChange} />
+          <ChatTextarea
             ref={textareaRef}
-            autoFocus={true}
             value={chatInput}
             placeholder="메시지 보내기"
-            onChange={(e) => handleTextareaChange(e.target.value)}
-            onKeyDown={handleKeyDown}
+            handleChange={(e) => handleTextareaChange(e.target.value)}
+            handleKeyDown={handleKeyDown}
           />
           <S.ToolBarContainer>
             <S.IconWrapper>

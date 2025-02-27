@@ -22,6 +22,7 @@ export const MessageItemList = styled.ol`
 `;
 
 export const BottomBarWrapper = styled.div`
+  position: relative;
   width: 100%;
   padding: 0 1.6rem;
   background-color: ${({ theme }) => theme.colors.dark[600]};
@@ -43,23 +44,43 @@ export const AttachButton = styled.button`
   color: ${({ theme }) => theme.colors.dark[300]};
 `;
 
-export const ChatTextarea = styled.textarea`
-  resize: none;
+export const FileAttachInput = styled.input`
+  display: none;
+`;
 
-  overflow-y: auto;
-  flex-grow: 1;
+export const FilePreview = styled.div`
+  position: absolute;
+  bottom: 7rem;
 
-  height: 4.4rem;
-  max-height: 50vh;
-  padding: 1.1rem 1rem 1.1rem 0;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  font-size: 1.6rem;
-  font-weight: 400;
-  color: ${({ theme }) => theme.colors.dark[300]};
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.6rem;
 
   background-color: ${({ theme }) => theme.colors.dark[500]};
-  outline: none;
+`;
+
+export const FileName = styled.span`
+  font-size: 1.4rem;
+  color: ${({ theme }) => theme.colors.dark[300]};
+`;
+
+export const FileRemoveButton = styled.button`
+  cursor: pointer;
+
+  margin-left: 1rem;
+  border: none;
+
+  color: ${({ theme }) => theme.colors.dark[400]};
+
+  background: none;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.dark[300]};
+  }
 `;
 
 export const ToolBarContainer = styled.div`
