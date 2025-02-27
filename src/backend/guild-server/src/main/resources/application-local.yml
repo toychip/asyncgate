@@ -1,0 +1,32 @@
+server:
+  port: 0
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+spring:
+  application:
+    name: guild-server
+  profiles:
+    active: local
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, refresh
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /guilds/v3/api-docs/swagger-config
+    url: /guilds/v3/api-docs
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
