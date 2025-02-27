@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import { ChannelType } from '@/types/guilds';
 
-interface GuildChannelInfo {
+export interface GuildChannelInfo {
   id: string;
   name: string;
   type: ChannelType;
