@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export const GuildList = styled.nav`
   scrollbar-width: none;
 
-  overflow-x: auto;
+  overflow-x: visible;
   display: flex;
   flex-direction: column;
   gap: 2rem;
