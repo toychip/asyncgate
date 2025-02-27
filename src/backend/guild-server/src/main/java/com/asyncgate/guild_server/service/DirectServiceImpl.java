@@ -30,7 +30,10 @@ public class DirectServiceImpl implements DirectService {
     @Override
     @Transactional
     public DirectResponse create(final String currentUserId, final DirectChannelCreateRequest request) {
-        List<String> memberIds = request.getMemberIds();
+        List<String> memberIds = new ArrayList<>(request.getMemberIds());
+        if (!memberIds.contains(currentUserId)) {
+            memberIds.add(currentUserId);
+        }
 
         UserClientInfoResponses usersInfo = userClient
                 .getUsersInfo(memberIds)
