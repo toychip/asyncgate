@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.servlet.resource.NoResourceFoundException
 
 @ControllerAdvice
 class ChatServerErrorHandler {
@@ -25,5 +26,9 @@ class ChatServerErrorHandler {
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception) {
         log.error("🚨 [Global Error] ${exception.message}", exception)
+    }
+
+    @ExceptionHandler(NoResourceFoundException::class)
+    fun handleResourceException(exception: NoResourceFoundException) {
     }
 }

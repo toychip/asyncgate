@@ -10,12 +10,12 @@ import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.server.HandshakeInterceptor
 
 @Component
-class JwtHandshakeInterceptor(
+class WebSocketHandshakeInterceptor(
     private val jwtTokenProvider: JwtTokenProvider,
 ) : HandshakeInterceptor {
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(JwtHandshakeInterceptor::class.java)
+        private val log: Logger = LoggerFactory.getLogger(WebSocketHandshakeInterceptor::class.java)
     }
 
     /**
