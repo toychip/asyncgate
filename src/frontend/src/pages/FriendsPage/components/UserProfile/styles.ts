@@ -12,7 +12,7 @@ export const UserProfileContainer = styled.div`
   height: 5.2rem;
   padding: 0 1rem;
 
-  background-color: ${({ theme }) => theme.colors.dark[800]};
+  background-color: ${({ theme }) => theme.colors.dark[750]};
 `;
 
 export const UserInfoContainer = styled.div`
