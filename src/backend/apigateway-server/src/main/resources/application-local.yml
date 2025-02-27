@@ -10,6 +10,8 @@ eureka:
 spring:
   application:
     name: apigateway-server
+  profiles:
+    active: local
   cloud:
     gateway:
       routes:

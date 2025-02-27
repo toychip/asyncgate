@@ -10,7 +10,9 @@ eureka:
 
 spring:
   application:
-    name: notification-server
+    name: user-server
+  profiles:
+    active: local
 
 management:
   endpoints:
@@ -20,4 +22,15 @@ management:
 
 logging:
   level:
-    com.asyncgate.notification_server: DEBUG
+    com.asyncgate.user_server: DEBUG
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /users/v3/api-docs/swagger-config
+    url: /users/v3/api-docs
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true

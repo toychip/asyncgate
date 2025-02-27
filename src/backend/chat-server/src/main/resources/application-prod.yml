@@ -11,6 +11,8 @@ eureka:
 spring:
   application:
     name: chat-server
+  profiles:
+    active: prod
   kafka:
     topic:
       direct-message: direct-message-topic

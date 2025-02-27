@@ -10,7 +10,9 @@ eureka:
 
 spring:
   application:
-    name: state-server
+    name: notification-server
+  profiles:
+    active: local
 
 management:
   endpoints:
@@ -20,4 +22,4 @@ management:
 
 logging:
   level:
-    com.asyncgate.state_server: DEBUG
+    com.asyncgate.notification_server: DEBUG

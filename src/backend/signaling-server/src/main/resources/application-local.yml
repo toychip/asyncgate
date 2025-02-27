@@ -1,0 +1,44 @@
+server:
+  port: 0
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+spring:
+  application:
+    name: signaling-server
+  profiles:
+    active: local
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: signaling
+
+turn:
+  server:
+    urls: turn:13.125.99.229:3478
+    username: myUsername
+    credential: myPassword
+
+stun:
+  server:
+    urls: stun:stun.l.google.com:19302
+
+kms:
+  url: ws://13.125.99.229:8890/kurento
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, refresh
+
+logging:
+  level:
+    com.asyncgate.signaling_server: DEBUG
+    org.springframework.security: DEBUG
