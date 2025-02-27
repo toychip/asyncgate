@@ -6,12 +6,11 @@ import { useGuildInfoStore } from '@/stores/guildInfo';
 
 import * as S from './styles';
 
+type ChattingSectionView = 'guildChat' | 'directChat' | 'friendsManagement';
+
 const ChattingSection = () => {
   const { guildId } = useGuildInfoStore();
   const { selectedDMChannel } = useChannelInfoStore();
-
-  const isGuildChattingDisplayed = !!guildId;
-  const isFriendChattingDisplayed = !!(!guildId && selectedDMChannel);
 
   const component = {
     guildChat: <GuildChattingRoom />,
@@ -19,13 +18,13 @@ const ChattingSection = () => {
     friendsManagement: <FriendsManagement />,
   };
 
-  const currentView: keyof typeof component = isGuildChattingDisplayed
-    ? 'guildChat'
-    : isFriendChattingDisplayed
-      ? 'directChat'
-      : 'friendsManagement';
+  const getCurrentView = (): ChattingSectionView => {
+    if (guildId) return 'guildChat';
+    if (selectedDMChannel) return 'directChat';
+    return 'friendsManagement';
+  };
 
-  return <S.ChattingSectionContainer>{component[currentView]}</S.ChattingSectionContainer>;
+  return <S.ChattingSectionContainer>{component[getCurrentView()]}</S.ChattingSectionContainer>;
 };
 
 export default ChattingSection;
