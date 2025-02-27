@@ -14,7 +14,7 @@ public class DirectMemberRepositoryImpl implements DirectMemberRepository {
     private final DirectMemberJpaRepository jpaRepository;
 
     @Override
-    public void saveAll(List<DirectMember> directMembers) {
+    public void saveAll(final List<DirectMember> directMembers) {
         jpaRepository.saveAll(
                 directMembers.stream()
                         .map(DomainUtil.DirectMemberMapper::toEntity)

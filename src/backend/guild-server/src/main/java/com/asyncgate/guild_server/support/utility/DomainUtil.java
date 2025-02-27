@@ -101,6 +101,7 @@ public class DomainUtil {
         public static Direct toDomain(final DirectEntity entity) {
             return Direct.builder()
                     .id(entity.getId())
+                    .createdDate(entity.getCreatedDate())
                     .build();
         }
     }
@@ -109,6 +110,7 @@ public class DomainUtil {
         public static DirectMemberEntity toEntity(final DirectMember directMember) {
             return DirectMemberEntity.builder()
                     .id(directMember.getId())
+                    .directId(directMember.getDirectId())
                     .memberId(directMember.getMemberId())
                     .memberName(directMember.getMemberName())
                     .build();
@@ -119,6 +121,7 @@ public class DomainUtil {
                     .id(entity.getId())
                     .memberId(entity.getMemberId())
                     .memberName(entity.getMemberName())
+                    .createdDate(entity.getCreatedDate())
                     .build();
         }
     }
