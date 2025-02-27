@@ -28,12 +28,18 @@ export const CategoryName = styled.div`
   svg {
     color: ${({ theme }) => theme.colors.dark[300]};
   }
+
+  &:hover {
+    * {
+      color: ${({ theme }) => theme.colors.white};
+    }
+  }
 `;
 
 export const Channels = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.1rem;
   margin-top: 0.6rem;
 `;
 
@@ -44,5 +50,11 @@ export const ChannelName = styled.div`
   gap: 0.5rem;
   align-items: center;
 
+  height: 3.2rem;
   padding-left: 1rem;
+  border-radius: 0.4rem;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.dark[500]};
+  }
 `;
