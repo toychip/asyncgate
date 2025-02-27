@@ -1,0 +1,124 @@
+server:
+  port: 8000
+  max-http-request-header-size: 64KB
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+
+spring:
+  application:
+    name: apigateway-server
+  cloud:
+    gateway:
+      routes:
+        - id: guild-server-swagger
+          uri: lb://GUILD-SERVER
+          predicates:
+            - Path=/guilds/swagger-ui/**, /guilds/v3/api-docs/**, /guilds/swagger-resources/**, /guilds/webjars/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/guilds/(?<segment>.*), /$\{segment}
+
+        - id: user-server-swagger
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/users/swagger-ui/**, /users/v3/api-docs/**, /users/swagger-resources/**, /users/webjars/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+
+        - id: guild-server
+          uri: lb://GUILD-SERVER
+          predicates:
+            - Path=/guilds/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/guilds/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+            - RemoveRequestHeader=X-Forwarded-For
+            - RemoveRequestHeader=X-Forwarded-Proto
+            - RemoveRequestHeader=X-Forwarded-Port
+            - RemoveRequestHeader=Forwarded
+
+        - id: user-server
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/users/sign-up
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+
+        - id: user-server
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/users/sign-in
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+
+        - id: user-server
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/users/validation/authentication-code
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+
+        - id: user-server
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/users/validation/email
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+
+        - id: user-server
+          uri: lb://USER-SERVER
+          predicates:
+            - Path=/users/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: signaling-server
+          uri: lb://SIGNALING-SERVER
+          predicates:
+            - Path=/signalings/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter   
+
+        - id: signaling-server
+          uri: lb://SIGNALING-SERVER
+          predicates:
+            - Path=/signalings/signal
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}   
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - 'http://localhost:5173'
+              - 'https://localhost:5173'
+            allow-credentials: true
+            allowed-headers: '*'
+            allowed-methods:
+              - PUT
+              - GET
+              - POST
+              - DELETE
+              - OPTIONS
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, info
