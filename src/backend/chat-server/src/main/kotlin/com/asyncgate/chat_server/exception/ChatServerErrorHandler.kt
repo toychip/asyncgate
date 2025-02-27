@@ -26,5 +26,4 @@ class ChatServerErrorHandler {
     fun handleException(exception: Exception) {
         log.error("🚨 [Global Error] ${exception.message}", exception)
     }
-
 }
