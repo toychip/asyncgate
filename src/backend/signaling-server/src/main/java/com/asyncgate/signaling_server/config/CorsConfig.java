@@ -18,7 +18,7 @@ public class CorsConfig {
         //리소스를 허용
         ArrayList<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("*");
-        configuration.setAllowedOrigins(allowedOriginPatterns);
+        configuration.setAllowedOriginPatterns(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD
         ArrayList<String> allowedHttpMethods = new ArrayList<>();

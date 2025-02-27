@@ -31,6 +31,10 @@ public class KurentoManager {
     // kurento media pipline (SFU) 방에 대한 데이터 (key, value)
     private final Map<String, MediaPipeline> pipelines = new ConcurrentHashMap<>();
     private final Map<String, Map<String, WebRtcEndpoint>> roomEndpoints = new ConcurrentHashMap<>();
+
+    // 화면 공유용 WebRTC 엔드포인트 저장 (roomId -> userId -> WebRtcEndpoint)
+    private final Map<String, Map<String, WebRtcEndpoint>> roomScreenEndpoints = new ConcurrentHashMap<>();
+
     private final Map<String, Member> userStates = new ConcurrentHashMap<>();
 
     /**
@@ -68,6 +72,33 @@ public class KurentoManager {
 
         log.info("[Kurento] WebRTC Endpoint 생성: roomId={}, userId={}", roomId, userId);
         return endpoint;
+    }
+
+    /**
+     * 화면 공유용 WebRTC 엔드포인트 생성
+     *
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    public synchronized WebRtcEndpoint createScreenShareEndpoint(String roomId, String userId) {
+        MediaPipeline pipeline = getOrCreatePipeline(roomId);
+        WebRtcEndpoint screenEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
+
+        // ICE Candidate 리스너 추가
+        screenEndpoint.addIceCandidateFoundListener(event -> {
+            JsonObject candidateMessage = new JsonObject();
+            candidateMessage.addProperty("id", "iceCandidate");
+            candidateMessage.addProperty("userId", userId);
+            candidateMessage.add("candidate", new Gson().toJsonTree(event.getCandidate()));
+
+            log.info("🖥️ [Kurento] 화면 공유 ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, userId, event.getCandidate());
+        });
+
+        // 화면 공유 엔드포인트 저장
+        roomScreenEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, screenEndpoint);
+        log.info("🖥️ [Kurento] 화면 공유 WebRTC Endpoint 생성: roomId={}, userId={}", roomId, userId);
+        return screenEndpoint;
     }
 
     /**
@@ -240,6 +271,32 @@ public class KurentoManager {
     }
 
     /**
+     * 특정 사용자의 화면 공유 스트림 다시 연결
+     */
+    private void reconnectScreenShare(String userId, WebRtcEndpoint endpoint) {
+        endpoint.connect(endpoint, MediaType.VIDEO);
+        log.info("🖥️ [Kurento] 화면 공유 활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("screenShare", true);
+        }
+    }
+
+    /**
+     * 특정 사용자의 화면 공유 스트림 연결 해제
+     */
+    private void disconnectScreenShare(String userId, WebRtcEndpoint endpoint) {
+        endpoint.disconnect(endpoint, MediaType.VIDEO);
+        log.info("🚫 [Kurento] 화면 공유 비활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("screenShare", false);
+        }
+    }
+
+    /**
      * 방을 제거함
      */
     public void removeRoom(String roomId) {
@@ -248,9 +305,16 @@ public class KurentoManager {
             roomEndpoints.remove(roomId);
         }
 
+        if (roomScreenEndpoints.containsKey(roomId)) {
+            roomScreenEndpoints.get(roomId).values().forEach(WebRtcEndpoint::release);
+            roomScreenEndpoints.remove(roomId);
+        }
+
         if (pipelines.containsKey(roomId)) {
             pipelines.get(roomId).release();
             pipelines.remove(roomId);
         }
+
+        log.info("🛑 [Kurento] 방 제거 완료: roomId={}", roomId);
     }
 }
