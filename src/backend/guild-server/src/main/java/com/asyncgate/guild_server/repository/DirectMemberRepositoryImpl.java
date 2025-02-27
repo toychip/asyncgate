@@ -12,6 +12,7 @@ import java.util.List;
 public class DirectMemberRepositoryImpl implements DirectMemberRepository {
 
     private final DirectMemberJpaRepository jpaRepository;
+    private final DirectMemberQueryDslRepository queryDslRepository;
 
     @Override
     public void saveAll(final List<DirectMember> directMembers) {
@@ -20,5 +21,14 @@ public class DirectMemberRepositoryImpl implements DirectMemberRepository {
                         .map(DomainUtil.DirectMemberMapper::toEntity)
                         .toList()
         );
+    }
+
+    @Override
+    public List<DirectMember> getDirectMessageList(final String currentUserId) {
+        return queryDslRepository.getDirectMessageList(currentUserId).stream()
+                .map(
+                        DomainUtil.DirectMemberMapper::toDomain
+                )
+                .toList();
     }
 }

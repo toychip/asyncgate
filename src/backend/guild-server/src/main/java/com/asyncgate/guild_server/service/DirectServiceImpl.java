@@ -54,7 +54,7 @@ public class DirectServiceImpl implements DirectService {
     @Override
     public DirectResponses getDirectList(final String currentUserId) {
         // 1. 현재 사용자의 다이렉트 메시지 목록 조회
-        List<DirectMember> directMembers = directRepository.getDirectMessageList(currentUserId);
+        List<DirectMember> directMembers = directMemberRepository.getDirectMessageList(currentUserId);
 
         // 2. 다이렉트 ID별로 DirectMember 그룹화
         Map<String, List<DirectMember>> directGroups = directMembers.stream()
