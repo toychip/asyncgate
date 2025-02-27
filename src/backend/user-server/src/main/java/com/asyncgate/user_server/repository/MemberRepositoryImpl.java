@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
     private final MemberJpaRepository memberJpaRepository;
+    private final MemberQueryDslRepository queryDslRepository;
 
     @Override
     public void save(final Member member) {
@@ -28,6 +30,13 @@ public class MemberRepositoryImpl implements MemberRepository {
     public void softDeleteById(final String id) {
 
         memberJpaRepository.softDeleteById(id);
+    }
+
+    @Override
+    public List<Member> getByMemberIds(List<String> memberIds) {
+        return queryDslRepository.getByMemberIds(memberIds).stream()
+                .map(DomainUtil.MemberMapper::toDomain)
+                .toList();
     }
 
     @Override

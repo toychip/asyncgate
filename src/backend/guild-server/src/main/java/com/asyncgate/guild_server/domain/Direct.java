@@ -19,15 +19,10 @@ public class Direct {
     }
 
     public static Direct create(final List<String> memberNames) {
-        String id = UUID.randomUUID().toString();
-
-        StringBuilder builder = new StringBuilder();
-        for (String memberName : memberNames) {
-            builder.append(memberName);
-            builder.append(" ");
-        }
-        String name = builder.toString();
-        return new Direct(id, name);
+        return Direct.builder()
+                .id(UUID.randomUUID().toString())
+                .name(String.join(" ", memberNames))
+                .build();
     }
 
     public void changeName(final String name) {

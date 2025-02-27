@@ -1,11 +1,9 @@
 package com.asyncgate.guild_server.dto.response;
 
-import com.asyncgate.guild_server.client.UserClientInfoResponse;
+import com.asyncgate.guild_server.client.UserClientInfoResponses;
 
-import java.util.List;
-
-public record DirectResponse(String directId, List<UserClientInfoResponse> members) {
-    public static DirectResponse of(final String directId, final List<UserClientInfoResponse> members) {
+public record DirectResponse(String directId, UserClientInfoResponses members) {
+    public static DirectResponse of(final String directId, final UserClientInfoResponses members) {
         return new DirectResponse(directId, members);
     }
 }

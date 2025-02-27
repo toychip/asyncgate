@@ -4,5 +4,5 @@ import com.asyncgate.guild_server.dto.request.DirectChannelCreateRequest;
 import com.asyncgate.guild_server.dto.response.DirectResponse;
 
 public interface DirectService {
-    DirectResponse create(DirectChannelCreateRequest request);
+    DirectResponse create(String currentUserId, DirectChannelCreateRequest request);
 }
