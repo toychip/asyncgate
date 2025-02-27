@@ -4,12 +4,15 @@ import com.asyncgate.user_server.controller.docs.MemberControllerDocs;
 import com.asyncgate.user_server.dto.request.*;
 import com.asyncgate.user_server.dto.response.CheckEmailDuplicateResponse;
 import com.asyncgate.user_server.dto.response.DefaultJsonWebTokenResponse;
+import com.asyncgate.user_server.dto.response.UserClientInfoResponses;
 import com.asyncgate.user_server.security.annotation.MemberID;
 import com.asyncgate.user_server.support.response.SuccessResponse;
 import com.asyncgate.user_server.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +25,10 @@ public class MemberCommandController implements MemberControllerDocs {
     private final UpdateUserInfoUseCase UpdateUserInfoUseCase;
     private final DeleteUserUseCase DeleteUserUseCase;
     private final UpdateDeviceTokenUseCase UpdateDeviceTokenUseCase;
+    private final FindUserInfoUseCase findUserInfoUseCase;
 
     // 사소한 주석 추가 테스트테스트용 용용용가리
+
     /**
      * 1.0 임시 회원가입
      */
@@ -110,5 +115,17 @@ public class MemberCommandController implements MemberControllerDocs {
     public SuccessResponse<?> deleteUser(@MemberID final String userId) {
         DeleteUserUseCase.execute(userId);
         return SuccessResponse.ok("회원탈퇴 완료");
+    }
+
+    @GetMapping("/users")
+    public SuccessResponse<UserClientInfoResponses> getMembers(
+            @RequestParam(required = false) List<String> memberIds
+    ) {
+
+        UserClientInfoResponses byUserIds = findUserInfoUseCase.getByUserIds(memberIds);
+        System.out.println("byUserIds = " + byUserIds);
+        return SuccessResponse.ok(
+                byUserIds
+        );
     }
 }

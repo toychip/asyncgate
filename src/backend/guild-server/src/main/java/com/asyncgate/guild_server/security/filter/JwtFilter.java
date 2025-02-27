@@ -41,6 +41,9 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String jwtToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        System.out.println("jwtToken = " + jwtToken);
+
         jwtService.authenticate(jwtToken);
         filterChain.doFilter(request, response);
     }
