@@ -1,0 +1,41 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: guild-server
+    ip-address: '{cipher}a826bbebe95e697cb505c82ead1b6201c2aaea3d5970d2d6929aa1e1f4cf81b6'
+  client:
+    service-url:
+      defaultZone: '{cipher}c10802fde605ba30df72871d3dfc9c765a71c43b3f6326fd0f9169b52210c582fe3aa81f882e05c08ffcfdb402f7949a'
+jwt:
+  secret-key: '{cipher}e3ee7c81dedbd05d33e9e934a192a67cca17890d39faebc6645fe3eeb6c7b16034312dad499dd72f869cb03a6f2d6b7498b5204a523412735009f0c8b8f56eb6'
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: '{cipher}f47d4947266ae8c0c97b48ebb6f630c4455b3f96e16874b05af33cdd0d38746861cc65a5c6c0a80c5ccdc76220c5b9630aab91a805eeedecc56c6e975c8ef87ca8f812e44496670ba999279984367c13df2abd89687d1ca1a75930ed5c5bef5b3affdd36c7067ae92d996b5a1bdc9356904886e360defc645d6436481899010df30663511ac19ebd5179eb36ff86818f94f6b0f0b752ca297ea9c2988479a9c5'
+    username: '{cipher}d04ebd61d69291a6d34ef8546d3b21f71f38e4b4b26a78e8973527c58ea00901'
+    password: '{cipher}c8469a5995b68951a7c40a5432ddd0c9450a71a8e1d3781c36a66f724a49ee17'
+    hikari:
+      data-source-properties:
+        serverTimezone: Asia/Seoul
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+cloud:
+  aws:
+    credentials:
+      access-key: '{cipher}27ac45d373e5ab8c85a2a29dba678d5cf4bce210d4561ce5e8a107b8ed300c998e5e68fb10b4c4b7b51457bb7e0d03cd'
+      secret-key: '{cipher}4f26ef87fac4e6434d23d5bf3a2cf460f4770b5e85ba0b96e52a3d22cb1fe553f5d8d2f14afff4600a6d01db476576639fb06ea006617722d588c24ebee798c7'
+    region:
+      static: '{cipher}9c1fddf30981e4a52bb3b5d483faf3640277ea98e56cd896c4af07fc74f8a7d1'
+    s3:
+      bucket: '{cipher}791ddfe9003ecb7c329f694bbc05d386cf783189f0e7196d5a3dcbfec48d84bd'
+      url: '{cipher}0d5e7427241949e0656366472edde113f98d7b215ef6f982cbf6725264510beffa4da0f650b56d13c71eea6b5827179650b9aaf563bda7a0d6a14375ff7d8eff6a603b1063687a88b2073d3ca273d1f9'
+      profile:
+        default:
+          url: '{cipher}80a3e3e1d8a848f7554ab98e9d9445cd0c3df5c6c175425e49725b896eec8d673ebd99e8d23f05fefacef6a7f87b45ce321dd213394e81fbd5f76a732da941d1d43e155c7a011c5c5c0db10ec2f110c20c6e1306404eb7828926df31eba2712a'
+
+
+
+

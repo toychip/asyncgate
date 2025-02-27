@@ -1,0 +1,14 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: notification-server
+    ip-address: '{cipher}57bb18dfa1c3c3a5ade9260e2a4257a85fb0d9d426168232e3e21be01df2b511'
+  client:
+    service-url:
+      defaultZone: '{cipher}c10802fde605ba30df72871d3dfc9c765a71c43b3f6326fd0f9169b52210c582fe3aa81f882e05c08ffcfdb402f7949a'
+jwt:
+  secret-key: '{cipher}e3ee7c81dedbd05d33e9e934a192a67cca17890d39faebc6645fe3eeb6c7b16034312dad499dd72f869cb03a6f2d6b7498b5204a523412735009f0c8b8f56eb6'
+
+spring:
+  kafka:
+    bootstrap-servers: '{cipher}276ada73fdb90a68125e2dcce993b77384c8c80d672a78b26eefda56bf60f808f77d486f86d9f1de94e6cb342711bb6211dd8f6cbf98b01e4ece80b938b40acf1cfef75ec74c910f32e68873b06dd3d5'
