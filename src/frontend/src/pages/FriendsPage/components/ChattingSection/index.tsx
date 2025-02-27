@@ -1,46 +1,31 @@
-import { BiHash } from 'react-icons/bi';
-import { BsFillMicFill, BsFillPeopleFill } from 'react-icons/bs';
-import { FaInbox } from 'react-icons/fa';
+import DirectMessageChattingRoom from '@/components/friend/DirectMessageChattingRoom';
+import FriendsManagement from '@/components/friend/FriendsManagement';
+import GuildChattingRoom from '@/components/guild/GuildChattingRoom';
+import { useChannelInfoStore } from '@/stores/channelInfo';
+import { useGuildInfoStore } from '@/stores/guildInfo';
 
-import MessageSection from './components/MessageSection';
 import * as S from './styles';
-// PR 머지 시 types/guilds의 타입으로 수정
-type ChannelType = 'TEXT' | 'VOICE' | null;
 
-interface ChannelInfo {
-  type: ChannelType;
-  title: string;
-}
+const ChattingSection = () => {
+  const { guildId } = useGuildInfoStore();
+  const { selectedDMChannel } = useChannelInfoStore();
 
-interface ChattingSectionProps {
-  currentChannel: ChannelInfo;
-}
+  const isGuildChattingDisplayed = !!guildId;
+  const isFriendChattingDisplayed = !!(!guildId && selectedDMChannel);
 
-const ChattingSection = ({ currentChannel }: ChattingSectionProps) => {
-  const renderChannelIcon = () => {
-    if (currentChannel.type === 'TEXT') return <BiHash size={28} />;
-    if (currentChannel.type === 'VOICE') return <BsFillMicFill size={28} />;
+  const component = {
+    guildChat: <GuildChattingRoom />,
+    directChat: <DirectMessageChattingRoom />,
+    friendsManagement: <FriendsManagement />,
   };
 
-  return (
-    <S.ChattingSectionContainer>
-      <S.ChattingHeader>
-        <S.ChannelInfo>
-          <S.ChannelIcon>{renderChannelIcon()}</S.ChannelIcon>
-          <S.ChannelTitle>{currentChannel.title}</S.ChannelTitle>
-        </S.ChannelInfo>
-        <S.ToolBar>
-          <S.IconWrapper>
-            <BsFillPeopleFill size={24} />
-          </S.IconWrapper>
-          <S.IconWrapper>
-            <FaInbox size={24} />
-          </S.IconWrapper>
-        </S.ToolBar>
-      </S.ChattingHeader>
-      <MessageSection />
-    </S.ChattingSectionContainer>
-  );
+  const currentView: keyof typeof component = isGuildChattingDisplayed
+    ? 'guildChat'
+    : isFriendChattingDisplayed
+      ? 'directChat'
+      : 'friendsManagement';
+
+  return <S.ChattingSectionContainer>{component[currentView]}</S.ChattingSectionContainer>;
 };
 
 export default ChattingSection;

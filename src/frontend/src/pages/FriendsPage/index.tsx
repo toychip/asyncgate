@@ -1,4 +1,4 @@
-import GuildCategories from '@/components/guild/GuildCategory';
+import CategorySection from '@/pages/FriendsPage/components/CategorySection';
 
 import GuildList from '../../components/guild/GuildList';
 
@@ -10,8 +10,8 @@ const FriendsPage = () => {
     <S.FriendsPage>
       <S.ContentContainer>
         <GuildList />
-        <GuildCategories />
-        <ChattingSection currentChannel={{ type: 'TEXT', title: '테스트 채널' }} />
+        <CategorySection />
+        <ChattingSection />
       </S.ContentContainer>
     </S.FriendsPage>
   );
