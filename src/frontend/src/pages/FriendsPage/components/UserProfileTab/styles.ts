@@ -4,6 +4,7 @@ import { ChipText } from '@/styles/Typography';
 
 export const DropdownContainer = styled.ul`
   position: absolute;
+  z-index: 999;
   bottom: 6rem;
   left: 0;
 
