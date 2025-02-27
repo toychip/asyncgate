@@ -18,9 +18,6 @@ spring:
     hikari:
       data-source-properties:
         serverTimezone: Asia/Seoul
-  jpa:
-    hibernate:
-      ddl-auto: none
 
 cloud:
   aws:

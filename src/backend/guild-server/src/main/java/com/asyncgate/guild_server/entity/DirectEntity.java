@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "direct")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DirectEntity {
+public class DirectEntity extends BaseEntity {
 
     @Id
     private String id;

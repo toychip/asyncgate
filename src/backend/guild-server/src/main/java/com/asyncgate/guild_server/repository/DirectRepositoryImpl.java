@@ -11,7 +11,7 @@ public class DirectRepositoryImpl implements DirectRepository {
     private final DirectJpaRepository jpaRepository;
 
     @Override
-    public void save(Direct direct) {
+    public void save(final Direct direct) {
         jpaRepository.save(
                 DomainUtil.DirectMapper.toEntity(direct)
         );
