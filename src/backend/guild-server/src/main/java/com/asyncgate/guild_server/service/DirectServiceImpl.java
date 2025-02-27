@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,17 +26,13 @@ public class DirectServiceImpl implements DirectService {
     @Override
     @Transactional
     public DirectResponse create(final String currentUserId, final DirectChannelCreateRequest request) {
-        List<String> memberIds = new ArrayList<>(request.getMemberIds());
-        if (!memberIds.contains(currentUserId)) {
-            memberIds.add(currentUserId);
-        }
+        List<String> memberIds = request.getMemberIds();
 
-        UserClientInfoResponses usersInfo = userClient.getUsersInfo(memberIds);
-        List<String> userNames = usersInfo.responses().stream()
-                .map(UserClientInfoResponses.UserClientInfoResponse::name)
-                .toList();
+        UserClientInfoResponses usersInfo = userClient
+                .getUsersInfo(memberIds)
+                .getResult();
 
-        Direct direct = Direct.create(userNames);
+        Direct direct = Direct.create();
 
         // ToDo memberName 변경시 이벤트 구독하고 수정해야함
         List<DirectMember> directMembers = usersInfo.responses().stream()

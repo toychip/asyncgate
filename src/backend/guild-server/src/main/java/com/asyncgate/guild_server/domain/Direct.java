@@ -10,23 +10,15 @@ import java.util.UUID;
 public class Direct {
 
     private final String id;
-    private String name;
 
     @Builder
     private Direct(String id, String name) {
         this.id = id;
-        this.name = name;
     }
 
-    public static Direct create(final List<String> memberNames) {
+    public static Direct create() {
         return Direct.builder()
                 .id(UUID.randomUUID().toString())
-                .name(String.join(" ", memberNames))
                 .build();
     }
-
-    public void changeName(final String name) {
-        this.name = name;
-    }
-
 }

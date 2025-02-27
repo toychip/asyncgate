@@ -95,14 +95,12 @@ public class DomainUtil {
         public static DirectEntity toEntity(final Direct domain) {
             return DirectEntity.builder()
                     .id(domain.getId())
-                    .name(domain.getName())
                     .build();
         }
 
         public static Direct toDomain(final DirectEntity entity) {
             return Direct.builder()
                     .id(entity.getId())
-                    .name(entity.getName())
                     .build();
         }
     }

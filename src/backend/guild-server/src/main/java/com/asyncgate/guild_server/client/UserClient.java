@@ -1,5 +1,6 @@
 package com.asyncgate.guild_server.client;
 
+import com.asyncgate.guild_server.support.response.SuccessResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,5 +11,5 @@ import java.util.List;
 public interface UserClient {
 
     @GetMapping("/users")
-    UserClientInfoResponses getUsersInfo(@RequestParam(required = false) List<String> memberIds);
+    SuccessResponse<UserClientInfoResponses> getUsersInfo(@RequestParam(required = false) List<String> memberIds);
 }

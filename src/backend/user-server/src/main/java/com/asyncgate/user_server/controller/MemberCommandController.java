@@ -121,8 +121,11 @@ public class MemberCommandController implements MemberControllerDocs {
     public SuccessResponse<UserClientInfoResponses> getMembers(
             @RequestParam(required = false) List<String> memberIds
     ) {
+
+        UserClientInfoResponses byUserIds = findUserInfoUseCase.getByUserIds(memberIds);
+        System.out.println("byUserIds = " + byUserIds);
         return SuccessResponse.ok(
-                findUserInfoUseCase.getByUserIds(memberIds)
+                byUserIds
         );
     }
 }

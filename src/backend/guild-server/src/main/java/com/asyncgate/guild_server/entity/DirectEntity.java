@@ -16,11 +16,9 @@ public class DirectEntity {
 
     @Id
     private String id;
-    private String name;
 
     @Builder
-    private DirectEntity(String id, String name) {
+    private DirectEntity(String id) {
         this.id = id;
-        this.name = name;
     }
 }
