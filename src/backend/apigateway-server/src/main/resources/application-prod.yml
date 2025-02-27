@@ -90,15 +90,23 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/signalings/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter   
+            - AuthorizationHeaderFilter
 
         - id: signaling-server
-          uri: lb://SIGNALING-SERVER
+          uri: ws://SIGNALING-SERVER
           predicates:
-            - Path=/signalings/signal
+            - Path=/signalings/**
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/signalings/(?<segment>.*), /$\{segment}   
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}
+          
+        - id: signaling-server
+          uri: wss://SIGNALING-SERVER
+          predicates:
+            - Path=/signalings/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signalings/(?<segment>.*), /$\{segment}
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials

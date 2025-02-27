@@ -2,10 +2,12 @@ package com.asyncgate.signaling_server.signaling;
 
 import com.asyncgate.signaling_server.domain.Member;
 import com.asyncgate.signaling_server.dto.response.GetUsersInChannelResponse;
-import com.asyncgate.signaling_server.entity.MemberEntity;
-import com.asyncgate.signaling_server.support.utility.DomainUtil;
+import com.asyncgate.signaling_server.exception.FailType;
+import com.asyncgate.signaling_server.exception.SignalingServerException;
+import com.asyncgate.signaling_server.infrastructure.client.MemberServiceClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import lombok.RequiredArgsConstructor;
 import org.kurento.client.*;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +22,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KurentoManager {
     private final KurentoClient kurentoClient;
+
+    private final MemberServiceClient memberServiceClient;
 
     // kurento media pipline (SFU) 방에 대한 데이터 (key, value)
     private final Map<String, MediaPipeline> pipelines = new ConcurrentHashMap<>();
     private final Map<String, Map<String, WebRtcEndpoint>> roomEndpoints = new ConcurrentHashMap<>();
-    private final Map<String, Member> userStates = new ConcurrentHashMap<>();
 
-    public KurentoManager(KurentoClient kurentoClient) {
-        this.kurentoClient = kurentoClient;
-    }
+    // 화면 공유용 WebRTC 엔드포인트 저장 (roomId -> userId -> WebRtcEndpoint)
+    private final Map<String, Map<String, WebRtcEndpoint>> roomScreenEndpoints = new ConcurrentHashMap<>();
+
+    private final Map<String, Member> userStates = new ConcurrentHashMap<>();
 
     /**
      * 특정 방에 대한 MediaPipeline을 가져오거나 새로 생성
@@ -48,27 +53,52 @@ public class KurentoManager {
         MediaPipeline pipeline = getOrCreatePipeline(roomId);
         WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
 
+        // 사용자 정보 조회
+        Member member = memberServiceClient.fetchMemberById(userId, roomId);
+
         // ICE Candidate 리스너 추가
         endpoint.addIceCandidateFoundListener(event -> {
+            JsonObject candidateMessage = new JsonObject();
+            candidateMessage.addProperty("id", "iceCandidate");
+            candidateMessage.addProperty("userId", member.getId());
+            candidateMessage.add("candidate", new Gson().toJsonTree(event.getCandidate()));
+
+            log.info("🧊 [Kurento] ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, member.getId(), event.getCandidate());
+        });
+
+        // 사용자 엔드포인트 저장
+        roomEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, endpoint);
+        userStates.put(userId, member);
+
+        log.info("[Kurento] WebRTC Endpoint 생성: roomId={}, userId={}", roomId, userId);
+        return endpoint;
+    }
+
+    /**
+     * 화면 공유용 WebRTC 엔드포인트 생성
+     *
+     * @param roomId
+     * @param userId
+     * @return
+     */
+    public synchronized WebRtcEndpoint createScreenShareEndpoint(String roomId, String userId) {
+        MediaPipeline pipeline = getOrCreatePipeline(roomId);
+        WebRtcEndpoint screenEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
+
+        // ICE Candidate 리스너 추가
+        screenEndpoint.addIceCandidateFoundListener(event -> {
             JsonObject candidateMessage = new JsonObject();
             candidateMessage.addProperty("id", "iceCandidate");
             candidateMessage.addProperty("userId", userId);
             candidateMessage.add("candidate", new Gson().toJsonTree(event.getCandidate()));
 
-            log.info("🧊 [Kurento] ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, userId, event.getCandidate());
+            log.info("🖥️ [Kurento] 화면 공유 ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, userId, event.getCandidate());
         });
 
-        // 사용자 엔드포인트 저장
-        roomEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, endpoint);
-        userStates.put(userId, DomainUtil.MemberMapper.toDomain(
-                MemberEntity.builder()
-                        .userId(userId)
-                        .roomId(roomId)
-                        .build())
-        );
-
-        log.info("[Kurento] WebRTC Endpoint 생성: roomId={}, userId={}", roomId, userId);
-        return endpoint;
+        // 화면 공유 엔드포인트 저장
+        roomScreenEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, screenEndpoint);
+        log.info("🖥️ [Kurento] 화면 공유 WebRTC Endpoint 생성: roomId={}, userId={}", roomId, userId);
+        return screenEndpoint;
     }
 
     /**
@@ -111,13 +141,21 @@ public class KurentoManager {
                     String userId = entry.getKey();
                     WebRtcEndpoint endpoint = entry.getValue();
 
+
+                    Member member = userStates.get(userId);
+
+                    // member가 null이라면 exception
+                    if (member == null) {
+                        throw new SignalingServerException(FailType._MEMBER_NOT_FOUND);
+                    }
+
                     boolean isMicEnabled = endpoint.isMediaFlowingIn(MediaType.AUDIO) && endpoint.isMediaFlowingOut(MediaType.AUDIO);
                     boolean isCameraEnabled = endpoint.isMediaFlowingIn(MediaType.VIDEO) && endpoint.isMediaFlowingOut(MediaType.VIDEO);
 
                     return GetUsersInChannelResponse.UserInRoom.builder()
-                            .id(userId)
-                            .nickname(userId)  // 닉네임 정보가 없으면 기본 userId 사용
-                            .profileImage("")  // 프로필 이미지 필드가 없으면 기본 값 설정
+                            .id(member.getId())
+                            .nickname(member.getNickname())  // 닉네임 정보가 없으면 기본 userId 사용
+                            .profileImage(member.getProgileImageUrl())  // 프로필 이미지 필드가 없으면 기본 값 설정
                             .isMicEnabled(isMicEnabled)
                             .isCameraEnabled(isCameraEnabled)
                             .isScreenSharingEnabled(false)
@@ -154,7 +192,7 @@ public class KurentoManager {
         }
 
         switch (type) {
-            case "audio":
+            case "mic":
                 if (enabled) {
                     reconnectAudio(userId, endpoint);
                 } else {
@@ -164,7 +202,7 @@ public class KurentoManager {
                 member.updateMediaState("mic", enabled);
                 break;
 
-            case "video":
+            case "camera":
                 if (enabled) {
                     reconnectVideo(userId, endpoint);
                 } else {
@@ -233,6 +271,32 @@ public class KurentoManager {
     }
 
     /**
+     * 특정 사용자의 화면 공유 스트림 다시 연결
+     */
+    private void reconnectScreenShare(String userId, WebRtcEndpoint endpoint) {
+        endpoint.connect(endpoint, MediaType.VIDEO);
+        log.info("🖥️ [Kurento] 화면 공유 활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("screenShare", true);
+        }
+    }
+
+    /**
+     * 특정 사용자의 화면 공유 스트림 연결 해제
+     */
+    private void disconnectScreenShare(String userId, WebRtcEndpoint endpoint) {
+        endpoint.disconnect(endpoint, MediaType.VIDEO);
+        log.info("🚫 [Kurento] 화면 공유 비활성화: userId={}", userId);
+
+        // ✅ userStates에서 해당 사용자의 상태 업데이트
+        if (userStates.containsKey(userId)) {
+            userStates.get(userId).updateMediaState("screenShare", false);
+        }
+    }
+
+    /**
      * 방을 제거함
      */
     public void removeRoom(String roomId) {
@@ -241,9 +305,16 @@ public class KurentoManager {
             roomEndpoints.remove(roomId);
         }
 
+        if (roomScreenEndpoints.containsKey(roomId)) {
+            roomScreenEndpoints.get(roomId).values().forEach(WebRtcEndpoint::release);
+            roomScreenEndpoints.remove(roomId);
+        }
+
         if (pipelines.containsKey(roomId)) {
             pipelines.get(roomId).release();
             pipelines.remove(roomId);
         }
+
+        log.info("🛑 [Kurento] 방 제거 완료: roomId={}", roomId);
     }
 }

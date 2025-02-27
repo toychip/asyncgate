@@ -18,7 +18,7 @@ public class CorsConfig {
         //리소스를 허용
         ArrayList<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("*");
-        configuration.setAllowedOrigins(allowedOriginPatterns);
+        configuration.setAllowedOriginPatterns(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD
         ArrayList<String> allowedHttpMethods = new ArrayList<>();
@@ -32,9 +32,6 @@ public class CorsConfig {
 
         configuration.setAllowedHeaders(Collections.singletonList("*"));
 //        configuration.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
-
-        //인증, 인가를 위한 credentials 를 TRUE로 설정
-        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

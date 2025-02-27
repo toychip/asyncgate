@@ -1,5 +1,6 @@
 package com.asyncgate.signaling_server.config;
 
+import com.asyncgate.signaling_server.infrastructure.client.MemberServiceClient;
 import com.asyncgate.signaling_server.signaling.KurentoManager;
 import com.asyncgate.signaling_server.support.handler.KurentoHandler;
 import org.kurento.client.KurentoClient;
@@ -24,8 +25,13 @@ public class KurentoConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public KurentoManager kurentoManager(KurentoClient kurentoClient) {
-        return new KurentoManager(kurentoClient);
+    public MemberServiceClient memberServiceClient() {
+        return new MemberServiceClient();
+    }
+
+    @Bean
+    public KurentoManager kurentoManager(KurentoClient kurentoClient, MemberServiceClient memberServiceClient) {
+        return new KurentoManager(kurentoClient, memberServiceClient);
     }
 
     @Bean
@@ -35,7 +41,8 @@ public class KurentoConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(kurentoHandler(kurentoManager(kurentoClient())), "/signal").setAllowedOrigins("*");
+        System.out.println("🚀 WebSocketHandlerRegistry 등록");
+        registry.addHandler(kurentoHandler(kurentoManager(kurentoClient(), memberServiceClient())), "/signal").setAllowedOrigins("*");
     }
 
     @Bean
