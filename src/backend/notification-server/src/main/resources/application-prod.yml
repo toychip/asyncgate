@@ -11,8 +11,6 @@ eureka:
 spring:
   application:
     name: notification-server
-  profiles:
-    active: prod
 
 management:
   endpoints:

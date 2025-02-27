@@ -11,8 +11,6 @@ eureka:
 spring:
   application:
     name: state-server
-  profiles:
-    active: local
 
 management:
   endpoints:
