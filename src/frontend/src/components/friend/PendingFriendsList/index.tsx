@@ -31,6 +31,7 @@ const PendingFriendsList = () => {
 
   return (
     <S.FriendsList>
+      <S.FriendCount>대기 중인 친구 - {friends.length}명</S.FriendCount>
       {friends.map((friend, index) => (
         <S.FriendItem key={`${friend.name}_${index}`}>
           <S.FriendInfoContainer>

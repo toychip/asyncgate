@@ -29,6 +29,7 @@ const friends: Friend[] = [
 const FriendsList = () => {
   return (
     <S.FriendsList>
+      <S.FriendCount>모든 친구 - {friends.length}명</S.FriendCount>
       {friends.map((friend, index) => (
         <S.FriendItem key={`${friend.name}_${index}`}>
           <S.FriendProfileImage $imageUrl={friend.profileImageUrl}>

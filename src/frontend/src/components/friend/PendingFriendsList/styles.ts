@@ -8,7 +8,13 @@ export const FriendsList = styled.ul`
 
   width: 100%;
   margin-top: 0.8rem;
+  padding: 0 2rem 0 3rem;
 
+  color: ${({ theme }) => theme.colors.dark[300]};
+`;
+
+export const FriendCount = styled(ChipText)`
+  margin: 1.6rem 0 1rem;
   color: ${({ theme }) => theme.colors.dark[300]};
 `;
 
@@ -20,8 +26,7 @@ export const FriendItem = styled.li`
   justify-content: space-between;
 
   height: 6.2rem;
-  margin: 0 2rem 0 3rem;
-  padding: 1.6rem 1rem;
+  border-top: 0.1rem solid ${({ theme }) => theme.colors.dark[500]};
   border-radius: 0.4rem;
 
   &:hover {
