@@ -1,7 +1,8 @@
-import GuildCategories from '@/components/guild/GuildCategory';
+import CategorySection from '@/pages/FriendsPage/components/CategorySection';
 
 import GuildList from '../../components/guild/GuildList';
 
+import ChattingSection from './components/ChattingSection';
 import * as S from './styles';
 
 const FriendsPage = () => {
@@ -9,7 +10,8 @@ const FriendsPage = () => {
     <S.FriendsPage>
       <S.ContentContainer>
         <GuildList />
-        <GuildCategories />
+        <CategorySection />
+        <ChattingSection />
       </S.ContentContainer>
     </S.FriendsPage>
   );

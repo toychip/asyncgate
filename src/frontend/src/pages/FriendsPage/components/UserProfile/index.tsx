@@ -18,6 +18,7 @@ interface UserProfileProps {
   handleHeadsetToggle: () => void;
 }
 
+// TODO: props로 받고 있는 정보들을 전역 상태 및 사용자 정보 요청으로 대체
 const UserProfile = ({
   userImageUrl,
   userName,

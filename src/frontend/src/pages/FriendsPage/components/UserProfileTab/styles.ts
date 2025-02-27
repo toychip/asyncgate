@@ -4,6 +4,7 @@ import { ChipText } from '@/styles/Typography';
 
 export const DropdownContainer = styled.ul`
   position: absolute;
+  z-index: 999;
   bottom: 6rem;
   left: 0;
 
@@ -11,7 +12,7 @@ export const DropdownContainer = styled.ul`
   padding: 1.6rem;
   border-radius: 0.4rem;
 
-  background-color: ${({ theme }) => theme.colors.dark[800]};
+  background-color: ${({ theme }) => theme.colors.black};
 `;
 
 export const DropdownMenu = styled.li`

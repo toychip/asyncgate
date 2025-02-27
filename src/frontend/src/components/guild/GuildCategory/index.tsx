@@ -8,7 +8,7 @@ import { useGuildInfoStore } from '@/stores/guildInfo';
 import useModalStore from '@/stores/modalStore';
 import { GuildResultData } from '@/types/guilds';
 
-import CategoriesList from '../CategoriesList';
+import GuildCategoriesList from '../GuildCategoriesList';
 
 import * as S from './styles';
 
@@ -18,11 +18,14 @@ interface DropdownItem {
   onClick?: () => void;
 }
 
-const GuildCategories = () => {
-  const { openModal } = useModalStore();
+const GuildCategory = () => {
   const { isOpened, dropdownRef, toggleDropdown } = useDropdown();
+  const { openModal } = useModalStore();
   const { guildId } = useGuildInfoStore();
-  const { data } = useQuery<GuildResultData>({ queryKey: ['guildInfo', guildId], queryFn: () => getGuild(guildId) });
+  const { data } = useQuery<GuildResultData>({
+    queryKey: ['guildInfo', guildId],
+    queryFn: () => getGuild(guildId),
+  });
 
   const dropdownItems: DropdownItem[] = [
     {
@@ -48,27 +51,23 @@ const GuildCategories = () => {
   ];
 
   return (
-    <S.GuildCategories>
-      {guildId && (
-        <>
-          <S.GuildTitle onClick={toggleDropdown}>
-            <S.GuildName>{data?.guild.name}</S.GuildName>
-            {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} />}
-          </S.GuildTitle>
-          <CategoriesList categories={data?.categories} channels={data?.channels} />
-          {isOpened && (
-            <S.DropDown ref={dropdownRef}>
-              {dropdownItems.map((item) => (
-                <S.DropDownItem key={item.id} onClick={item.onClick}>
-                  <S.DropDownItemText>{item.text}</S.DropDownItemText>
-                </S.DropDownItem>
-              ))}
-            </S.DropDown>
-          )}
-        </>
+    <>
+      <S.GuildTitle onClick={toggleDropdown}>
+        <S.GuildName>{data?.guild.name}</S.GuildName>
+        {isOpened ? <TbX size={24} onClick={toggleDropdown} /> : <TbChevronDown size={24} />}
+      </S.GuildTitle>
+      <GuildCategoriesList categories={data?.categories} channels={data?.channels} />
+      {isOpened && (
+        <S.DropDown ref={dropdownRef}>
+          {dropdownItems.map((item) => (
+            <S.DropDownItem key={item.id} onClick={item.onClick}>
+              <S.DropDownItemText>{item.text}</S.DropDownItemText>
+            </S.DropDownItem>
+          ))}
+        </S.DropDown>
       )}
-    </S.GuildCategories>
+    </>
   );
 };
 
-export default GuildCategories;
+export default GuildCategory;

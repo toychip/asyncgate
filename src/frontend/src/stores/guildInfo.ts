@@ -13,7 +13,7 @@ export const useGuildInfoStore = create<GuildState>()(
       setGuildId: (guildId) => set({ guildId }),
     }),
     {
-      name: 'guild-info',
+      name: 'guildInfo',
     },
   ),
 );

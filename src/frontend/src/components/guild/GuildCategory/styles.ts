@@ -1,12 +1,6 @@
 import styled from 'styled-components';
 
-import { TitleText2, BodyRegularText } from '@/styles/Typography';
-
-export const GuildCategories = styled.div`
-  width: 24rem;
-  padding: 1.6rem 1rem;
-  background-color: ${({ theme }) => theme.colors.dark[700]};
-`;
+import { BodyRegularText, TitleText2 } from '@/styles/Typography';
 
 export const GuildTitle = styled.div`
   cursor: pointer;
@@ -14,9 +8,11 @@ export const GuildTitle = styled.div`
   position: relative;
 
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
-  padding-bottom: 1.6rem;
+  height: 4.8rem;
+  padding: 1.2rem 1.6rem;
   border-bottom: 0.1rem solid ${({ theme }) => theme.colors.dark[500]};
 
   svg {
