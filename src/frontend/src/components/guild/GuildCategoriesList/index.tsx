@@ -19,7 +19,7 @@ export interface CategoriesListProps {
 const GuildCategoriesList = ({ categories, channels }: CategoriesListProps) => {
   const { openModal } = useModalStore();
   const { guildId } = useGuildInfoStore();
-  const { setSelectedChannel } = useChannelInfoStore();
+  const { selectedChannel, setSelectedChannel } = useChannelInfoStore();
 
   const handleOpenModal = (categoryId: string, guildId: string) => {
     openModal('withFooter', <CreateChannelModal categoryId={categoryId} guildId={guildId} />);
@@ -50,6 +50,7 @@ const GuildCategoriesList = ({ categories, channels }: CategoriesListProps) => {
                       type: channel.channelType as ChannelType,
                     })
                   }
+                  $isSelected={selectedChannel?.id === channel.channelId}
                 >
                   {channel.channelType === 'TEXT' ? <BiHash size={18} /> : <BsFillMicFill size={18} />}
                   <BodyRegularText>{channel.name}</BodyRegularText>

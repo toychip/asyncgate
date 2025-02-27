@@ -43,7 +43,7 @@ export const Channels = styled.div`
   margin-top: 0.6rem;
 `;
 
-export const ChannelName = styled.div`
+export const ChannelName = styled.div<{ $isSelected: boolean }>`
   cursor: pointer;
 
   display: flex;
@@ -53,6 +53,10 @@ export const ChannelName = styled.div`
   height: 3.2rem;
   padding-left: 1rem;
   border-radius: 0.4rem;
+
+  color: ${({ theme, $isSelected }) => $isSelected && theme.colors.white};
+
+  background-color: ${({ theme, $isSelected }) => $isSelected && theme.colors.dark[500]};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.dark[500]};
