@@ -67,7 +67,7 @@ const useStompClient = ({ channelId }: UseStompClientProps) => {
       setIsConnected(false);
       console.log('✅ WebSocket 연결 해제됨');
     };
-  }, []);
+  }, [channelId]);
 
   return { client: clientRef.current, isConnected };
 };
