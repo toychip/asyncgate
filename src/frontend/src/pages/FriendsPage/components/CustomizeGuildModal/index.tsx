@@ -64,12 +64,12 @@ const CustomizeGuildModal = ({
             </CaptionText>
             <input
               type="file"
-              id="profile-image-upload"
+              id="profileImageUpload"
               accept="image/*"
               onChange={handleProfileImageChange}
               style={{ display: 'none' }}
             />
-            <label htmlFor="profile-image-upload">
+            <label htmlFor="profileImageUpload">
               <S.ImageUpLoad $profileImagePreview={profileImagePreview}>
                 {!profileImagePreview && (
                   <>
