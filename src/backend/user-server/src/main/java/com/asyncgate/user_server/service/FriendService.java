@@ -32,6 +32,9 @@ public class FriendService implements FriendUseCase {
     @Override
     @Transactional
     public Friend registerFriend(final String requestUserId, final String toUserId) {
+
+        // ToDo 이미 존재하는지 확인하기
+
         Friend friend = Friend.create(requestUserId, toUserId);
         friendRepository.save(friend);
         return friend;
@@ -92,7 +95,7 @@ public class FriendService implements FriendUseCase {
     public FriendsResponse getReceivedFriendRequests(final String userId) {
         List<String> receivedFriendIds = friendRepository.findReceivedFriendRequests(userId);
         return FriendsResponse.of(
-                memberRepository.getByMemberIds(receivedFriendIds), FriendStatus.PENDING
+                memberRepository.getByMemberIds(receivedFriendIds), FriendStatus.RECEIVED
         );
     }
 

@@ -1,9 +1,6 @@
 package com.asyncgate.user_server.repository;
 
 import com.asyncgate.user_server.domain.Member;
-import com.asyncgate.user_server.entity.MemberEntity;
-import com.asyncgate.user_server.exception.FailType;
-import com.asyncgate.user_server.exception.UserServerException;
 import com.asyncgate.user_server.support.utility.DomainUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +18,9 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public void save(final Member member) {
-        MemberEntity memberEntity = DomainUtil.MemberMapper.toEntity(member);
-
-        memberJpaRepository.save(memberEntity);
+        memberJpaRepository.save(
+                DomainUtil.MemberMapper.toEntity(member)
+        );
     }
 
     @Override
@@ -59,15 +56,5 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     public boolean isExistById(final String id) {
         return memberJpaRepository.findById(id).isPresent();
-    }
-
-    private MemberEntity findMemberEntityByEmail(final String email) {
-        return memberJpaRepository.findByNotDeletedEmail(email)
-                .orElseThrow(() -> new UserServerException(FailType.MEMBER_NOT_EXIST_EMAIL));
-    }
-
-    private MemberEntity findMemberEntityById(final String id) {
-        return memberJpaRepository.findByNotDeletedId(id)
-                .orElseThrow(() -> new UserServerException(FailType.MEMBER_NOT_FOUND));
     }
 }

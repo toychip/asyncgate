@@ -5,7 +5,7 @@ import com.asyncgate.user_server.domain.Friend;
 import com.asyncgate.user_server.domain.Member;
 import com.asyncgate.user_server.dto.response.FriendResponse;
 import com.asyncgate.user_server.dto.response.FriendsResponse;
-import com.asyncgate.user_server.dto.response.MemberResponse;
+import com.asyncgate.user_server.dto.response.UserClientInfoResponses.UserClientInfoResponse;
 import com.asyncgate.user_server.security.annotation.MemberID;
 import com.asyncgate.user_server.support.response.SuccessResponse;
 import com.asyncgate.user_server.usecase.FriendUseCase;
@@ -24,10 +24,10 @@ public class FriendController implements FriendControllerDocs {
      */
     @Override
     @GetMapping
-    public SuccessResponse<MemberResponse> searchTarget(final @RequestParam String email) {
+    public SuccessResponse<UserClientInfoResponse> searchTarget(final @RequestParam String email) {
         Member findMember = friendUseCase.getByEmail(email);
         return SuccessResponse.ok(
-                MemberResponse.from(findMember)
+                UserClientInfoResponse.from(findMember)
         );
     }
 

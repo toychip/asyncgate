@@ -2,7 +2,7 @@ package com.asyncgate.user_server.controller.docs;
 
 import com.asyncgate.user_server.dto.response.FriendResponse;
 import com.asyncgate.user_server.dto.response.FriendsResponse;
-import com.asyncgate.user_server.dto.response.MemberResponse;
+import com.asyncgate.user_server.dto.response.UserClientInfoResponses;
 import com.asyncgate.user_server.security.annotation.MemberID;
 import com.asyncgate.user_server.support.response.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +18,7 @@ public interface FriendControllerDocs {
             @ApiResponse(responseCode = "200", description = "정상적으로 조회되었습니다.")
     })
     @GetMapping
-    SuccessResponse<MemberResponse> searchTarget(
+    SuccessResponse<UserClientInfoResponses.UserClientInfoResponse> searchTarget(
             @Parameter(description = "검색할 회원의 이메일", required = true)
             @RequestParam String email
     );
