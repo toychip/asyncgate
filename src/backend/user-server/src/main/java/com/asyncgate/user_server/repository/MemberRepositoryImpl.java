@@ -30,7 +30,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public List<Member> getByMemberIds(List<String> memberIds) {
+    public List<Member> getByMemberIds(final List<String> memberIds) {
         return queryDslRepository.getByMemberIds(memberIds).stream()
                 .map(DomainUtil.MemberMapper::toDomain)
                 .toList();

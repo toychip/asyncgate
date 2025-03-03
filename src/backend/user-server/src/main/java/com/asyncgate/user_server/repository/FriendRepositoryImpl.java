@@ -55,4 +55,16 @@ public class FriendRepositoryImpl implements FriendRepository {
     public List<String> findFriendIdsByUserId(final String userId) {
         return queryDslRepository.findFriendsIdByUserId(userId);
     }
+
+    @Override
+    public void validNotExists(final String userId1, final String userId2) {
+        queryDslRepository.validNotExists(userId1, userId2);
+    }
+
+    @Override
+    public Friend findIdAndPending(final String friendId) {
+        return DomainUtil.FriendMapper.toDomain(
+                queryDslRepository.findByIdAndPending(friendId)
+        );
+    }
 }

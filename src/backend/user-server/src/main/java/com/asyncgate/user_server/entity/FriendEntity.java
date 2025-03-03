@@ -31,7 +31,7 @@ public class FriendEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private FriendStatus status;
+    private FriendStatus status = FriendStatus.PENDING;
 
     @Builder
     public FriendEntity(String id, String userId1, String userId2, String requestedBy, FriendStatus status) {
