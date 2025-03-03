@@ -52,8 +52,16 @@ public enum FailType {
 
     // Friend
     FRIEND_NOT_FOUND(HttpStatus.NOT_FOUND, "Friend_4001", "친구 정보가 존재하지 않습니다."),
-    UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "Friend_40300", "현재 사용자는 해당 친구 관계에 대한 권한이 없습니다."),
-    UNAUTHORIZED_ACTION(HttpStatus.FORBIDDEN, "Friend_40301", "본인의 친구 요청에 대해서는 해당 작업을 수행할 수 없습니다.");;
+    FRIEND_PENDING_NOT_FOUND(HttpStatus.NOT_FOUND, "Friend_4002", "친구 요청한 기록이 없습니다."),
+    UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "Friend_4030", "현재 사용자는 해당 친구 관계에 대한 권한이 없습니다."),
+    UNAUTHORIZED_ACTION(HttpStatus.FORBIDDEN, "Friend_4031", "본인의 친구 요청에 대해서는 해당 작업을 수행할 수 없습니다."),
+
+    FRIEND_ALREADY_PENDING_EXISTS(HttpStatus.BAD_REQUEST, "Friend_4003", "이미 친구요청을 한 상태입니다."),
+    FRIEND_IS_NOT_PENDING(HttpStatus.BAD_REQUEST, "Friend_4003", "친구 상태가 친구 요청 상태가 아닙니다."),
+    FRIEND_ALREADY_ACCEPTED_EXISTS(HttpStatus.BAD_REQUEST, "Friend_4004", "이미 친구인 관계입니다."),
+    FRIEND_ALREADY_REJECTED_EXISTS(HttpStatus.BAD_REQUEST, "Friend_4005", "이미 친구 신청을 거절당했습니다."),
+
+    ;
 
     private final HttpStatus status;
     private final String errorCode;

@@ -32,6 +32,7 @@ public class FriendService implements FriendUseCase {
     @Override
     @Transactional
     public Friend registerFriend(final String requestUserId, final String toUserId) {
+        friendRepository.validNotExists(requestUserId, toUserId);
         Friend friend = Friend.create(requestUserId, toUserId);
         friendRepository.save(friend);
         return friend;
@@ -40,7 +41,7 @@ public class FriendService implements FriendUseCase {
     @Override
     @Transactional
     public Friend acceptFriend(final String userId, final String friendId) {
-        Friend friend = friendRepository.findById(friendId);
+        Friend friend = friendRepository.findIdAndPending(friendId);
         validEditPermission(userId, friend);
         friend.accept();
         friendRepository.save(friend);
@@ -65,7 +66,7 @@ public class FriendService implements FriendUseCase {
     @Override
     @Transactional
     public Friend rejectFriend(final String userId, final String friendId) {
-        Friend friend = friendRepository.findById(friendId);
+        Friend friend = friendRepository.findIdAndPending(friendId);
         validEditPermission(userId, friend);
         friend.reject();
         friendRepository.save(friend);
@@ -92,7 +93,7 @@ public class FriendService implements FriendUseCase {
     public FriendsResponse getReceivedFriendRequests(final String userId) {
         List<String> receivedFriendIds = friendRepository.findReceivedFriendRequests(userId);
         return FriendsResponse.of(
-                memberRepository.getByMemberIds(receivedFriendIds), FriendStatus.PENDING
+                memberRepository.getByMemberIds(receivedFriendIds), FriendStatus.RECEIVED
         );
     }
 

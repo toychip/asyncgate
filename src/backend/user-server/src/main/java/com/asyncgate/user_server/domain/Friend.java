@@ -21,17 +21,24 @@ public class Friend {
     }
 
     public static Friend create(String requestUserId, String toUserId) {
-        // 두 사용자 ID를 사전 순으로 정렬하여 저장
-        if (requestUserId.compareTo(toUserId) < 0) {
-            return new Friend(UUID.randomUUID().toString(), requestUserId, toUserId, requestUserId, FriendStatus.PENDING);
-        } else {
-            return new Friend(UUID.randomUUID().toString(), toUserId, requestUserId, requestUserId, FriendStatus.PENDING);
-        }
+        String lowerUserId = getLowerUserId(requestUserId, toUserId);
+        String higherUserId = getHigherUserId(requestUserId, toUserId);
+        // 요청을 보낸 쪽의 ID는 요청자(requestedBy)로 설정합니다.
+        return new Friend(UUID.randomUUID().toString(), lowerUserId, higherUserId, requestUserId, FriendStatus.PENDING);
     }
 
     public static Friend of(String id, String userId1, String userId2, String requestedBy, FriendStatus status) {
         return new Friend(id, userId1, userId2, requestedBy, status);
     }
+
+    public static String getLowerUserId(String userId1, String userId2) {
+        return userId1.compareTo(userId2) < 0 ? userId1 : userId2;
+    }
+
+    public static String getHigherUserId(String userId1, String userId2) {
+        return userId1.compareTo(userId2) < 0 ? userId2 : userId1;
+    }
+
 
     public void accept() {
         this.status = FriendStatus.ACCEPTED;

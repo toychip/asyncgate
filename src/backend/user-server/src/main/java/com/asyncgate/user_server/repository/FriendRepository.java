@@ -16,4 +16,8 @@ public interface FriendRepository {
     List<String> findReceivedFriendRequests(String userId);
 
     List<String> findFriendIdsByUserId(String userId);
+
+    void validNotExists(String userId1, String userId2);
+
+    Friend findIdAndPending(String friendId);
 }

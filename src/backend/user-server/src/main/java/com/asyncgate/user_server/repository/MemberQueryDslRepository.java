@@ -1,6 +1,5 @@
 package com.asyncgate.user_server.repository;
 
-import com.asyncgate.user_server.domain.Member;
 import com.asyncgate.user_server.entity.MemberEntity;
 import com.asyncgate.user_server.entity.QMemberEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
