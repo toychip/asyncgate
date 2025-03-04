@@ -29,6 +29,14 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/users/(?<segment>.*), /$\{segment}
 
+        - id: chat-server-swagger
+          uri: lb://CHAT-SERVER
+          predicates:
+            - Path=/chats/swagger-ui/**, /chats/v3/api-docs/**, /chats/swagger-resources/**, /chats/webjars/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/chats/(?<segment>.*), /$\{segment}
+
         - id: guild-server
           uri: lb://GUILD-SERVER
           predicates:
@@ -107,6 +115,15 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/signalings/(?<segment>.*), /$\{segment}
+
+        - id: chat-server
+          uri: lb://CHAT-SERVER
+          predicates:
+            - Path=/chats/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/chats/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials

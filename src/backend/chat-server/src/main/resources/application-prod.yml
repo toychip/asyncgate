@@ -47,3 +47,14 @@ management:
 logging:
   level:
     com.asyncgate.chat_server: DEBUG
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /chats/v3/api-docs/swagger-config
+    url: /chats/v3/api-docs
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true

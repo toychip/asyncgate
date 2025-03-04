@@ -1,5 +1,6 @@
 package com.asyncgate.chat_server.controller
 
+import com.asyncgate.chat_server.controller.docs.DirectControllerDocs
 import com.asyncgate.chat_server.domain.ReadStatus
 import com.asyncgate.chat_server.filter.JwtTokenProvider
 import com.asyncgate.chat_server.service.DirectService
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 class DirectController(
     private val directService: DirectService,
     private val jwtTokenProvider: JwtTokenProvider,
-) {
+) : DirectControllerDocs {
 
     @MessageMapping("/chat/direct/send-message")
     fun direct(@Payload directMessageCreate: DirectMessageCreate, message: Message<*>) {
@@ -36,7 +37,7 @@ class DirectController(
     }
 
     @MessageMapping("/chat/direct/typing")
-    fun typing(@Payload directTyping: DirectMessageTyping, message: Message<*>) {
+    fun typing(@Payload directTyping: DirectMessageTypingRequest, message: Message<*>) {
         val jwtToken = CustomSecurityContext.extractJwtTokenForStomp(message)
         val userId = jwtTokenProvider.extract(jwtToken)
         val directMessage = directTyping.toDomain(userId)
@@ -44,7 +45,7 @@ class DirectController(
     }
 
     @MessageMapping("/chat/direct/edit")
-    fun edit(@Payload directEdit: DirectMessageEdit, message: Message<*>) {
+    fun edit(@Payload directEdit: DirectMessageEditRequest, message: Message<*>) {
         val jwtToken = CustomSecurityContext.extractJwtTokenForStomp(message)
         val userId = jwtTokenProvider.extract(jwtToken)
         val directMessage = directEdit.toDomain(userId)
@@ -52,7 +53,7 @@ class DirectController(
     }
 
     @MessageMapping("/chat/direct/delete")
-    fun sendDeleteMessage(@Payload directDelete: DirectMessageDelete, message: Message<*>) {
+    fun sendDeleteMessage(@Payload directDelete: DirectMessageDeleteRequest, message: Message<*>) {
         val jwtToken = CustomSecurityContext.extractJwtTokenForStomp(message)
         val userId = jwtTokenProvider.extract(jwtToken)
         val directMessage = directDelete.toDomain(userId)
@@ -61,7 +62,7 @@ class DirectController(
 
     @ResponseBody
     @PostMapping("/chat/direct/file")
-    fun uploadFile(@ModelAttribute fileRequest: FileRequest, servletRequest: HttpServletRequest): SuccessResponse<FileUploadResponse> {
+    override fun uploadFile(@ModelAttribute fileRequest: FileRequest, servletRequest: HttpServletRequest): SuccessResponse<FileUploadResponse> {
         val jwtToken = CustomSecurityContext.extractJwtTokenForHttp(servletRequest)
         val userId = jwtTokenProvider.extract(jwtToken)
         val response = directService.upload(fileRequest, userId)
@@ -70,12 +71,25 @@ class DirectController(
 
     @ResponseBody
     @GetMapping("chat/direct")
-    fun readPaging(
+    override fun readPaging(
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("size", defaultValue = "10") size: Int,
         @RequestParam("channel-id") channelId: String,
     ): SuccessResponse<DirectPagingResponse> {
         val response = directService.readPaging(channelId, page, size)
         return SuccessResponse.ok(response)
+    }
+
+    // Just Docs
+    override fun directJustDocs(directMessageCreate: DirectMessageCreate, message: Message<*>) {
+    }
+
+    override fun typingJustDocs(directTyping: DirectMessageTypingRequest, message: Message<*>) {
+    }
+
+    override fun editJustDocs(directEdit: DirectMessageEditRequest, message: Message<*>) {
+    }
+
+    override fun sendDeleteMessageJustDocs(directDelete: DirectMessageDeleteRequest, message: Message<*>) {
     }
 }
