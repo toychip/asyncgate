@@ -2,14 +2,19 @@ package com.asyncgate.chat_server.controller
 
 import com.asyncgate.chat_server.controller.docs.DirectControllerDocs
 import com.asyncgate.chat_server.domain.ReadStatus
+import com.asyncgate.chat_server.exception.ChatServerException
 import com.asyncgate.chat_server.filter.JwtTokenProvider
 import com.asyncgate.chat_server.service.DirectService
 import com.asyncgate.chat_server.support.response.SuccessResponse
 import com.asyncgate.chat_server.support.utility.CustomSecurityContext
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.messaging.Message
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
+import org.springframework.messaging.simp.stomp.StompCommand
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
@@ -91,5 +96,13 @@ class DirectController(
     }
 
     override fun sendDeleteMessageJustDocs(directDelete: DirectMessageDeleteRequest, message: Message<*>) {
+    }
+
+    // 메시지 예외 처리
+    @MessageExceptionHandler(ChatServerException::class)
+    fun handleChatServerException(e: ChatServerException): Message<*> {
+        val accessor = StompHeaderAccessor.create(StompCommand.ERROR)
+        accessor.messageHeaders[StompHeaderAccessor.STOMP_MESSAGE_HEADER] = e.failType.message
+        return MessageBuilder.createMessage(ByteArray(0), accessor.messageHeaders)
     }
 }
