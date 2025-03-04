@@ -1,5 +1,7 @@
 package com.asyncgate.chat_server.filter
 
+import com.asyncgate.chat_server.exception.ChatServerException
+import com.asyncgate.chat_server.exception.FailType
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -8,6 +10,7 @@ import org.springframework.messaging.MessageChannel
 import org.springframework.messaging.simp.stomp.StompCommand
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor
 import org.springframework.messaging.support.ChannelInterceptor
+import org.springframework.messaging.support.MessageBuilder
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ResponseStatusException
 
@@ -44,11 +47,15 @@ class FilterChannelInterceptor(
                 log.error("🚨 [STOMP] Access Token is missing or improperly formatted!")
                 throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Access token is missing")
             }
-            if (!jwtTokenProvider.validate(jwtToken)) {
-                log.error("🚨 [STOMP] Access Token validation failed!")
-                throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+            try {
+                if (!jwtTokenProvider.validate(jwtToken)) {
+                    log.error("🚨 [STOMP] Access Token validation failed!")
+                    throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
+                }
+                log.info("✅ [STOMP] CONNECT 요청 처리 완료")
+            } catch (e: ChatServerException) {
+                createErrorMessage(e.failType)
             }
-            log.info("✅ [STOMP] CONNECT 요청 처리 완료")
         }
         return message
     }
@@ -100,6 +107,18 @@ class FilterChannelInterceptor(
         )
         // 시그널링 서버에 전달 (주석)
         // messageSender.signaling(stateTopic, stateRequest)
+    }
+
+    /**
+     * STOMP ERROR 프레임 생성 메서드
+     */
+    private fun createErrorMessage(failType: FailType): Message<*> {
+        val errorAccessor = StompHeaderAccessor.create(StompCommand.ERROR)
+        errorAccessor.messageHeaders[StompHeaderAccessor.STOMP_MESSAGE_HEADER] = failType.message
+        errorAccessor.messageHeaders["errorCode"] = failType.errorCode
+        errorAccessor.messageHeaders["status"] = failType.status.value()
+
+        return MessageBuilder.createMessage(ByteArray(0), errorAccessor.messageHeaders)
     }
 }
 
