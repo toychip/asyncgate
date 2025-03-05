@@ -76,7 +76,7 @@ class WebSocketHandshakeInterceptor(
 
             response.setStatusCode(status)
             response.headers["WWW-Authenticate"] =
-                "Bearer error=\"invalid_token\", error_description=\"$message\""
+                "Bearer error=\"invalid_token\", error_description=\""
 
             return false
         }
