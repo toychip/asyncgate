@@ -10,6 +10,6 @@ interface DirectMessageMongoRepository : MongoRepository<DirectMessageEntity, St
     @Query("{ '_id': ?0, 'isDeleted': false }")
     fun findActiveById(id: String): DirectMessageEntity?
 
-    @Query("{ 'channelId': ?0, 'isDeleted': false }")
+    @Query(value = "{ 'channelId': ?0, 'isDeleted': false }", sort = "{ 'createdAt': -1 }")
     fun findByChannelId(channelId: String, pageable: Pageable): Page<DirectMessageEntity>
 }

@@ -1,5 +1,6 @@
 package com.asyncgate.chat_server.filter
 
+import com.asyncgate.chat_server.exception.ChatServerException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -60,13 +61,26 @@ class WebSocketHandshakeInterceptor(
         }
         val (_, jwtToken) = pair
 
-        if (!jwtTokenProvider.validate(jwtToken)) {
-            log.info("❌ WebSocket Handshake 실패: 유효하지 않은 JWT 토큰")
-            response.setStatusCode(HttpStatus.UNAUTHORIZED)
+        try {
+            if (!jwtTokenProvider.validate(jwtToken)) {
+                log.info("❌ WebSocket Handshake 실패: 유효하지 않은 JWT 토큰")
+                response.setStatusCode(HttpStatus.UNAUTHORIZED)
+                response.headers["WWW-Authenticate"] =
+                    "Bearer error=\"invalid_token\", error_description=\"invalid JWT token\""
+                return false
+            }
+        } catch (e: ChatServerException) {
+            log.info("❌ WebSocket Handshake 실패: {}", e.failType.message)
+            val message = e.failType.message
+            val status = e.failType.status
+
+            response.setStatusCode(status)
             response.headers["WWW-Authenticate"] =
-                "Bearer error=\"invalid_token\", error_description=\"invalid JWT token\""
+                "Bearer error=\"invalid_token\", error_description=\""
+
             return false
         }
+
         val userId = jwtTokenProvider.extract(jwtToken)
         log.info("✅ WebSocket Handshake 성공 - userId: $userId")
 
