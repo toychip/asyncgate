@@ -216,7 +216,7 @@ public class KurentoManager {
     }
 
     public void startIceCandidateListenerAuto(String roomId, String userId) {
-        log.warn("⚠️ user id : {}", userId);
+        log.warn("Candidate 찾을거임 !!!!!  Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!Candidate 찾을거임 !!!!!: {}", userId);
         WebRtcEndpoint endpoint = getUserEndpoint(roomId, userId);
 
         endpoint.addIceCandidateFoundListener(event -> {
