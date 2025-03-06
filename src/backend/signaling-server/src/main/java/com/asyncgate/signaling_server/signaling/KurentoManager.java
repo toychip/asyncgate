@@ -89,6 +89,7 @@ public class KurentoManager {
                 // ICE Candidate 수집 시작
                 endpoint.gatherCandidates();
 
+                log.info("users topic을 전송하려고 합니다..");
                 // 자동으로 토픽 전송
                 getUsersInChannel(roomId);
 
