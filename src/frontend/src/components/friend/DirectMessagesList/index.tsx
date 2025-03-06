@@ -30,10 +30,8 @@ const DirectMessagesList = () => {
       </S.CategoryName>
       <S.DirectMessagesList>
         {directMessages.map(({ directId, members }) => {
-          const directMessageName = members.responses
-            .filter((member) => member.userId !== userInfo?.userId)
-            .map((member) => member.nickname)
-            .join(', ');
+          const otherMemberList = members.responses.filter((member) => member.userId !== userInfo?.userId);
+          const directMessageName = otherMemberList.map((member) => member.nickname).join(', ');
 
           return (
             <S.DirectMessageItem
@@ -41,11 +39,7 @@ const DirectMessagesList = () => {
               $isSelected={selectedDMChannel?.id === directId}
               onClick={() => setSelectedDMChannel({ id: directId, name: directMessageName, type: 'TEXT' })}
             >
-              <S.DirectMessageImage
-                $userImageUrl={
-                  members.responses.filter((member) => member.userId !== userInfo?.userId)[0].profileImageUrl
-                }
-              >
+              <S.DirectMessageImage $userImageUrl={otherMemberList[0].profileImageUrl}>
                 {members.responses.length === 2 && <S.UserStatusMark $isOnline={true} />}
               </S.DirectMessageImage>
               <S.DirectMessageInfo>
