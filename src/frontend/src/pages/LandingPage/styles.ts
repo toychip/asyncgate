@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+import LandingBackgroundImage from '@/assets/landingBackground.png';
+import LandingPreview from '@/assets/landingPreview.webp';
+import LandingStars from '@/assets/landingStars.webp';
 import { BodyRegularText, DisplayText } from '@/styles/Typography';
 
 export const PageContainer = styled.div`
@@ -9,7 +12,7 @@ export const PageContainer = styled.div`
 
   width: 100%;
 
-  background-image: url('/src/assets/landingBackground.png');
+  background-image: url(${LandingBackgroundImage});
   background-repeat: no-repeat;
   background-position: 0 1%;
   background-size: cover;
@@ -25,7 +28,7 @@ export const DescriptionContainer = styled.div`
   padding: 0 4rem;
   padding-top: 10rem;
 
-  background-image: url('/src/assets/landingStars.webp');
+  background-image: url(${LandingStars});
   background-repeat: no-repeat;
   background-size: 90%;
 `;
@@ -56,7 +59,7 @@ export const PreviewImageWrapper = styled.div`
   max-width: 60rem;
   min-height: 50rem;
 
-  background-image: url('/src/assets/landingPreview.webp');
+  background-image: url(${LandingPreview});
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: contain;

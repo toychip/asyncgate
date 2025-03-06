@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import BackgroundImage from '@/assets/background.svg';
+
 export const LayoutContainer = styled.div`
   position: relative;
   width: 100%;
@@ -15,7 +17,7 @@ export const Background = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background-image: url('/src/assets/background.svg');
+  background-image: url(${BackgroundImage});
   background-repeat: no-repeat;
   background-size: cover;
 `;
