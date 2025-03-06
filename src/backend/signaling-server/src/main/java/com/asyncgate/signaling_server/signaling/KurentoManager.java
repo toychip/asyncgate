@@ -154,6 +154,8 @@ public class KurentoManager {
 
         System.out.println("sdp 처리 및 sdp answer 생성" + sdpAnswer);
 
+        getUsersInChannel(message.data().roomId());
+
         // 클라이언트에게 SDP Answer 전송
         messagingTemplate.convertAndSend("/topic/answer/" + message.data().roomId() + "/" + userId,
                 new KurentoAnswerResponse("sdpAnswer", sdpAnswer));

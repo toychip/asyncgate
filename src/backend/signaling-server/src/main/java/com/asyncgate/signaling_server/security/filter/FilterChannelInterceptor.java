@@ -2,11 +2,9 @@ package com.asyncgate.signaling_server.security.filter;
 
 import com.asyncgate.signaling_server.security.constant.Constants;
 import com.asyncgate.signaling_server.security.utility.JsonWebTokenUtil;
-import com.asyncgate.signaling_server.signaling.KurentoManager;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -21,17 +19,11 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(FilterChannelInterceptor.class);
     private static final String AUTHORIZATION_HEADER = "Authorization";
-
-    private static final String ROOM_HEADER = "room-id";
     private static final String BEARER_PREFIX = "Bearer ";
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
-    @Lazy  // ✅ Circular Dependency 방지
-    private final KurentoManager kurentoManager;
-
-    public FilterChannelInterceptor(JsonWebTokenUtil jsonWebTokenUtil, KurentoManager kurentoManager) {
+    public FilterChannelInterceptor(JsonWebTokenUtil jsonWebTokenUtil) {
         this.jsonWebTokenUtil = jsonWebTokenUtil;
-        this.kurentoManager = kurentoManager;
     }
 
     private String extractToken(String headerValue) {
@@ -59,18 +51,8 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
             if(headerAccessor.getSessionAttributes().get("userId") == null) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "userId is missing");
             }
-
-            // ✅ roomId 가져오기
-            String roomId = headerAccessor.getFirstNativeHeader(ROOM_HEADER);
-            log.info("🔑 [STOMP] Room ID: {}", roomId);
-            if (roomId == null || roomId.isEmpty()) {
-                log.error("🚨 [STOMP] Room ID is missing!");
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Room ID is missing");
-            }
-
-            log.info("✅ [STOMP] CONNECT 요청 처리 완료 - Room ID: {}", roomId);
-
-            kurentoManager.getUsersInChannel(roomId);
+            
+            log.info("✅ [STOMP] CONNECT 요청 처리 완료");
         }
         return message;
     }
