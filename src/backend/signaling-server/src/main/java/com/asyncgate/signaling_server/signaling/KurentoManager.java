@@ -78,8 +78,6 @@ public class KurentoManager {
 
                 startIceCandidateListenerAuto(roomId, userId);
 
-                // ICE Candidate 수집 시작
-                endpoint.gatherCandidates();
 
                 // log.info("users topic을 전송하려고 합니다..");
                 // 자동으로 토픽 전송
@@ -119,6 +117,20 @@ public class KurentoManager {
                 new KurentoOfferResponse("sdpOffer", sdpOffer));
 
         log.info("🎬 Kurento가 클라이언트에게 Offer 전송 완료: {}", sdpOffer);
+    }
+
+    /**
+     * ice 수집을 시작하는 메서드
+     */
+    public void GetherICECandidate(KurentoOfferRequest message, StompHeaderAccessor accessor) {
+        log.info("message {}", message);
+        String userId = (String) accessor.getSessionAttributes().get("userId");
+        log.warn("⚠️ user id : {}, roomId: {}", userId, message.data().roomId());
+        WebRtcEndpoint endpoint = getUserEndpoint(message.data().roomId(), userId);
+
+        log.info("Gether ICE Candidate candidate kurento가 수집을 시작합니다 와하하~~" + endpoint);
+        // ICE Candidate 수집 시작
+        endpoint.gatherCandidates();
     }
 
     /**
