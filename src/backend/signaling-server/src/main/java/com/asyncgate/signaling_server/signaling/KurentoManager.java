@@ -187,6 +187,8 @@ public class KurentoManager {
         System.out.println("connected 확인" + endpoint.getMediaState());
         // 더 많은 정보를 원해
         // System.out.println("endpoint 정보" + endpoint.getICECandidatePairs());
+
+        startIceCandidateListener(message, accessor);
     }
 
     /**
