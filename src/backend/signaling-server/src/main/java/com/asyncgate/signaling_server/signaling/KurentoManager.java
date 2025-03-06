@@ -186,7 +186,7 @@ public class KurentoManager {
         // connected가 잘 되었는지를 확인 하고싶어
         System.out.println("connected 확인" + endpoint.getMediaState());
         // 더 많은 정보를 원해
-        System.out.println("endpoint 정보" + endpoint.getICECandidatePairs().get(0));
+        // System.out.println("endpoint 정보" + endpoint.getICECandidatePairs());
     }
 
     /**
