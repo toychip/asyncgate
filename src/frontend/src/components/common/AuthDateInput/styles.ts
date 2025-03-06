@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import { SmallText } from '@/styles/Typography';
 
+import { DescriptionType } from '../AuthInput';
+
 export const DateInputContainer = styled.div`
   display: flex;
   flex-direction: column;
