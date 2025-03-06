@@ -12,7 +12,7 @@ const MAX_DIRECT_MESSAGE_FRIENDS = 9;
 
 const CreateDirectMessageModal = () => {
   const [selectedFriends, setSelectedFriends] = useState<string[]>([]);
-  const { createDirectMessageMutation } = usePostDirect();
+  const { createDirectMessage, isPending } = usePostDirect();
   const { friends } = useGetFriendsList();
   if (!friends) return null;
 
@@ -26,14 +26,10 @@ const CreateDirectMessageModal = () => {
   };
 
   const handleCreateDirectMessage = async () => {
-    try {
-      createDirectMessageMutation.mutate({ bodyRequest: { memberIds: selectedFriends } });
-    } catch (error) {
-      console.log('DM 생성 실패', error);
-    }
+    createDirectMessage(selectedFriends);
   };
 
-  const isButtonDisabled = !selectedFriends.length || createDirectMessageMutation.isPending;
+  const isButtonDisabled = !selectedFriends.length || isPending;
 
   return (
     <Modal name="withFooter">
@@ -61,7 +57,7 @@ const CreateDirectMessageModal = () => {
       </Modal.Content>
       <Modal.Footer>
         <S.CreateButton disabled={isButtonDisabled} $isDisabled={isButtonDisabled} onClick={handleCreateDirectMessage}>
-          {createDirectMessageMutation.isPending ? '요청 중...' : 'DM 생성'}
+          {isPending ? '요청 중...' : 'DM 생성'}
         </S.CreateButton>
       </Modal.Footer>
     </Modal>
