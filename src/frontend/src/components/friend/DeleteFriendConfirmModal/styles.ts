@@ -28,7 +28,9 @@ export const CancelButton = styled.button`
   }
 `;
 
-export const DeleteButton = styled.button`
+export const DeleteButton = styled.button<{ $isPending: boolean }>`
+  cursor: ${({ $isPending }) => $isPending && 'not-allowed'};
+
   height: 3.8rem;
   padding: 0.2rem 1.6rem;
   border-radius: 0.4rem;

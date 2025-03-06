@@ -1,9 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query';
-
-import { deleteFriend } from '@/api/friends';
 import Modal from '@/components/common/Modal';
 import useModalStore from '@/stores/modalStore';
 
+import useDeleteFriend from './hooks/useDeleteFriend';
 import * as S from './styles';
 
 interface DeleteFriendConfirmModalProps {
@@ -12,17 +10,8 @@ interface DeleteFriendConfirmModalProps {
 }
 
 const DeleteFriendConfirmModal = ({ friendId, friendNickname }: DeleteFriendConfirmModalProps) => {
-  const queryClient = useQueryClient();
   const { closeAllModal } = useModalStore();
-
-  const handleDeleteFriend = async () => {
-    try {
-      await deleteFriend({ friendId });
-      queryClient.invalidateQueries({ queryKey: ['friendsList'] });
-    } catch (error) {
-      console.error('친구 삭제 실패', error);
-    }
-  };
+  const { deleteFriend, isPending } = useDeleteFriend();
 
   return (
     <Modal name="withFooter">
@@ -33,7 +22,9 @@ const DeleteFriendConfirmModal = ({ friendId, friendNickname }: DeleteFriendConf
       </Modal.Content>
       <S.ModalButtonContainer>
         <S.CancelButton onClick={closeAllModal}>취소</S.CancelButton>
-        <S.DeleteButton onClick={handleDeleteFriend}>친구 삭제하기</S.DeleteButton>
+        <S.DeleteButton disabled={isPending} $isPending={isPending} onClick={() => deleteFriend(friendId)}>
+          친구 삭제하기
+        </S.DeleteButton>
       </S.ModalButtonContainer>
     </Modal>
   );
