@@ -26,7 +26,7 @@ public class StompWebRtcController {
         // 메시지 처리 및 Kurento에서 사용자 연결
         kurentoManager.processSdpOffer(message, accessor);
 
-        kurentoManager.startIceCandidateListener(message, accessor);
+        // kurentoManager.startIceCandidateListener(message, accessor);
     }
 
     /**
