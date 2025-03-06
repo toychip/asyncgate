@@ -5,7 +5,7 @@ import { TbPlus } from 'react-icons/tb';
 import { GuildChannelInfo, useChannelInfoStore } from '@/stores/channelInfo';
 import { useGuildInfoStore } from '@/stores/guildInfo';
 import useModalStore from '@/stores/modalStore';
-import { BodyMediumText, BodyRegularText, ChipText } from '@/styles/Typography';
+import { BodyRegularText, ChipText } from '@/styles/Typography';
 import { CategoryDataResult, ChannelResult, ChannelType } from '@/types/guilds';
 
 import CreateChannelModal from '../CreateChannelModal';

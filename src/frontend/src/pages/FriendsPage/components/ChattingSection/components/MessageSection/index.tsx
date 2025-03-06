@@ -6,7 +6,7 @@ import { MdEmojiEmotions } from 'react-icons/md';
 import ChatTextarea from '../ChatTextarea';
 import MessageItem from '../MessageItem';
 
-import useChat, { ChatMessage } from './hooks/useChat';
+import useChat from './hooks/useChat';
 import useChatTextarea from './hooks/useChatTextarea';
 import * as S from './styles';
 
@@ -16,38 +16,7 @@ interface MessageSectionProps {
 
 const MessageSection = ({ channelId }: MessageSectionProps) => {
   const { messages, sendMessage } = useChat({ channelId });
-  const MOCKDATA: ChatMessage[] = [
-    {
-      profileImage: '',
-      channelId,
-      name: '철민',
-      content: '테스트용 메시지',
-    },
-    {
-      profileImage: '',
-      channelId,
-      name: '철민',
-      content: '테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지',
-    },
-    {
-      profileImage: '',
-      channelId,
-      name: '철민',
-      content: '테스트용 메시지테스트용 메시지',
-    },
-    {
-      profileImage: '',
-      channelId,
-      name: '철민',
-      content: '테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지',
-    },
-    {
-      profileImage: '',
-      channelId,
-      name: '철민',
-      content: '테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지테스트용 메시지',
-    },
-  ];
+
   // TODO: 이전 채팅 기록 불러오는 로직 추가 예정
   const { chatInput, textareaRef, handleTextareaChange, handleKeyDown } = useChatTextarea({
     sendMessage,
@@ -81,7 +50,7 @@ const MessageSection = ({ channelId }: MessageSectionProps) => {
     <S.MessageSection>
       <S.MessageContainer>
         <S.MessageItemList>
-          {MOCKDATA.map((message, index) => (
+          {messages.map((message, index) => (
             <MessageItem
               key={`${index}_${message.content}`}
               sentUserProfileUrl={message.profileImage}

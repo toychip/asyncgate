@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 import ChatTextarea from '../ChatTextarea';
