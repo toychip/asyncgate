@@ -68,16 +68,6 @@ public class KurentoManager {
             if (member != null) {
                 log.info("✔ 성공적으로 사용자 정보 조회: {}", member);
 
-                // ICE Candidate 리스너 추가
-                endpoint.addIceCandidateFoundListener(event -> {
-                    JsonObject candidateMessage = new JsonObject();
-                    candidateMessage.addProperty("id", "iceCandidate");
-                    candidateMessage.addProperty("userId", member.getId());
-                    candidateMessage.add("candidate", new Gson().toJsonTree(event.getCandidate()));
-
-                    // log.info("🧊 ICE Candidate 전송: roomId={}, userId={}, candidate={}", roomId, member.getId(), event.getCandidate());
-                });
-
                 // 사용자 엔드포인트 저장 (음성, 화상용)
                 roomEndpoints.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(userId, endpoint);
 
