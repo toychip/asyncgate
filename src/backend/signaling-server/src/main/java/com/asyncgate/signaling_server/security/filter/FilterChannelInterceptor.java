@@ -6,6 +6,7 @@ import com.asyncgate.signaling_server.signaling.KurentoManager;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -25,6 +26,7 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
     private static final String BEARER_PREFIX = "Bearer ";
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
+    @Lazy
     private final KurentoManager kurentoManager;
 
     public FilterChannelInterceptor(JsonWebTokenUtil jsonWebTokenUtil, KurentoManager kurentoManager) {
