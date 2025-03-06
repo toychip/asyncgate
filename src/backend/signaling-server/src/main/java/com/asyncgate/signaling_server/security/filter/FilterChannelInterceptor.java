@@ -19,6 +19,8 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(FilterChannelInterceptor.class);
     private static final String AUTHORIZATION_HEADER = "Authorization";
+
+    private static final String ROOM_HEADER = "room-id";
     private static final String BEARER_PREFIX = "Bearer ";
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
@@ -51,7 +53,15 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
             if(headerAccessor.getSessionAttributes().get("userId") == null) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "userId is missing");
             }
-            log.info("✅ [STOMP] CONNECT 요청 처리 완료");
+
+            // ✅ roomId 가져오기
+            String roomId = headerAccessor.getFirstNativeHeader(ROOM_HEADER);
+            if (roomId == null || roomId.isEmpty()) {
+                log.error("🚨 [STOMP] Room ID is missing!");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Room ID is missing");
+            }
+
+            log.info("✅ [STOMP] CONNECT 요청 처리 완료 - Room ID: {}", roomId);
         }
         return message;
     }
