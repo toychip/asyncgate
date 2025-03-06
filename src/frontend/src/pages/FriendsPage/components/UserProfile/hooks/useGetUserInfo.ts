@@ -5,7 +5,7 @@ import { getUserInfo } from '@/api/users';
 import { useUserInfoStore } from '@/stores/userInfo';
 
 const useGetUserInfo = () => {
-  const { setUserInfo, clearUserInfo } = useUserInfoStore();
+  const { userInfo, setUserInfo, clearUserInfo } = useUserInfoStore();
 
   const queryResult = useQuery({
     queryKey: ['userInfo'],
@@ -14,8 +14,11 @@ const useGetUserInfo = () => {
   });
 
   useEffect(() => {
-    if (queryResult.data) setUserInfo({ userId: queryResult.data.result.userId });
-  }, [queryResult.data, setUserInfo]);
+    if (queryResult.data) {
+      const newUserId = queryResult.data.result.userId;
+      if (newUserId !== userInfo?.userId) setUserInfo({ userId: queryResult.data.result.userId });
+    }
+  }, [queryResult.data, setUserInfo, userInfo]);
 
   useEffect(() => {
     if (queryResult.isError) clearUserInfo();
