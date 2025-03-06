@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import styled from 'styled-components';
 
+import QRCodeAssetImage from '@/assets/qrcode.svg';
 import {
   BodyMediumText,
   BodyRegularText,
@@ -146,7 +147,7 @@ export const QRCodeWrapper = styled.div`
 export const QRCodeImage = styled.div`
   width: 100%;
   height: 100%;
-  background-image: url('/src/assets/qrcode.svg');
+  background-image: url(${QRCodeAssetImage});
   background-size: cover;
 `;
 
