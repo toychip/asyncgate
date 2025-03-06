@@ -86,6 +86,8 @@ public class KurentoManager {
 
                 log.info("✅ 사용자 데이터 및 엔드포인트 저장 완료: roomId={}, userId={}", roomId, userId);
 
+                startIceCandidateListenerAuto(roomId, userId);
+
                 // ICE Candidate 수집 시작
                 endpoint.gatherCandidates();
 
@@ -208,6 +210,21 @@ public class KurentoManager {
 
             // ✅ 클라이언트에게 ICE Candidate 전송
             messagingTemplate.convertAndSend("/topic/candidate/" + message.data().roomId(), candidateMessage.toString());
+        });
+    }
+
+    public void startIceCandidateListenerAuto(String roomId, String userId) {
+        log.warn("⚠️ user id : {}", userId);
+        WebRtcEndpoint endpoint = getUserEndpoint(roomId, userId);
+
+        endpoint.addIceCandidateFoundListener(event -> {
+            IceCandidate candidate = event.getCandidate();
+            JsonObject candidateMessage = new JsonObject();
+            candidateMessage.addProperty("type", "iceCandidate");
+            candidateMessage.add("candidate", new Gson().toJsonTree(candidate));
+
+            // ✅ 클라이언트에게 ICE Candidate 전송
+            messagingTemplate.convertAndSend("/topic/candidate/" + roomId, candidateMessage.toString());
         });
     }
 

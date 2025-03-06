@@ -36,17 +36,13 @@ public class KurentoConfig implements WebSocketMessageBrokerConfigurer {
     private final FilterChannelInterceptor filterChannelInterceptor;
     private final WebSocketHandshakeInterceptor webSocketHandshakeInterceptor;
 
-    @Lazy
-    private final SimpMessagingTemplate messagingTemplate;
     private final WebClientUtil webClientUtil;
 
     public KurentoConfig(FilterChannelInterceptor filterChannelInterceptor,
                          WebSocketHandshakeInterceptor webSocketHandshakeInterceptor,
-                         @Lazy SimpMessagingTemplate messagingTemplate,
                          WebClientUtil webClientUtil) {
         this.filterChannelInterceptor = filterChannelInterceptor;
         this.webSocketHandshakeInterceptor = webSocketHandshakeInterceptor;
-        this.messagingTemplate = messagingTemplate;
         this.webClientUtil = webClientUtil;
     }
 
@@ -60,10 +56,12 @@ public class KurentoConfig implements WebSocketMessageBrokerConfigurer {
         return new MemberServiceClient(webClientUtil);
     }
 
+    /*
     @Bean
     public KurentoManager kurentoManager(KurentoClient kurentoClient, MemberServiceClient memberServiceClient) {
         return new KurentoManager(kurentoClient, memberServiceClient, messagingTemplate);
     }
+     */
 
     @Bean
     public KurentoHandler kurentoHandler(KurentoManager kurentoManager) {

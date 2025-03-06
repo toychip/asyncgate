@@ -26,7 +26,6 @@ public class FilterChannelInterceptor implements ChannelInterceptor {
     private static final String BEARER_PREFIX = "Bearer ";
     private final JsonWebTokenUtil jsonWebTokenUtil;
 
-    @Lazy
     private final KurentoManager kurentoManager;
 
     public FilterChannelInterceptor(JsonWebTokenUtil jsonWebTokenUtil, KurentoManager kurentoManager) {
