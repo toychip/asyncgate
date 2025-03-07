@@ -245,6 +245,12 @@ public class KurentoManager {
         WebRtcEndpoint publisherEndpoint = getUserEndpoint(message.data().roomId(), userId);
         WebRtcEndpoint subscriberEndpoint = getUserEndpoint(message.data().publisherId(), userId);
 
+        // user id가 publisher id와 같은 경우 에러
+        if (message.data().publisherId().equals(userId)) {
+            log.warn("⚠️ [Kurento] 동일한 사용자가 연결을 시도하고 있습니다: roomId={}, userId={}", message.data().roomId(), userId);
+            return;
+        }
+
         // data가 없는 경우 에러
         if (publisherEndpoint == null || subscriberEndpoint == null) {
             log.warn("⚠️ [Kurento] WebRTC Endpoint 없음: roomId={}, userId={}, publisherId={}", message.data().roomId(), userId, message.data().publisherId());
