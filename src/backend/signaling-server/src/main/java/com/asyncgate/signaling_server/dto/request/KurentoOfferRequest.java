@@ -18,6 +18,10 @@ public record KurentoOfferRequest(
             String roomId,
 
             @Nullable
+            @JsonProperty("publisher_id")
+            String publisherId,
+
+            @Nullable
             @JsonProperty("sdp_offer")
             String sdpOffer,
 

@@ -161,6 +161,10 @@ public class KurentoManager {
         // 클라이언트에게 SDP Answer 전송
         messagingTemplate.convertAndSend("/topic/answer/" + message.data().roomId() + "/" + userId,
                 new KurentoAnswerResponse("sdpAnswer", sdpAnswer));
+
+        // offer를 보낸 클라이언트를 publisher (제공자)로 설정
+        messagingTemplate.convertAndSend("/topic/publisher/" + message.data().roomId(),
+                new KurentoAnswerResponse("userId", userId));
     }
 
     /**
@@ -230,6 +234,19 @@ public class KurentoManager {
             // ✅ 클라이언트에게 ICE Candidate 전송
             messagingTemplate.convertAndSend("/topic/candidate/" + roomId + "/" + userId, candidateMessage.toString());
         });
+    }
+
+    /**
+     * client가 stream을 연결하는 메서드
+     */
+    public void subscribeStream(KurentoOfferRequest message, StompHeaderAccessor accessor) {
+        String userId = (String) accessor.getSessionAttributes().get("userId");
+        log.warn("⚠️ user id : {}", userId);
+        WebRtcEndpoint publisherEndpoint = getUserEndpoint(message.data().roomId(), userId);
+        WebRtcEndpoint subscriberEndpoint = getUserEndpoint(message.data().publisherId(), userId);
+
+        // publisher media를 subscribe에 연결
+        publisherEndpoint.connect(subscriberEndpoint);
     }
 
 

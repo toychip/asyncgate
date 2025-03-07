@@ -67,6 +67,14 @@ public class StompWebRtcController {
     }
 
     /**
+     * 스트림 연결
+     */
+    @MessageMapping("/subscribe")
+    public void subscribeEndpoints(KurentoOfferRequest message, StompHeaderAccessor accessor) {
+        kurentoManager.subscribeStream(message, accessor);
+    }
+
+    /**
      * WebRTC 종료 처리
      */
     @MessageMapping("/exit")
