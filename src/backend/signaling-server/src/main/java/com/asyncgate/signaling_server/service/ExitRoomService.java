@@ -14,8 +14,6 @@ public class ExitRoomService implements ExitRoomUseCase {
 
     @Override
     public void execute(final String roomId, final String memberId) {
-        log.info("ExitRoomService.execute 호출됨, roomId: {}, memberId: {}", roomId, memberId);
-
         // 방에서 유저 제거
         kurentoManager.removeUser(roomId, memberId);
     }

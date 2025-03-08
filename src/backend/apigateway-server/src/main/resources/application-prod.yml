@@ -116,6 +116,9 @@ spring:
             allowed-origins:
               - 'http://localhost:5173'
               - 'https://localhost:5173'
+              - 'https://asyncgate.vercel.app'
+              - 'https://asyncgate.site'
+              - 'https://www.asyncgate.site'
             allow-credentials: true
             allowed-headers: '*'
             allowed-methods:
