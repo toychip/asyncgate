@@ -4,11 +4,13 @@ import com.asyncgate.user_server.dto.response.ReadUserRoomProfileResponse;
 import com.asyncgate.user_server.support.response.SuccessResponse;
 import com.asyncgate.user_server.usecase.ReadUserRoomProfileUseCase;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.asyncgate.user_server.security.annotation.MemberID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class MemberQueryController {
@@ -37,6 +39,7 @@ public class MemberQueryController {
      */
     @GetMapping("/user/id")
     public SuccessResponse<String> readUserId(final @MemberID String userId) {
+        log.info("userId: {}", userId);
         return SuccessResponse.ok(userId);
     }
 }
