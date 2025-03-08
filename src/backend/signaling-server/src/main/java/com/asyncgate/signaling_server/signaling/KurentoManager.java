@@ -481,6 +481,19 @@ public class KurentoManager {
         // 사용자 정보 제거
         userStates.remove(userId);
 
+        // 사용자 제거 이벤트 브로드캐스트
+        // 예: 클라이언트 측에서 해당 사용자의 미디어 스트림 제거 처리를 수행하도록 알림 전송
+        messagingTemplate.convertAndSend("/topic/removed/" + roomId, userId);
+
+        // 선택사항: 방이 비어있다면 미디어 파이프라인도 정리
+        if (roomEndpoints.get(roomId).isEmpty()) {
+            MediaPipeline mediaPipeline = pipelines.get(roomId);
+            // 미디어 파이프라인 해제 코드 (예시)
+            mediaPipeline.release();
+            pipelines.remove(roomId); // collection에서 제거
+            log.info("🚮 [Kurento] 방 {}에 남은 사용자가 없어 미디어 파이프라인을 해제합니다.", roomId);
+        }
+
         log.info("🛑 [Kurento] 사용자 제거 완료: roomId={}, userId={}", roomId, userId);
     }
 
