@@ -30,4 +30,12 @@ public class MemberQueryController {
     public SuccessResponse<ReadUserRoomProfileResponse> readUserRoomProfile(@RequestParam("userId") final String userId) {
         return SuccessResponse.ok(readUserRoomProfileUseCase.execute(userId));
     }
+
+    /**
+     * 1.8 회원 id 조회
+     */
+    @GetMapping("/id")
+    public SuccessResponse<String> readUserId(@RequestParam("userId") final String userId) {
+        return SuccessResponse.ok(userId);
+    }
 }
