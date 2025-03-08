@@ -35,7 +35,7 @@ public class MemberQueryController {
     /**
      * 1.8 회원 id 조회
      */
-    @GetMapping("/id")
+    @GetMapping("/user/id")
     public SuccessResponse<String> readUserId(final @MemberID String userId) {
         return SuccessResponse.ok(userId);
     }
