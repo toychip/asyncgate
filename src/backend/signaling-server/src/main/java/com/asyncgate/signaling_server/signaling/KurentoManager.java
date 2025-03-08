@@ -269,6 +269,7 @@ public class KurentoManager {
      */
     public void getUsersInChannel(String roomId, String myUserId) {
 
+        log.info("🔍 [Kurento] user info 조회 합니다. 대상 : {}", myUserId);
         if (!roomEndpoints.containsKey(roomId)) {
             log.warn("🚨 [Kurento] 조회 실패: 존재하지 않는 채널 (channelId={})", roomId);
             messagingTemplate.convertAndSend("/topic/users/" + roomId, Collections.emptyList());
