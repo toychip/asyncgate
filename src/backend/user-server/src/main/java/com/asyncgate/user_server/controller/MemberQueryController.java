@@ -4,10 +4,13 @@ import com.asyncgate.user_server.dto.response.ReadUserRoomProfileResponse;
 import com.asyncgate.user_server.support.response.SuccessResponse;
 import com.asyncgate.user_server.usecase.ReadUserRoomProfileUseCase;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.asyncgate.user_server.security.annotation.MemberID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class MemberQueryController {
@@ -25,8 +28,18 @@ public class MemberQueryController {
     /**
      * 1.7 회원 화상 간단 정보 조회
      */
+    // test
     @GetMapping("/room/profile")
     public SuccessResponse<ReadUserRoomProfileResponse> readUserRoomProfile(@RequestParam("userId") final String userId) {
         return SuccessResponse.ok(readUserRoomProfileUseCase.execute(userId));
+    }
+
+    /**
+     * 1.8 회원 id 조회
+     */
+    @GetMapping("/user/id")
+    public SuccessResponse<String> readUserId(final @MemberID String userId) {
+        log.info("userId: {}", userId);
+        return SuccessResponse.ok(userId);
     }
 }

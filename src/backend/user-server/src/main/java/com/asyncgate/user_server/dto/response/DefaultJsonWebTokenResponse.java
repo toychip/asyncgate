@@ -9,6 +9,11 @@ import lombok.Getter;
 @Getter
 public class DefaultJsonWebTokenResponse {
 
+    @Schema(description = "유저 ID", example = "idididid")
+    @JsonProperty("user_id")
+    @NotBlank
+    private final String userId;
+
     @Schema(description = "JWT 토큰", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
     @JsonProperty("access_token")
     @NotBlank
@@ -16,8 +21,10 @@ public class DefaultJsonWebTokenResponse {
 
     @Builder
     public DefaultJsonWebTokenResponse(
+            String userId,
             String accessToken
     ) {
+        this.userId = userId;
         this.accessToken = accessToken;
     }
 }

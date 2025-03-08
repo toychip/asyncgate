@@ -1,3 +1,8 @@
+### 0.0 get id
+// @no-log
+GET {{host_url}}/user/id
+Authorization: Bearer {{access_token}}
+
 ### 0.0 health check
 // @no-log
 GET {{host_url}}/health
