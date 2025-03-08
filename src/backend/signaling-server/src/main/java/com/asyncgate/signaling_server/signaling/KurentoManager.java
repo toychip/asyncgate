@@ -243,7 +243,7 @@ public class KurentoManager {
         String userId = (String) accessor.getSessionAttributes().get("userId");
         log.warn("⚠️ user id : {}", userId);
         WebRtcEndpoint publisherEndpoint = getUserEndpoint(message.data().roomId(), userId);
-        WebRtcEndpoint subscriberEndpoint = getUserEndpoint(message.data().publisherId(), userId);
+        WebRtcEndpoint subscriberEndpoint = getUserEndpoint(message.data().roomId(), message.data().publisherId());
 
         // user id가 publisher id와 같은 경우 에러
         if (message.data().publisherId().equals(userId)) {
