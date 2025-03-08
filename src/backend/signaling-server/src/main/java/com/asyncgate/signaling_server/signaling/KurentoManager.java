@@ -253,7 +253,7 @@ public class KurentoManager {
 
         // data가 없는 경우 에러
         if (publisherEndpoint == null || subscriberEndpoint == null) {
-            log.warn("⚠️ [Kurento] WebRTC Endpoint 없음: roomId={}, userId={}, publisherId={}", message.data().roomId(), userId, message.data().publisherId());
+            log.warn("⚠️ Publish에서 이야기합니다. [Kurento] WebRTC Endpoint 없음: roomId={}, userId={}, publisherId={}", message.data().roomId(), userId, message.data().publisherId());
             return;
         }
 
