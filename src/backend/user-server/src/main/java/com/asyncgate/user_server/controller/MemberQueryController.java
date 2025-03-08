@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.asyncgate.user_server.security.annotation.MemberID;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class MemberQueryController {
      * 1.8 회원 id 조회
      */
     @GetMapping("/id")
-    public SuccessResponse<String> readUserId(@RequestParam("userId") final String userId) {
+    public SuccessResponse<String> readUserId(final @MemberID String userId) {
         return SuccessResponse.ok(userId);
     }
 }
