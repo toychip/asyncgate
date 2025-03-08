@@ -156,7 +156,7 @@ public class KurentoManager {
 
         System.out.println("sdp 처리 및 sdp answer 생성" + sdpAnswer);
 
-        getUsersInChannel(message.data().roomId());
+        getUsersInChannel(message.data().roomId(), userId);
 
         // 클라이언트에게 SDP Answer 전송
         messagingTemplate.convertAndSend("/topic/answer/" + message.data().roomId() + "/" + userId,
@@ -267,7 +267,7 @@ public class KurentoManager {
     /**
      * 특정 방의 모든 유저 목록을 클라이언트에게 직접 전송
      */
-    public void getUsersInChannel(String roomId) {
+    public void getUsersInChannel(String roomId, String myUserId) {
 
         if (!roomEndpoints.containsKey(roomId)) {
             log.warn("🚨 [Kurento] 조회 실패: 존재하지 않는 채널 (channelId={})", roomId);
@@ -279,11 +279,12 @@ public class KurentoManager {
         userStates.forEach((key, value) -> log.info("🔍 userId={}, member={}", key, value));
 
         List<GetUsersInChannelResponse.UserInRoom> users = roomEndpoints.get(roomId).keySet().stream()
+                .filter(userId -> !userId.equals(myUserId)) // 내 userId 제외
                 .map(userId -> {
                     Member member = userStates.get(userId);
                     if (member == null) {
                         log.warn("⚠️ [Kurento] userStates에서 userId={}에 대한 멤버 정보를 찾을 수 없습니다. 건너뜁니다.", userId);
-                        return null; // 🚨 `null` 반환 (filter에서 제거)
+                        return null; // null 반환 (filter에서 제거)
                     }
 
                     return GetUsersInChannelResponse.UserInRoom.builder()
@@ -295,7 +296,7 @@ public class KurentoManager {
                             .isScreenSharingEnabled(member.isDataEnabled())
                             .build();
                 })
-                .filter(Objects::nonNull)  // 🚀 `null`인 경우 건너뛰기
+                .filter(Objects::nonNull)  // null인 경우 건너뛰기
                 .collect(Collectors.toList());
 
         // ✅ 클라이언트에게 STOMP 메시지 전송 (유저 목록)
