@@ -83,6 +83,7 @@ class DirectListener(
 
         when (directMessage.type) {
             DirectMessageType.EDIT -> {
+                msg["id"] = directMessage.id
                 msg["type"] = DirectMessageType.EDIT.toString()
                 msg["userId"] = directMessage.userId
                 msg["channelId"] = directMessage.channelId

@@ -24,7 +24,7 @@ fun DirectMessage.toEntity(existingEntity: DirectMessageEntity? = null): DirectM
         parentId = parentId,
         parentName = parentName,
         parentContent = parentContent,
-        isDeleted = existingEntity?.isDeleted ?: false
+        isDeleted = existingEntity?.isDeleted ?: isDeleted
     )
 }
 
@@ -43,7 +43,8 @@ fun DirectMessageEntity.toDomain(): DirectMessage {
         parentContent = parentContent,
         createdAt = createdAt,
         updatedAt = updatedAt,
-        type = type
+        type = type,
+        isDeleted = isDeleted
     )
 }
 

@@ -17,7 +17,8 @@ class DirectMessage(
     val parentName: String? = null,
     val parentContent: String? = null,
     val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null,
+    var updatedAt: LocalDateTime? = null,
+    var isDeleted: Boolean = false,
 ) {
     companion object {
         fun create(
@@ -43,7 +44,8 @@ class DirectMessage(
                 thumbnail = thumbnail,
                 parentId = parentId,
                 parentName = parentName,
-                parentContent = parentContent
+                parentContent = parentContent,
+                isDeleted = false
             )
         }
     }
@@ -65,7 +67,8 @@ class DirectMessage(
             thumbnail = this.thumbnail,
             parentId = this.parentId,
             parentName = this.parentName,
-            parentContent = this.parentContent
+            parentContent = this.parentContent,
+            isDeleted = true
         )
     }
 
@@ -86,7 +89,8 @@ class DirectMessage(
             thumbnail = this.thumbnail,
             parentId = this.parentId,
             parentName = this.parentName,
-            parentContent = this.parentContent
+            parentContent = this.parentContent,
+            isDeleted = false
         )
     }
 
