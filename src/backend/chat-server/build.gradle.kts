@@ -33,7 +33,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("org.springframework.cloud:spring-cloud-starter")
