@@ -61,7 +61,7 @@ class DirectController(
     }
 
     @ResponseBody
-    @PostMapping("/chat/direct/file")
+    @PostMapping("/chats/chat/direct/file")
     override fun uploadFile(@ModelAttribute fileRequest: FileRequest, servletRequest: HttpServletRequest): SuccessResponse<FileUploadResponse> {
         val jwtToken = CustomSecurityContext.extractJwtTokenForHttp(servletRequest)
         val userId = jwtTokenProvider.extract(jwtToken)
@@ -70,7 +70,7 @@ class DirectController(
     }
 
     @ResponseBody
-    @GetMapping("chat/direct")
+    @GetMapping("/chats/chat/direct")
     override fun readPaging(
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("size", defaultValue = "10") size: Int,
