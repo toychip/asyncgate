@@ -3,8 +3,6 @@ package com.asyncgate.chat_server.service
 import com.asyncgate.chat_server.domain.DirectMessage
 import com.asyncgate.chat_server.domain.DirectMessageType
 import com.asyncgate.chat_server.domain.ReadStatus
-import com.asyncgate.chat_server.exception.ChatServerException
-import com.asyncgate.chat_server.exception.FailType
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
