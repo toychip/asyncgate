@@ -74,11 +74,11 @@ class DirectMessage(
 
     /**
      * 현재 메시지를 수정하여, 새로운 메시지(수정본)를 생성.
-     * 새로운 메시지에는 새 ID가 부여되고, type은 EDIT로 변경됨.
+     * 새로운 메시지 type은 EDIT로 변경됨.
      */
     fun withEdit(newName: String, newContent: String): DirectMessage {
         return DirectMessage(
-            id = IdGenerator.generate(), // 새 ID 부여
+            id = this.id,
             channelId = this.channelId,
             userId = this.userId,
             type = DirectMessageType.EDIT,
