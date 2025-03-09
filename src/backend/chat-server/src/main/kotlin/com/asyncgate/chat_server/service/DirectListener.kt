@@ -32,13 +32,13 @@ class DirectListener(
         log.info("directMessage = $directMessage")
 
         val msg = HashMap<String, String>()
-        msg["type"] = DirectMessageType.CREATE.toString().lowercase()
+        msg["type"] = DirectMessageType.CREATE.toString()
         msg["userId"] = java.lang.String.valueOf(directMessage.userId)
         msg["name"] = directMessage.name ?: ""
         msg["profileImage"] = directMessage.profileImage ?: ""
         msg["message"] = directMessage.content ?: ""
         msg["time"] = java.lang.String.valueOf(directMessage.createdAt)
-        msg["id"] = directMessage.id ?: throw ChatServerException(FailType.X_DIRECT_INTERNAL_ERROR)
+        msg["id"] = directMessage.id
 
         val serializable = objectMapper.writeValueAsString(msg)
         template.convertAndSend("/topic/direct-message/" + directMessage.channelId, serializable)
@@ -91,7 +91,7 @@ class DirectListener(
                 msg["content"] = directMessage.content ?: ""
             }
             DirectMessageType.DELETE -> {
-                msg["id"] = directMessage.id ?: throw ChatServerException(FailType.X_DIRECT_INTERNAL_ERROR)
+                msg["id"] = directMessage.id
                 msg["type"] = DirectMessageType.DELETE.toString()
                 msg["userId"] = directMessage.userId
                 msg["channelId"] = directMessage.channelId
